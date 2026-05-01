@@ -1,0 +1,1062 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+  <title>CraftConnect – Carpenter & Home Services</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+<div class="app-wrapper">
+
+  <!-- ═══════════════════════════════════════ HOME SCREEN ═══════════════════════════════════════ -->
+  <div class="screen active" id="screen-home">
+
+    <!-- White Hero Header -->
+    <div class="home-header-v2">
+
+      <!-- Top Bar -->
+      <div class="hv2-topbar">
+        <button class="hv2-location-btn">
+          <svg width="13" height="16" viewBox="0 0 14 16" fill="none"><path d="M7 0C4.24 0 2 2.24 2 5c0 3.75 5 11 5 11s5-7.25 5-11c0-2.76-2.24-5-5-5zm0 6.5c-.83 0-1.5-.67-1.5-1.5S6.17 3.5 7 3.5 8.5 4.17 8.5 5 7.83 6.5 7 6.5z" fill="#0F3D3E"/></svg>
+          <span>Jodhpur</span>
+          <svg width="10" height="6" viewBox="0 0 10 6" fill="none"><path d="M1 1l4 4 4-4" stroke="#0F3D3E" stroke-width="1.8" stroke-linecap="round"/></svg>
+        </button>
+        <button class="hv2-notif-btn" id="notifBtn">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none"><path d="M12 22c1.1 0 2-.9 2-2h-4c0 1.1.9 2 2 2zm6-6v-5c0-3.07-1.64-5.64-4.5-6.32V4c0-.83-.67-1.5-1.5-1.5s-1.5.67-1.5 1.5v.68C7.63 5.36 6 7.92 6 11v5l-2 2v1h16v-1l-2-2z" fill="#374151"/></svg>
+          <span class="hv2-notif-dot"></span>
+        </button>
+      </div>
+
+      <!-- Hero Row: Text + Peacock -->
+      <div class="hv2-hero-row">
+        <div class="hv2-hero-text">
+          <p class="hv2-greeting-label">Good Morning ☀️</p>
+          <h1 class="hv2-hero-heading">Let's make your<br>home <span class="hv2-accent">beautiful</span></h1>
+        </div>
+        <div class="hv2-peacock-wrap">
+          <img
+            src="PEACOCK IMAGE 02.png"
+            alt="Peacock"
+            class="hv2-peacock-img"
+          />
+        </div>
+      </div>
+
+      <!-- Search Bar -->
+      <div class="hv2-search">
+        <svg width="17" height="17" viewBox="0 0 24 24" fill="none"><circle cx="11" cy="11" r="8" stroke="#9ca3af" stroke-width="2"/><path d="M21 21l-4.35-4.35" stroke="#9ca3af" stroke-width="2" stroke-linecap="round"/></svg>
+        <input type="text" placeholder="Search services..." />
+      </div>
+    </div>
+
+    <div class="screen-scroll">
+
+      <!-- Category Icons Row -->
+      <section class="hv2-cats-section">
+        <button class="hv2-cat" data-target="emergency">
+          <div class="hv2-cat-circle hv2-red">
+            <svg width="26" height="26" viewBox="0 0 24 24" fill="none"><path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z" fill="#fff"/></svg>
+          </div>
+          <span class="hv2-cat-name">Emergency Services</span>
+          <small class="hv2-cat-sub">24x7 Available</small>
+        </button>
+
+        <button class="hv2-cat" data-target="furniture">
+          <div class="hv2-cat-circle hv2-teal">
+            <svg width="26" height="26" viewBox="0 0 24 24" fill="none"><rect x="2" y="13" width="20" height="3" rx="1" fill="#fff"/><path d="M4 13V8a2 2 0 012-2h12a2 2 0 012 2v5" stroke="#fff" stroke-width="2"/><path d="M6 16v3M18 16v3" stroke="#fff" stroke-width="2" stroke-linecap="round"/></svg>
+          </div>
+          <span class="hv2-cat-name">Furniture</span>
+          <small class="hv2-cat-sub">Design &amp; Customization</small>
+        </button>
+
+        <button class="hv2-cat" data-target="painting">
+          <div class="hv2-cat-circle hv2-purple">
+            <svg width="26" height="26" viewBox="0 0 24 24" fill="none"><path d="M18.37 2.63L14 7l-1.59-1.59a2 2 0 00-2.82 0L8 7l9 9 1.59-1.59a2 2 0 000-2.82L17 10l4.37-4.37a.6.6 0 000-.85l-2.15-2.15a.6.6 0 00-.85 0z" fill="#fff"/><path d="M3 21v-3.5l8-8" stroke="#fff" stroke-width="2" stroke-linecap="round"/><circle cx="4.5" cy="19.5" r="1.5" fill="#fff"/></svg>
+          </div>
+          <span class="hv2-cat-name">Painting</span>
+          <small class="hv2-cat-sub">Colors that inspire</small>
+        </button>
+      </section>
+
+      <!-- Popular Services -->
+      <section class="section" style="margin-top:4px">
+        <div class="section-head">
+          <h2 class="section-title">Popular Services</h2>
+          <button class="view-all-btn" data-target="emergency">View All</button>
+        </div>
+        <div class="pop-grid">
+
+          <div class="pop-card" onclick="navigateTo('emergency')">
+            <div class="pop-card-img">
+              <img src="electrician.png.png" alt="Electrician" />
+            </div>
+            <p class="pop-card-name">Electrician</p>
+            <button class="pop-card-arrow">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none"><path d="M5 12h14M12 5l7 7-7 7" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+            </button>
+          </div>
+
+          <div class="pop-card" onclick="navigateTo('emergency')">
+            <div class="pop-card-img">
+              <img src="plumber.png" alt="Plumber" />
+            </div>
+            <p class="pop-card-name">Plumber</p>
+            <button class="pop-card-arrow">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none"><path d="M5 12h14M12 5l7 7-7 7" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+            </button>
+          </div>
+
+          <div class="pop-card" onclick="navigateTo('painting')">
+            <div class="pop-card-img">
+              <img src="carpainter.png" alt="Car Painter" />
+            </div>
+            <p class="pop-card-name">Car Painter</p>
+            <button class="pop-card-arrow">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none"><path d="M5 12h14M12 5l7 7-7 7" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+            </button>
+          </div>
+
+
+        </div>
+      </section>
+
+      <!-- Fast. Reliable. Trusted. Banner -->
+      <section class="section" style="margin-top:16px">
+        <div class="frt-banner">
+          <div class="frt-left">
+            <h3 class="frt-heading">Fast. Reliable.<br>Trusted.</h3>
+            <p class="frt-sub">Book expert professionals<br>at your doorstep</p>
+            <button class="frt-btn" onclick="showBookingModal('Home Service')">Book Now</button>
+          </div>
+          <div class="frt-right">
+            <img
+              src="peackock image 01.png"
+              alt="Peacock Feather"
+              class="frt-peacock"
+            />
+          </div>
+        </div>
+      </section>
+
+      <!-- Trust Strip -->
+      <section class="section trust-strip" style="margin-top:16px">
+        <div class="trust-item">
+          <span class="trust-num">1,200+</span>
+          <span class="trust-label">Happy Clients</span>
+        </div>
+        <div class="trust-divider"></div>
+        <div class="trust-item">
+          <span class="trust-num">4.8 ★</span>
+          <span class="trust-label">Avg Rating</span>
+        </div>
+        <div class="trust-divider"></div>
+        <div class="trust-item">
+          <span class="trust-num">48 hrs</span>
+          <span class="trust-label">Avg Delivery</span>
+        </div>
+      </section>
+
+      <div class="bottom-spacer"></div>
+    </div>
+  </div>
+
+  <!-- ═══════════════════════════════════════ EMERGENCY SCREEN ═══════════════════════════════════════ -->
+  <div class="screen" id="screen-emergency">
+    <div class="inner-header">
+      <img src="peackock image 01.png" class="ih-peacock" alt="" />
+      <button class="ih-back" onclick="navigateTo('home')">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none"><path d="M19 12H5M12 5l-7 7 7 7" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+      </button>
+      <div class="ih-body">
+        <h1 class="ih-title">Emergency<br>Services</h1>
+        <p class="ih-sub">We are available 24x7 for your help</p>
+      </div>
+    </div>
+
+    <div class="screen-scroll">
+      <div class="em2-list">
+
+        <div class="em2-card">
+          <div class="em2-left">
+            <div class="em2-icon em2-red">
+              <svg width="26" height="26" viewBox="0 0 24 24" fill="none"><path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z" fill="#fff"/></svg>
+            </div>
+            <div class="em2-info">
+              <h3>Electrician</h3>
+              <p>Quick electrical help at your home</p>
+            </div>
+          </div>
+          <button class="em2-btn em2-btn-red" onclick="showBookingModal('Electrician')">Book Now</button>
+        </div>
+
+        <div class="em2-card">
+          <div class="em2-left">
+            <div class="em2-icon em2-blue">
+              <svg width="26" height="26" viewBox="0 0 24 24" fill="none"><path d="M12 2C8 2 5 5 5 9c0 2.4 1.2 4.5 3 5.7V20h2v2h4v-2h2v-5.3c1.8-1.2 3-3.3 3-5.7 0-4-3-7-7-7z" fill="#fff"/></svg>
+            </div>
+            <div class="em2-info">
+              <h3>Plumber</h3>
+              <p>Leakage, pipe fitting, bathroom, kitchen</p>
+            </div>
+          </div>
+          <button class="em2-btn em2-btn-blue" onclick="showBookingModal('Plumber')">Book Now</button>
+        </div>
+
+        <div class="em2-card">
+          <div class="em2-left">
+            <div class="em2-icon em2-teal">
+              <svg width="26" height="26" viewBox="0 0 24 24" fill="none"><path d="M14.7 6.3a1 1 0 000 1.4l1.6 1.6a1 1 0 001.4 0l3.77-3.77a6 6 0 01-7.94 7.94l-6.91 6.91a2.12 2.12 0 01-3-3l6.91-6.91a6 6 0 017.94-7.94l-3.76 3.76z" stroke="#fff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+            </div>
+            <div class="em2-info">
+              <h3>Carpenter</h3>
+              <p>Door, hinge fix, lock change, furniture repair</p>
+            </div>
+          </div>
+          <button class="em2-btn em2-btn-teal" onclick="showBookingModal('Carpenter')">Book Now</button>
+        </div>
+
+        <div class="em2-card">
+          <div class="em2-left">
+            <div class="em2-icon em2-cyan">
+              <svg width="26" height="26" viewBox="0 0 24 24" fill="none"><path d="M12 2a5 5 0 00-5 5c0 3 2 5.5 5 7 3-1.5 5-4 5-7a5 5 0 00-5-5z" fill="#fff"/><path d="M5 22c0-3.9 3.1-7 7-7s7 3.1 7 7" stroke="#fff" stroke-width="2" stroke-linecap="round"/></svg>
+            </div>
+            <div class="em2-info">
+              <h3>AC Repair</h3>
+              <p>Installation, repair, service &amp; cleaning</p>
+            </div>
+          </div>
+          <button class="em2-btn em2-btn-cyan" onclick="showBookingModal('AC Repair')">Book Now</button>
+        </div>
+
+      </div>
+
+      <button class="em2-urgent" onclick="showBookingModal('Urgent Service')">
+        <span class="em2-urgent-icon">⚡</span>
+        <div class="em2-urgent-text">
+          <strong>Book Urgent Service</strong>
+          <small>We will reach you as soon as possible</small>
+        </div>
+      </button>
+
+      <div class="bottom-spacer"></div>
+    </div>
+  </div>
+
+  <!-- ═══════════════════════════════════════ FURNITURE SCREEN ═══════════════════════════════════════ -->
+  <div class="screen" id="screen-furniture">
+    <div class="inner-header">
+      <img src="peackock image 01.png" class="ih-peacock" alt="" />
+      <button class="ih-back" onclick="navigateTo('home')">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none"><path d="M19 12H5M12 5l-7 7 7 7" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+      </button>
+      <div class="ih-body">
+        <h1 class="ih-title">Furniture</h1>
+        <p class="ih-sub">Design your dream space</p>
+      </div>
+    </div>
+
+    <!-- Sub Tab Bar — TOP -->
+    <div class="sub-tab-bar" id="furnitureTabs">
+      <button class="sub-tab active" data-tab="bedroom">🛏 Bedroom</button>
+      <button class="sub-tab" data-tab="kitchen">🍳 Kitchen</button>
+      <button class="sub-tab" data-tab="office">💼 Office</button>
+      <button class="sub-tab" data-tab="living">🛋 Cafe</button>
+    </div>
+
+    <div class="screen-scroll">
+
+      <!-- Bedroom Tab -->
+      <div class="tab-content active" id="tab-bedroom">
+        <div class="section-head-row">
+          <h2>Bedroom Designs</h2>
+          <button class="view-all-link">View All</button>
+        </div>
+        <section class="section">
+          <div class="furniture-grid">
+            <div class="furniture-card" onclick="showItemDetail('Modern Minimal Bed', '₹18,500 – ₹32,000')">
+              <div class="furniture-img">
+                <img src="https://images.unsplash.com/photo-1586023492125-27b2c045efd7?auto=format&fit=crop&w=400&q=80" alt="Modern Minimal Bed" loading="lazy" />
+                <button class="wishlist-btn">♡</button>
+              </div>
+              <div class="furniture-info">
+                <h3>Modern Minimal Bed</h3>
+                <p class="furniture-material">Teak Wood · Queen Size</p>
+                <div class="furniture-footer">
+                  <span class="furniture-price">₹18,500 – ₹32,000</span>
+                  <span class="furniture-rating">★ 4.8</span>
+                </div>
+              </div>
+            </div>
+
+            <div class="furniture-card" onclick="showItemDetail('Classic Four-Post Bed', '₹24,000 – ₹45,000')">
+              <div class="furniture-img">
+                <img src="https://images.unsplash.com/photo-1524758631624-e2822e304c36?auto=format&fit=crop&w=400&q=80" alt="Classic Four-Post" loading="lazy" />
+                <button class="wishlist-btn">♡</button>
+              </div>
+              <div class="furniture-info">
+                <h3>Classic Four-Post Bed</h3>
+                <p class="furniture-material">Sheesham Wood · King Size</p>
+                <div class="furniture-footer">
+                  <span class="furniture-price">₹24,000 – ₹45,000</span>
+                  <span class="furniture-rating">★ 4.9</span>
+                </div>
+              </div>
+            </div>
+
+            <div class="furniture-card" onclick="showItemDetail('Sliding Wardrobe', '₹28,000 – ₹55,000')">
+              <div class="furniture-img">
+                <img src="https://images.unsplash.com/photo-1540574163026-643ea20ade25?auto=format&fit=crop&w=400&q=80" alt="Sliding Wardrobe" loading="lazy" />
+                <button class="wishlist-btn">♡</button>
+              </div>
+              <div class="furniture-info">
+                <h3>Sliding Wardrobe</h3>
+                <p class="furniture-material">Plywood + Mirror · 6 ft</p>
+                <div class="furniture-footer">
+                  <span class="furniture-price">₹28,000 – ₹55,000</span>
+                  <span class="furniture-rating">★ 4.7</span>
+                </div>
+              </div>
+            </div>
+
+            <div class="furniture-card" onclick="showItemDetail('Dressing Table', '₹8,000 – ₹15,000')">
+              <div class="furniture-img">
+                <img src="https://images.unsplash.com/photo-1493663284031-b7e3aefcae8e?auto=format&fit=crop&w=400&q=80" alt="Dressing Table" loading="lazy" />
+                <button class="wishlist-btn">♡</button>
+              </div>
+              <div class="furniture-info">
+                <h3>Dressing Table</h3>
+                <p class="furniture-material">MDF + Glass · Classic</p>
+                <div class="furniture-footer">
+                  <span class="furniture-price">₹8,000 – ₹15,000</span>
+                  <span class="furniture-rating">★ 4.6</span>
+                </div>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <section class="section custom-cta-section">
+          <div class="custom-cta-card">
+            <div class="custom-cta-text">
+              <h3>Want something unique?</h3>
+              <p>Get custom furniture made exactly to your room measurements and taste</p>
+            </div>
+            <button class="custom-cta-btn" onclick="showBookingModal('Custom Furniture')">Get Quote</button>
+          </div>
+        </section>
+        <div class="bottom-spacer"></div>
+      </div>
+
+      <!-- Kitchen Tab -->
+      <div class="tab-content" id="tab-kitchen">
+        <section class="section">
+          <div class="furniture-grid">
+            <div class="furniture-card" onclick="showItemDetail('L-Shape Modular Kitchen', '₹55,000 – ₹1,20,000')">
+              <div class="furniture-img">
+                <img src="https://images.unsplash.com/photo-1556909114-f6e7ad7d3136?auto=format&fit=crop&w=400&q=80" alt="Modular Kitchen" loading="lazy" />
+                <button class="wishlist-btn">♡</button>
+              </div>
+              <div class="furniture-info">
+                <h3>L-Shape Modular Kitchen</h3>
+                <p class="furniture-material">Marine Ply + Laminate</p>
+                <div class="furniture-footer">
+                  <span class="furniture-price">₹55,000 – ₹1,20,000</span>
+                  <span class="furniture-rating">★ 4.9</span>
+                </div>
+              </div>
+            </div>
+
+            <div class="furniture-card" onclick="showItemDetail('Straight Kitchen', '₹35,000 – ₹65,000')">
+              <div class="furniture-img">
+                <img src="https://images.unsplash.com/photo-1556909172-54557c7e4fb7?auto=format&fit=crop&w=400&q=80" alt="Straight Kitchen" loading="lazy" />
+                <button class="wishlist-btn">♡</button>
+              </div>
+              <div class="furniture-info">
+                <h3>Straight Kitchen</h3>
+                <p class="furniture-material">PVC · Easy-clean finish</p>
+                <div class="furniture-footer">
+                  <span class="furniture-price">₹35,000 – ₹65,000</span>
+                  <span class="furniture-rating">★ 4.7</span>
+                </div>
+              </div>
+            </div>
+
+            <div class="furniture-card" onclick="showItemDetail('Island Kitchen', '₹80,000 – ₹1,80,000')">
+              <div class="furniture-img">
+                <img src="https://images.unsplash.com/photo-1565183928294-7063f23ce0f8?auto=format&fit=crop&w=400&q=80" alt="Island Kitchen" loading="lazy" />
+                <button class="wishlist-btn">♡</button>
+              </div>
+              <div class="furniture-info">
+                <h3>Island Kitchen</h3>
+                <p class="furniture-material">Solid Wood + Quartz</p>
+                <div class="furniture-footer">
+                  <span class="furniture-price">₹80,000 – ₹1,80,000</span>
+                  <span class="furniture-rating">★ 4.8</span>
+                </div>
+              </div>
+            </div>
+
+            <div class="furniture-card" onclick="showItemDetail('Open Shelving Kitchen', '₹20,000 – ₹38,000')">
+              <div class="furniture-img">
+                <img src="https://images.unsplash.com/photo-1556909172-54557c7e4fb7?auto=format&fit=crop&w=400&q=80" alt="Open Kitchen" loading="lazy" />
+                <button class="wishlist-btn">♡</button>
+              </div>
+              <div class="furniture-info">
+                <h3>Open Shelving Kitchen</h3>
+                <p class="furniture-material">Pine Wood · Rustic</p>
+                <div class="furniture-footer">
+                  <span class="furniture-price">₹20,000 – ₹38,000</span>
+                  <span class="furniture-rating">★ 4.5</span>
+                </div>
+              </div>
+            </div>
+          </div>
+        </section>
+        <section class="section custom-cta-section">
+          <div class="custom-cta-card">
+            <div class="custom-cta-text">
+              <h3>Plan your dream kitchen</h3>
+              <p>Free consultation + 3D layout design included</p>
+            </div>
+            <button class="custom-cta-btn" onclick="showBookingModal('Kitchen Design')">Plan Now</button>
+          </div>
+        </section>
+        <div class="bottom-spacer"></div>
+      </div>
+
+      <!-- Office Tab -->
+      <div class="tab-content" id="tab-office">
+        <section class="section">
+          <div class="furniture-grid">
+            <div class="furniture-card" onclick="showItemDetail('Executive Desk', '₹12,000 – ₹28,000')">
+              <div class="furniture-img">
+                <img src="https://images.unsplash.com/photo-1593642632559-0c6d3fc62b89?auto=format&fit=crop&w=400&q=80" alt="Executive Desk" loading="lazy" />
+                <button class="wishlist-btn">♡</button>
+              </div>
+              <div class="furniture-info">
+                <h3>Executive Desk</h3>
+                <p class="furniture-material">Walnut Veneer · L-Shape</p>
+                <div class="furniture-footer">
+                  <span class="furniture-price">₹12,000 – ₹28,000</span>
+                  <span class="furniture-rating">★ 4.8</span>
+                </div>
+              </div>
+            </div>
+
+            <div class="furniture-card" onclick="showItemDetail('Workstation Setup', '₹8,500 – ₹22,000')">
+              <div class="furniture-img">
+                <img src="https://images.unsplash.com/photo-1547586696-ea22b4d4235d?auto=format&fit=crop&w=400&q=80" alt="Workstation" loading="lazy" />
+                <button class="wishlist-btn">♡</button>
+              </div>
+              <div class="furniture-info">
+                <h3>Workstation Setup</h3>
+                <p class="furniture-material">MDF + Steel Frame</p>
+                <div class="furniture-footer">
+                  <span class="furniture-price">₹8,500 – ₹22,000</span>
+                  <span class="furniture-rating">★ 4.6</span>
+                </div>
+              </div>
+            </div>
+
+            <div class="furniture-card" onclick="showItemDetail('Bookshelf Unit', '₹5,000 – ₹14,000')">
+              <div class="furniture-img">
+                <img src="https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?auto=format&fit=crop&w=400&q=80" alt="Bookshelf" loading="lazy" />
+                <button class="wishlist-btn">♡</button>
+              </div>
+              <div class="furniture-info">
+                <h3>Bookshelf Unit</h3>
+                <p class="furniture-material">Solid Oak · 6 Shelves</p>
+                <div class="furniture-footer">
+                  <span class="furniture-price">₹5,000 – ₹14,000</span>
+                  <span class="furniture-rating">★ 4.7</span>
+                </div>
+              </div>
+            </div>
+
+            <div class="furniture-card" onclick="showItemDetail('Conference Table', '₹22,000 – ₹60,000')">
+              <div class="furniture-img">
+                <img src="https://images.unsplash.com/photo-1497366216548-37526070297c?auto=format&fit=crop&w=400&q=80" alt="Conference Table" loading="lazy" />
+                <button class="wishlist-btn">♡</button>
+              </div>
+              <div class="furniture-info">
+                <h3>Conference Table</h3>
+                <p class="furniture-material">Teak + Glass · 8 Seater</p>
+                <div class="furniture-footer">
+                  <span class="furniture-price">₹22,000 – ₹60,000</span>
+                  <span class="furniture-rating">★ 4.9</span>
+                </div>
+              </div>
+            </div>
+          </div>
+        </section>
+        <section class="section custom-cta-section">
+          <div class="custom-cta-card">
+            <div class="custom-cta-text">
+              <h3>Furnish your office space</h3>
+              <p>Bulk orders get priority scheduling & 10% discount</p>
+            </div>
+            <button class="custom-cta-btn" onclick="showBookingModal('Office Furniture')">Get Quote</button>
+          </div>
+        </section>
+        <div class="bottom-spacer"></div>
+      </div>
+
+      <!-- Living Room Tab -->
+      <div class="tab-content" id="tab-living">
+        <section class="section">
+          <div class="furniture-grid">
+            <div class="furniture-card" onclick="showItemDetail('3-Seater Sofa', '₹15,000 – ₹35,000')">
+              <div class="furniture-img">
+                <img src="https://images.unsplash.com/photo-1555041469-a586c61ea9bc?auto=format&fit=crop&w=400&q=80" alt="Sofa" loading="lazy" />
+                <button class="wishlist-btn">♡</button>
+              </div>
+              <div class="furniture-info">
+                <h3>3-Seater Sofa</h3>
+                <p class="furniture-material">Fabric Upholstery · L-Shape</p>
+                <div class="furniture-footer">
+                  <span class="furniture-price">₹15,000 – ₹35,000</span>
+                  <span class="furniture-rating">★ 4.7</span>
+                </div>
+              </div>
+            </div>
+
+            <div class="furniture-card" onclick="showItemDetail('TV Unit Cabinet', '₹9,000 – ₹22,000')">
+              <div class="furniture-img">
+                <img src="https://images.unsplash.com/photo-1558618666-fcd25c85cd64?auto=format&fit=crop&w=400&q=80" alt="TV Unit" loading="lazy" />
+                <button class="wishlist-btn">♡</button>
+              </div>
+              <div class="furniture-info">
+                <h3>TV Unit Cabinet</h3>
+                <p class="furniture-material">MDF + Veneer · Wall-mount</p>
+                <div class="furniture-footer">
+                  <span class="furniture-price">₹9,000 – ₹22,000</span>
+                  <span class="furniture-rating">★ 4.8</span>
+                </div>
+              </div>
+            </div>
+
+            <div class="furniture-card" onclick="showItemDetail('Wooden Coffee Table', '₹5,500 – ₹12,000')">
+              <div class="furniture-img">
+                <img src="https://images.unsplash.com/photo-1555041469-a586c61ea9bc?auto=format&fit=crop&w=400&q=80" alt="Coffee Table" loading="lazy" />
+                <button class="wishlist-btn">♡</button>
+              </div>
+              <div class="furniture-info">
+                <h3>Wooden Coffee Table</h3>
+                <p class="furniture-material">Mango Wood · Natural</p>
+                <div class="furniture-footer">
+                  <span class="furniture-price">₹5,500 – ₹12,000</span>
+                  <span class="furniture-rating">★ 4.6</span>
+                </div>
+              </div>
+            </div>
+
+            <div class="furniture-card" onclick="showItemDetail('Display Shelving', '₹4,000 – ₹9,000')">
+              <div class="furniture-img">
+                <img src="https://images.unsplash.com/photo-1493663284031-b7e3aefcae8e?auto=format&fit=crop&w=400&q=80" alt="Display Unit" loading="lazy" />
+                <button class="wishlist-btn">♡</button>
+              </div>
+              <div class="furniture-info">
+                <h3>Display Shelving</h3>
+                <p class="furniture-material">Pine + Iron · Industrial</p>
+                <div class="furniture-footer">
+                  <span class="furniture-price">₹4,000 – ₹9,000</span>
+                  <span class="furniture-rating">★ 4.5</span>
+                </div>
+              </div>
+            </div>
+          </div>
+        </section>
+        <section class="section custom-cta-section">
+          <div class="custom-cta-card">
+            <div class="custom-cta-text">
+              <h3>Transform your living room</h3>
+              <p>Share your space dimensions and get a free design plan</p>
+            </div>
+            <button class="custom-cta-btn" onclick="showBookingModal('Living Room Furniture')">Start Now</button>
+          </div>
+        </section>
+        <div class="bottom-spacer"></div>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- ═══════════════════════════════════════ PAINTING SCREEN ═══════════════════════════════════════ -->
+  <div class="screen" id="screen-painting">
+    <div class="inner-header">
+      <img src="peackock image 01.png" class="ih-peacock" alt="" />
+      <button class="ih-back" onclick="navigateTo('home')">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none"><path d="M19 12H5M12 5l-7 7 7 7" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+      </button>
+      <div class="ih-body">
+        <h1 class="ih-title">Painting</h1>
+        <p class="ih-sub">Colors that bring life to your walls</p>
+      </div>
+    </div>
+
+    <!-- Sub Tab Bar — TOP -->
+    <div class="sub-tab-bar" id="paintingTabs">
+      <button class="sub-tab active" data-tab="bedroom-paint">Bedroom Painting</button>
+      <button class="sub-tab" data-tab="hall-paint">Hall Painting</button>
+      <button class="sub-tab" data-tab="office-paint">Office Painting</button>
+    </div>
+
+    <div class="screen-scroll">
+
+      <!-- Bedroom Painting -->
+      <div class="tab-content active" id="tab-bedroom-paint">
+        <div class="section-head-row">
+          <h2>Popular Styles</h2>
+          <button class="view-all-link">View All</button>
+        </div>
+        <div class="paint-img-grid">
+          <div class="paint-img-card" onclick="showBookingModal('Pastel Dreams')">
+            <img src="https://images.unsplash.com/photo-1560185007-5f0bb1866cab?auto=format&fit=crop&w=400&q=80" alt="Pastel Dreams" loading="lazy" />
+            <button class="paint-img-heart wishlist-btn">♡</button>
+            <div class="paint-img-overlay">
+              <span class="paint-img-name">Pastel Dreams</span>
+            </div>
+          </div>
+          <div class="paint-img-card" onclick="showBookingModal('Royal Elegance')">
+            <img src="https://images.unsplash.com/photo-1618221195710-dd6b41faaea6?auto=format&fit=crop&w=400&q=80" alt="Royal Elegance" loading="lazy" />
+            <button class="paint-img-heart wishlist-btn">♡</button>
+            <div class="paint-img-overlay">
+              <span class="paint-img-name">Royal Elegance</span>
+            </div>
+          </div>
+          <div class="paint-img-card" onclick="showBookingModal('Modern Texture')">
+            <img src="https://images.unsplash.com/photo-1600210492493-0946911123ea?auto=format&fit=crop&w=400&q=80" alt="Modern Texture" loading="lazy" />
+            <button class="paint-img-heart wishlist-btn">♡</button>
+            <div class="paint-img-overlay">
+              <span class="paint-img-name">Modern Texture</span>
+            </div>
+          </div>
+          <div class="paint-img-card" onclick="showBookingModal('Creative Patterns')">
+            <img src="https://images.unsplash.com/photo-1586023492125-27b2c045efd7?auto=format&fit=crop&w=400&q=80" alt="Creative Patterns" loading="lazy" />
+            <button class="paint-img-heart wishlist-btn">♡</button>
+            <div class="paint-img-overlay">
+              <span class="paint-img-name">Creative Patterns</span>
+            </div>
+          </div>
+        </div>
+        <button class="paint-book-cta" onclick="showBookingModal('Painting Service')">
+          <div class="paint-book-text">
+            <strong>🎨 Book Painter</strong>
+            <small>Get professional painting service</small>
+          </div>
+          <div class="paint-book-arrow">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none"><path d="M5 12h14M12 5l7 7-7 7" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+          </div>
+        </button>
+        <div class="bottom-spacer"></div>
+      </div>
+
+      <!-- Hall Painting -->
+      <div class="tab-content" id="tab-hall-paint">
+        <div class="section-head-row">
+          <h2>Popular Styles</h2>
+          <button class="view-all-link">View All</button>
+        </div>
+        <div class="paint-img-grid">
+          <div class="paint-img-card" onclick="showBookingModal('Warm Neutrals')">
+            <img src="https://images.unsplash.com/photo-1555041469-a586c61ea9bc?auto=format&fit=crop&w=400&q=80" alt="Warm Neutrals" loading="lazy" />
+            <button class="paint-img-heart wishlist-btn">♡</button>
+            <div class="paint-img-overlay">
+              <span class="paint-img-name">Warm Neutrals</span>
+            </div>
+          </div>
+          <div class="paint-img-card" onclick="showBookingModal('Bold Statement')">
+            <img src="https://images.unsplash.com/photo-1600566752355-35792bedcfea?auto=format&fit=crop&w=400&q=80" alt="Bold Statement" loading="lazy" />
+            <button class="paint-img-heart wishlist-btn">♡</button>
+            <div class="paint-img-overlay">
+              <span class="paint-img-name">Bold Statement</span>
+            </div>
+          </div>
+          <div class="paint-img-card" onclick="showBookingModal('All White Minimal')">
+            <img src="https://images.unsplash.com/photo-1615529328331-f8917597711f?auto=format&fit=crop&w=400&q=80" alt="Minimal" loading="lazy" />
+            <button class="paint-img-heart wishlist-btn">♡</button>
+            <div class="paint-img-overlay">
+              <span class="paint-img-name">All-White Minimal</span>
+            </div>
+          </div>
+          <div class="paint-img-card" onclick="showBookingModal('Mural Art')">
+            <img src="https://images.unsplash.com/photo-1493663284031-b7e3aefcae8e?auto=format&fit=crop&w=400&q=80" alt="Mural" loading="lazy" />
+            <button class="paint-img-heart wishlist-btn">♡</button>
+            <div class="paint-img-overlay">
+              <span class="paint-img-name">Hand-Painted Mural</span>
+            </div>
+          </div>
+        </div>
+        <button class="paint-book-cta" onclick="showBookingModal('Hall Painting Service')">
+          <div class="paint-book-text">
+            <strong>🎨 Book Painter</strong>
+            <small>Get professional painting service</small>
+          </div>
+          <div class="paint-book-arrow">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none"><path d="M5 12h14M12 5l7 7-7 7" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+          </div>
+        </button>
+        <div class="bottom-spacer"></div>
+      </div>
+
+      <!-- Office Painting -->
+      <div class="tab-content" id="tab-office-paint">
+        <div class="section-head-row">
+          <h2>Popular Styles</h2>
+          <button class="view-all-link">View All</button>
+        </div>
+        <div class="paint-img-grid">
+          <div class="paint-img-card" onclick="showBookingModal('Corporate Blue')">
+            <img src="https://images.unsplash.com/photo-1497366216548-37526070297c?auto=format&fit=crop&w=400&q=80" alt="Corporate" loading="lazy" />
+            <button class="paint-img-heart wishlist-btn">♡</button>
+            <div class="paint-img-overlay">
+              <span class="paint-img-name">Corporate Blue</span>
+            </div>
+          </div>
+          <div class="paint-img-card" onclick="showBookingModal('Energetic Orange')">
+            <img src="https://images.unsplash.com/photo-1593642632559-0c6d3fc62b89?auto=format&fit=crop&w=400&q=80" alt="Energetic" loading="lazy" />
+            <button class="paint-img-heart wishlist-btn">♡</button>
+            <div class="paint-img-overlay">
+              <span class="paint-img-name">Energetic Orange</span>
+            </div>
+          </div>
+          <div class="paint-img-card" onclick="showBookingModal('Zen Green Office')">
+            <img src="https://images.unsplash.com/photo-1547586696-ea22b4d4235d?auto=format&fit=crop&w=400&q=80" alt="Zen Green" loading="lazy" />
+            <button class="paint-img-heart wishlist-btn">♡</button>
+            <div class="paint-img-overlay">
+              <span class="paint-img-name">Zen Green</span>
+            </div>
+          </div>
+          <div class="paint-img-card" onclick="showBookingModal('Modern Minimal Office')">
+            <img src="https://images.unsplash.com/photo-1524758631624-e2822e304c36?auto=format&fit=crop&w=400&q=80" alt="Modern Minimal" loading="lazy" />
+            <button class="paint-img-heart wishlist-btn">♡</button>
+            <div class="paint-img-overlay">
+              <span class="paint-img-name">Modern Minimal</span>
+            </div>
+          </div>
+        </div>
+        <button class="paint-book-cta" onclick="showBookingModal('Office Painting Service')">
+          <div class="paint-book-text">
+            <strong>🎨 Book Painter</strong>
+            <small>Get professional painting service</small>
+          </div>
+          <div class="paint-book-arrow">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none"><path d="M5 12h14M12 5l7 7-7 7" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+          </div>
+        </button>
+        <div class="bottom-spacer"></div>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- ═══════════════════════════════════════ BOOKINGS SCREEN ═══════════════════════════════════════ -->
+  <div class="screen" id="screen-bookings">
+    <div class="inner-header">
+      <img src="peackock image 01.png" class="ih-peacock" alt="" />
+      <div class="ih-body" style="margin-top:50px">
+        <h1 class="ih-title">My Bookings</h1>
+        <p class="ih-sub">Track all your services</p>
+      </div>
+    </div>
+
+    <!-- Filter Tabs — TOP -->
+    <div class="sub-tab-bar" id="bookingTabs">
+      <button class="sub-tab active" data-tab="all-bookings">All</button>
+      <button class="sub-tab" data-tab="pending-bookings">Pending</button>
+      <button class="sub-tab" data-tab="confirmed-bookings">Confirmed</button>
+      <button class="sub-tab" data-tab="completed-bookings">Completed</button>
+    </div>
+
+    <div class="screen-scroll">
+
+      <!-- All -->
+      <div class="tab-content active" id="tab-all-bookings">
+        <section class="section">
+          <div class="booking-list">
+            <div class="booking-item">
+              <div class="bk2-icon bk2-red">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none"><path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z" fill="currentColor"/></svg>
+              </div>
+              <div class="booking-details">
+                <h3>Electrician</h3>
+                <p class="booking-sub">Electrical wiring issue</p>
+                <p class="booking-date">12 May 2024 · 10:30 AM</p>
+              </div>
+              <span class="booking-status pending">Pending</span>
+            </div>
+
+            <div class="booking-item">
+              <div class="bk2-icon bk2-blue">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none"><path d="M12 2C8 2 5 5 5 9c0 2.4 1.2 4.5 3 5.7V20h2v2h4v-2h2v-5.3c1.8-1.2 3-3.3 3-5.7 0-4-3-7-7-7z" fill="currentColor"/></svg>
+              </div>
+              <div class="booking-details">
+                <h3>Plumber</h3>
+                <p class="booking-sub">Bathroom pipe leakage</p>
+                <p class="booking-date">11 May 2024 · 04:00 PM</p>
+              </div>
+              <span class="booking-status confirmed">Confirmed</span>
+            </div>
+
+            <div class="booking-item">
+              <div class="bk2-icon bk2-cyan">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none"><path d="M12 2a5 5 0 00-5 5c0 3 2 5.5 5 7 3-1.5 5-4 5-7a5 5 0 00-5-5z" fill="currentColor"/></svg>
+              </div>
+              <div class="booking-details">
+                <h3>AC Repair</h3>
+                <p class="booking-sub">AC not cooling</p>
+                <p class="booking-date">10 May 2024 · 02:30 PM</p>
+              </div>
+              <span class="booking-status completed">Completed</span>
+            </div>
+
+            <div class="booking-item">
+              <div class="bk2-icon bk2-teal">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none"><rect x="2" y="13" width="20" height="3" rx="1" fill="currentColor"/><path d="M4 13V8a2 2 0 012-2h12a2 2 0 012 2v5" stroke="currentColor" stroke-width="2"/></svg>
+              </div>
+              <div class="booking-details">
+                <h3>Bedroom Furniture</h3>
+                <p class="booking-sub">Modern wardrobe design</p>
+                <p class="booking-date">09 May 2024 · 11:00 AM</p>
+              </div>
+              <span class="booking-status confirmed">Confirmed</span>
+            </div>
+
+            <div class="booking-item">
+              <div class="bk2-icon bk2-purple">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none"><path d="M18.37 2.63L14 7l-1.59-1.59a2 2 0 00-2.82 0L8 7l9 9 1.59-1.59a2 2 0 000-2.82L17 10l4.37-4.37a.6.6 0 000-.85l-2.15-2.15a.6.6 0 00-.85 0z" fill="currentColor"/><path d="M3 21v-3.5l8-8" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>
+              </div>
+              <div class="booking-details">
+                <h3>Bedroom Painting</h3>
+                <p class="booking-sub">Pastel color painting</p>
+                <p class="booking-date">08 May 2024 · 01:00 PM</p>
+              </div>
+              <span class="booking-status completed">Completed</span>
+            </div>
+          </div>
+        </section>
+        <div class="bottom-spacer"></div>
+      </div>
+
+      <!-- Pending -->
+      <div class="tab-content" id="tab-pending-bookings">
+        <section class="section">
+          <div class="booking-list">
+            <div class="booking-item">
+              <div class="bk2-icon bk2-red">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none"><path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z" fill="currentColor"/></svg>
+              </div>
+              <div class="booking-details">
+                <h3>Electrician</h3>
+                <p class="booking-sub">Electrical wiring issue</p>
+                <p class="booking-date">12 May 2024 · 10:30 AM</p>
+              </div>
+              <span class="booking-status pending">Pending</span>
+            </div>
+          </div>
+        </section>
+        <div class="bottom-spacer"></div>
+      </div>
+
+      <!-- Confirmed -->
+      <div class="tab-content" id="tab-confirmed-bookings">
+        <section class="section">
+          <div class="booking-list">
+            <div class="booking-item">
+              <div class="bk2-icon bk2-blue">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none"><path d="M12 2C8 2 5 5 5 9c0 2.4 1.2 4.5 3 5.7V20h2v2h4v-2h2v-5.3c1.8-1.2 3-3.3 3-5.7 0-4-3-7-7-7z" fill="currentColor"/></svg>
+              </div>
+              <div class="booking-details">
+                <h3>Plumber</h3>
+                <p class="booking-sub">Bathroom pipe leakage</p>
+                <p class="booking-date">11 May 2024 · 04:00 PM</p>
+              </div>
+              <span class="booking-status confirmed">Confirmed</span>
+            </div>
+            <div class="booking-item">
+              <div class="bk2-icon bk2-teal">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none"><rect x="2" y="13" width="20" height="3" rx="1" fill="currentColor"/><path d="M4 13V8a2 2 0 012-2h12a2 2 0 012 2v5" stroke="currentColor" stroke-width="2"/></svg>
+              </div>
+              <div class="booking-details">
+                <h3>Bedroom Furniture</h3>
+                <p class="booking-sub">Modern wardrobe design</p>
+                <p class="booking-date">09 May 2024 · 11:00 AM</p>
+              </div>
+              <span class="booking-status confirmed">Confirmed</span>
+            </div>
+          </div>
+        </section>
+        <div class="bottom-spacer"></div>
+      </div>
+
+      <!-- Completed -->
+      <div class="tab-content" id="tab-completed-bookings">
+        <section class="section">
+          <div class="booking-list">
+            <div class="booking-item">
+              <div class="bk2-icon bk2-cyan">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none"><path d="M12 2a5 5 0 00-5 5c0 3 2 5.5 5 7 3-1.5 5-4 5-7a5 5 0 00-5-5z" fill="currentColor"/></svg>
+              </div>
+              <div class="booking-details">
+                <h3>AC Repair</h3>
+                <p class="booking-sub">AC not cooling</p>
+                <p class="booking-date">10 May 2024 · 02:30 PM</p>
+              </div>
+              <span class="booking-status completed">Completed</span>
+            </div>
+            <div class="booking-item">
+              <div class="bk2-icon bk2-purple">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none"><path d="M18.37 2.63L14 7l-1.59-1.59a2 2 0 00-2.82 0L8 7l9 9 1.59-1.59a2 2 0 000-2.82L17 10l4.37-4.37a.6.6 0 000-.85l-2.15-2.15a.6.6 0 00-.85 0z" fill="currentColor"/></svg>
+              </div>
+              <div class="booking-details">
+                <h3>Bedroom Painting</h3>
+                <p class="booking-sub">Pastel color painting</p>
+                <p class="booking-date">08 May 2024 · 01:00 PM</p>
+              </div>
+              <span class="booking-status completed">Completed</span>
+            </div>
+          </div>
+        </section>
+        <div class="bottom-spacer"></div>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- ═══════════════════════════════════════ BOTTOM NAV ═══════════════════════════════════════ -->
+  <nav class="bottom-nav">
+    <button class="nav-item active" data-screen="home">
+      <div class="nav-icon">
+        <svg width="22" height="22" viewBox="0 0 24 24" fill="none"><path d="M3 9l9-7 9 7v11a2 2 0 01-2 2H5a2 2 0 01-2-2z" stroke="currentColor" stroke-width="2" stroke-linejoin="round"/><polyline points="9 22 9 12 15 12 15 22" stroke="currentColor" stroke-width="2" stroke-linejoin="round"/></svg>
+      </div>
+      <span>Home</span>
+    </button>
+    <button class="nav-item" data-screen="emergency">
+      <div class="nav-icon">
+        <svg width="22" height="22" viewBox="0 0 24 24" fill="none"><path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z" stroke="currentColor" stroke-width="2" stroke-linejoin="round"/></svg>
+      </div>
+      <span>Emergency</span>
+    </button>
+    <button class="nav-item nav-center-btn" data-screen="furniture">
+      <div class="nav-icon nav-center-icon">
+        <svg width="22" height="22" viewBox="0 0 24 24" fill="none"><rect x="2" y="13" width="20" height="3" rx="1" stroke="currentColor" stroke-width="2"/><path d="M4 13V8a2 2 0 012-2h12a2 2 0 012 2v5" stroke="currentColor" stroke-width="2"/><path d="M6 16v3M18 16v3" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>
+      </div>
+      <span>Furniture</span>
+    </button>
+    <button class="nav-item" data-screen="painting">
+      <div class="nav-icon">
+        <svg width="22" height="22" viewBox="0 0 24 24" fill="none"><path d="M2 20h20M6 20V10l6-8 6 8v10" stroke="currentColor" stroke-width="2" stroke-linejoin="round"/></svg>
+      </div>
+      <span>Painting</span>
+    </button>
+    <button class="nav-item" data-screen="bookings">
+      <div class="nav-icon">
+        <svg width="22" height="22" viewBox="0 0 24 24" fill="none"><circle cx="12" cy="8" r="4" stroke="currentColor" stroke-width="2"/><path d="M4 20c0-4 3.6-7 8-7s8 3 8 7" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>
+      </div>
+      <span>Profile</span>
+    </button>
+  </nav>
+
+  <!-- ═══════════════════════════════════════ BOOKING MODAL ═══════════════════════════════════════ -->
+  <div class="modal-overlay" id="bookingModal">
+    <div class="modal-sheet">
+      <div class="modal-drag-handle"></div>
+      <h2 class="modal-title" id="modalTitle">Book Service</h2>
+      <p class="modal-sub">Fill in your details and we'll confirm your booking</p>
+
+      <div class="form-group">
+        <label>Your Name</label>
+        <input type="text" value="Shivam Singh" placeholder="Full name" />
+      </div>
+      <div class="form-group">
+        <label>Phone Number</label>
+        <input type="tel" placeholder="+91 XXXXX XXXXX" />
+      </div>
+      <div class="form-group">
+        <label>Preferred Date</label>
+        <input type="date" />
+      </div>
+      <div class="form-group">
+        <label>Preferred Time</label>
+        <div class="time-chips">
+          <button class="time-chip active">Morning (8–12)</button>
+          <button class="time-chip">Afternoon (12–4)</button>
+          <button class="time-chip">Evening (4–8)</button>
+        </div>
+      </div>
+      <div class="form-group">
+        <label>Additional Notes</label>
+        <textarea placeholder="Describe your requirement..." rows="3"></textarea>
+      </div>
+      <div class="modal-actions">
+        <button class="modal-cancel-btn" onclick="closeModal()">Cancel</button>
+        <button class="modal-confirm-btn" onclick="confirmBooking()">Confirm Booking</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Toast -->
+  <div class="toast" id="toast"></div>
+
+  <!-- ═══════════════════════════════════════ LOCATION PICKER ═══════════════════════════════════════ -->
+  <div class="loc-overlay" id="locOverlay">
+    <div class="loc-sheet">
+      <div class="loc-drag-handle"></div>
+      <div class="loc-header">
+        <h2 class="loc-title">Select Your Jila</h2>
+        <p class="loc-sub">Rajasthan ke sabhi 33 jile</p>
+      </div>
+      <div class="loc-search-wrap">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none"><circle cx="11" cy="11" r="8" stroke="#9ca3af" stroke-width="2"/><path d="M21 21l-4.35-4.35" stroke="#9ca3af" stroke-width="2" stroke-linecap="round"/></svg>
+        <input type="text" id="locSearchInput" placeholder="Jila dhundhe..." autocomplete="off" />
+      </div>
+      <ul class="loc-list" id="locList">
+        <li class="loc-item active" data-jila="Jodhpur">
+          <span class="loc-pin">📍</span> Jodhpur
+          <svg class="loc-check" width="16" height="16" viewBox="0 0 24 24" fill="none"><path d="M20 6L9 17l-5-5" stroke="#0F3D3E" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        </li>
+        <li class="loc-item" data-jila="Ajmer"><span class="loc-pin">📍</span> Ajmer</li>
+        <li class="loc-item" data-jila="Alwar"><span class="loc-pin">📍</span> Alwar</li>
+        <li class="loc-item" data-jila="Banswara"><span class="loc-pin">📍</span> Banswara</li>
+        <li class="loc-item" data-jila="Baran"><span class="loc-pin">📍</span> Baran</li>
+        <li class="loc-item" data-jila="Barmer"><span class="loc-pin">📍</span> Barmer</li>
+        <li class="loc-item" data-jila="Bharatpur"><span class="loc-pin">📍</span> Bharatpur</li>
+        <li class="loc-item" data-jila="Bhilwara"><span class="loc-pin">📍</span> Bhilwara</li>
+        <li class="loc-item" data-jila="Bikaner"><span class="loc-pin">📍</span> Bikaner</li>
+        <li class="loc-item" data-jila="Bundi"><span class="loc-pin">📍</span> Bundi</li>
+        <li class="loc-item" data-jila="Chittorgarh"><span class="loc-pin">📍</span> Chittorgarh</li>
+        <li class="loc-item" data-jila="Churu"><span class="loc-pin">📍</span> Churu</li>
+        <li class="loc-item" data-jila="Dausa"><span class="loc-pin">📍</span> Dausa</li>
+        <li class="loc-item" data-jila="Dholpur"><span class="loc-pin">📍</span> Dholpur</li>
+        <li class="loc-item" data-jila="Dungarpur"><span class="loc-pin">📍</span> Dungarpur</li>
+        <li class="loc-item" data-jila="Hanumangarh"><span class="loc-pin">📍</span> Hanumangarh</li>
+        <li class="loc-item" data-jila="Jaipur"><span class="loc-pin">📍</span> Jaipur</li>
+        <li class="loc-item" data-jila="Jaisalmer"><span class="loc-pin">📍</span> Jaisalmer</li>
+        <li class="loc-item" data-jila="Jalore"><span class="loc-pin">📍</span> Jalore</li>
+        <li class="loc-item" data-jila="Jhalawar"><span class="loc-pin">📍</span> Jhalawar</li>
+        <li class="loc-item" data-jila="Jhunjhunu"><span class="loc-pin">📍</span> Jhunjhunu</li>
+        <li class="loc-item" data-jila="Karauli"><span class="loc-pin">📍</span> Karauli</li>
+        <li class="loc-item" data-jila="Kota"><span class="loc-pin">📍</span> Kota</li>
+        <li class="loc-item" data-jila="Nagaur"><span class="loc-pin">📍</span> Nagaur</li>
+        <li class="loc-item" data-jila="Pali"><span class="loc-pin">📍</span> Pali</li>
+        <li class="loc-item" data-jila="Pratapgarh"><span class="loc-pin">📍</span> Pratapgarh</li>
+        <li class="loc-item" data-jila="Rajsamand"><span class="loc-pin">📍</span> Rajsamand</li>
+        <li class="loc-item" data-jila="Sawai Madhopur"><span class="loc-pin">📍</span> Sawai Madhopur</li>
+        <li class="loc-item" data-jila="Sikar"><span class="loc-pin">📍</span> Sikar</li>
+        <li class="loc-item" data-jila="Sirohi"><span class="loc-pin">📍</span> Sirohi</li>
+        <li class="loc-item" data-jila="Sri Ganganagar"><span class="loc-pin">📍</span> Sri Ganganagar</li>
+        <li class="loc-item" data-jila="Tonk"><span class="loc-pin">📍</span> Tonk</li>
+        <li class="loc-item" data-jila="Udaipur"><span class="loc-pin">📍</span> Udaipur</li>
+      </ul>
+    </div>
+  </div>
+
+</div>
+
+<script src="script.js"></script>
+</body>
+</html>
