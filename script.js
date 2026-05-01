@@ -15,15 +15,18 @@ function navigateTo(screenId) {
 }
 
 document.querySelectorAll('.nav-item').forEach(btn => {
-  btn.addEventListener('click', () => navigateTo(btn.dataset.screen));
+  btn.addEventListener('click', () => {
+    if (!btn.dataset.screen) return;
+    navigateTo(btn.dataset.screen);
+  });
 });
 
 document.querySelectorAll('.cat-card').forEach(card => {
   card.addEventListener('click', () => navigateTo(card.dataset.target));
 });
 
-/* New V2 category buttons */
-document.querySelectorAll('.hv2-cat').forEach(btn => {
+/* Category horizontal cards */
+document.querySelectorAll('.cat-card-h').forEach(btn => {
   btn.addEventListener('click', () => navigateTo(btn.dataset.target));
 });
 
@@ -76,6 +79,24 @@ let currentService = '';
 function showBookingModal(serviceName) {
   currentService = serviceName;
   document.getElementById('modalTitle').textContent = 'Book – ' + serviceName;
+
+  // Auto-fill name
+  const nameField = document.getElementById('field-name');
+  if (nameField && !nameField.value) nameField.value = 'Shivam Singh';
+
+  // Set today's min date on date field
+  const dateField = document.getElementById('field-date');
+  if (dateField) {
+    const today = new Date().toISOString().split('T')[0];
+    dateField.min = today;
+  }
+
+  // Clear previous errors
+  ['fg-name', 'fg-phone', 'fg-date'].forEach(id => {
+    const el = document.getElementById(id);
+    if (el) el.classList.remove('has-error', 'shake');
+  });
+
   document.getElementById('bookingModal').classList.add('open');
   document.body.style.overflow = 'hidden';
 }
@@ -85,8 +106,66 @@ function closeModal() {
   document.body.style.overflow = '';
 }
 
+function shakeField(groupId) {
+  const el = document.getElementById(groupId);
+  if (!el) return;
+  el.classList.add('has-error');
+  el.classList.remove('shake');
+  void el.offsetWidth; // force reflow to restart animation
+  el.classList.add('shake');
+}
+
 function confirmBooking() {
+  const name  = (document.getElementById('field-name')?.value  || '').trim();
+  const phone = (document.getElementById('field-phone')?.value || '').trim();
+  const date  = (document.getElementById('field-date')?.value  || '').trim();
+
+  let hasError = false;
+
+  if (!name) { shakeField('fg-name');  hasError = true; }
+  else document.getElementById('fg-name')?.classList.remove('has-error');
+
+  const phoneDigits = phone.replace(/\D/g, '');
+  if (!phone || phoneDigits.length < 10) { shakeField('fg-phone'); hasError = true; }
+  else document.getElementById('fg-phone')?.classList.remove('has-error');
+
+  if (!date) { shakeField('fg-date'); hasError = true; }
+  else document.getElementById('fg-date')?.classList.remove('has-error');
+
+  if (hasError) return;
+
+  // All valid — proceed
   closeModal();
+
+  const now = new Date();
+  const dateStr = now.toLocaleDateString('en-IN', { day: 'numeric', month: 'short', year: 'numeric' });
+  const timeStr = now.toLocaleTimeString('en-IN', { hour: '2-digit', minute: '2-digit' });
+
+  const iconMap = {
+    'Electrician':       { cls: 'bk2-red',    svg: '<path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z" fill="currentColor"/>' },
+    'Plumber':           { cls: 'bk2-blue',   svg: '<path d="M12 2C8 2 5 5 5 9c0 2.4 1.2 4.5 3 5.7V20h2v2h4v-2h2v-5.3c1.8-1.2 3-3.3 3-5.7 0-4-3-7-7-7z" fill="currentColor"/>' },
+    'Carpenter':         { cls: 'bk2-teal',   svg: '<path d="M14.7 6.3a1 1 0 000 1.4l1.6 1.6a1 1 0 001.4 0l3.77-3.77a6 6 0 01-7.94 7.94l-6.91 6.91a2.12 2.12 0 01-3-3l6.91-6.91a6 6 0 017.94-7.94l-3.76 3.76z" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>' },
+    'AC Repair':         { cls: 'bk2-cyan',   svg: '<path d="M12 2a5 5 0 00-5 5c0 3 2 5.5 5 7 3-1.5 5-4 5-7a5 5 0 00-5-5z" fill="currentColor"/>' },
+    'Car Painter':       { cls: 'bk2-purple', svg: '<path d="M18.37 2.63L14 7l-1.59-1.59a2 2 0 00-2.82 0L8 7l9 9 1.59-1.59a2 2 0 000-2.82L17 10l4.37-4.37a.6.6 0 000-.85l-2.15-2.15a.6.6 0 00-.85 0z" fill="currentColor"/>' },
+  };
+  const icon = iconMap[currentService] || { cls: 'bk2-teal', svg: '<circle cx="12" cy="12" r="8" fill="currentColor"/>' };
+
+  const itemHTML = `
+    <div class="booking-item">
+      <div class="bk2-icon ${icon.cls}">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none">${icon.svg}</svg>
+      </div>
+      <div class="booking-details">
+        <h3>${currentService}</h3>
+        <p class="booking-sub">Booking requested</p>
+        <p class="booking-date">${dateStr} · ${timeStr}</p>
+      </div>
+      <span class="booking-status pending">Pending</span>
+    </div>`;
+
+  document.getElementById('list-all').insertAdjacentHTML('afterbegin', itemHTML);
+  document.getElementById('list-pending').insertAdjacentHTML('afterbegin', itemHTML);
+
   navigateTo('bookings');
   showToast('✓ Booking confirmed for ' + currentService);
 }
@@ -217,14 +296,33 @@ locList.addEventListener('click', e => {
   if (item) selectJila(item.dataset.jila);
 });
 
-/* ── Search Bar Interaction ── */
-const searchInput = document.querySelector('.hv2-search input');
-if (searchInput) searchInput.addEventListener('keydown', e => {
-  if (e.key === 'Enter') {
-    const val = e.target.value.trim();
-    if (val) showToast(`Searching for "${val}"…`);
+/* ── Search ── */
+const serviceRoutes = {
+  electrician: 'emergency', electric: 'emergency', wiring: 'emergency', switch: 'emergency',
+  plumber: 'emergency', pipe: 'emergency', leak: 'emergency', tap: 'emergency',
+  carpenter: 'emergency', door: 'emergency', hinge: 'emergency', lock: 'emergency',
+  ac: 'emergency', repair: 'emergency', cooling: 'emergency',
+  furniture: 'furniture', bed: 'furniture', kitchen: 'furniture', wardrobe: 'furniture',
+  sofa: 'furniture', office: 'furniture', table: 'furniture', shelf: 'furniture',
+  paint: 'painting', painting: 'painting', colour: 'painting', color: 'painting', wall: 'painting',
+};
+
+function handleSearch(e) {
+  e.preventDefault();
+  const inp = document.getElementById('searchInput');
+  const val = inp.value.trim().toLowerCase();
+  if (!val) { showToast('Type a service name to search'); return; }
+
+  const matched = Object.keys(serviceRoutes).find(k => val.includes(k));
+  if (matched) {
+    inp.value = '';
+    inp.blur();
+    navigateTo(serviceRoutes[matched]);
+    showToast(`Showing results for "${inp.value || val}"`);
+  } else {
+    showToast(`No results for "${val}" — try Electrician, Furniture, Painting`);
   }
-});
+}
 
 /* ── Greeting based on time ── */
 (function setGreeting() {
@@ -239,6 +337,17 @@ if (searchInput) searchInput.addEventListener('keydown', e => {
     el.textContent = `${greeting} ${icon}`;
   }
 })();
+
+/* ── Profile Sheet ── */
+function openProfileSheet() {
+  document.getElementById('profileOverlay').classList.add('open');
+  document.body.style.overflow = 'hidden';
+}
+
+function closeProfileSheet() {
+  document.getElementById('profileOverlay').classList.remove('open');
+  document.body.style.overflow = '';
+}
 
 /* ── Swipe Down to close modals ── */
 (function setupSwipeClose() {

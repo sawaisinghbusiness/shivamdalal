@@ -47,38 +47,48 @@
       </div>
 
       <!-- Search Bar -->
-      <div class="hv2-search">
+      <form class="hv2-search" id="searchForm" onsubmit="handleSearch(event)">
         <svg width="17" height="17" viewBox="0 0 24 24" fill="none"><circle cx="11" cy="11" r="8" stroke="#9ca3af" stroke-width="2"/><path d="M21 21l-4.35-4.35" stroke="#9ca3af" stroke-width="2" stroke-linecap="round"/></svg>
-        <input type="text" placeholder="Search services..." />
-      </div>
+        <input type="search" id="searchInput" placeholder="Search services, furniture, painting…" autocomplete="off" />
+        <button type="submit" class="hv2-search-btn">Search</button>
+      </form>
     </div>
 
     <div class="screen-scroll">
 
-      <!-- Category Icons Row -->
-      <section class="hv2-cats-section">
-        <button class="hv2-cat" data-target="emergency">
-          <div class="hv2-cat-circle hv2-red">
-            <svg width="26" height="26" viewBox="0 0 24 24" fill="none"><path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z" fill="#fff"/></svg>
+      <!-- Category Cards Row -->
+      <section class="cat-row">
+        <button class="cat-card-h" data-target="emergency">
+          <div class="cat-card-h-icon cat-red">
+            <svg width="22" height="22" viewBox="0 0 24 24" fill="none"><path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z" fill="#fff"/></svg>
           </div>
-          <span class="hv2-cat-name">Emergency Services</span>
-          <small class="hv2-cat-sub">24x7 Available</small>
+          <div class="cat-card-h-text">
+            <span class="cat-card-h-name">Emergency</span>
+            <span class="cat-card-h-sub">24x7 Available</span>
+          </div>
+          <svg class="cat-card-h-arrow" width="14" height="14" viewBox="0 0 24 24" fill="none"><path d="M9 18l6-6-6-6" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
         </button>
 
-        <button class="hv2-cat" data-target="furniture">
-          <div class="hv2-cat-circle hv2-teal">
-            <svg width="26" height="26" viewBox="0 0 24 24" fill="none"><rect x="2" y="13" width="20" height="3" rx="1" fill="#fff"/><path d="M4 13V8a2 2 0 012-2h12a2 2 0 012 2v5" stroke="#fff" stroke-width="2"/><path d="M6 16v3M18 16v3" stroke="#fff" stroke-width="2" stroke-linecap="round"/></svg>
+        <button class="cat-card-h" data-target="furniture">
+          <div class="cat-card-h-icon cat-teal">
+            <svg width="22" height="22" viewBox="0 0 24 24" fill="none"><rect x="3" y="11" width="18" height="7" rx="2" stroke="white" stroke-width="2"/><path d="M3 14V9a2 2 0 014 0v2" stroke="white" stroke-width="2" stroke-linecap="round"/><path d="M21 14V9a2 2 0 00-4 0v2" stroke="white" stroke-width="2" stroke-linecap="round"/></svg>
           </div>
-          <span class="hv2-cat-name">Furniture</span>
-          <small class="hv2-cat-sub">Design &amp; Customization</small>
+          <div class="cat-card-h-text">
+            <span class="cat-card-h-name">Furniture</span>
+            <span class="cat-card-h-sub">Design &amp; Custom</span>
+          </div>
+          <svg class="cat-card-h-arrow" width="14" height="14" viewBox="0 0 24 24" fill="none"><path d="M9 18l6-6-6-6" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
         </button>
 
-        <button class="hv2-cat" data-target="painting">
-          <div class="hv2-cat-circle hv2-purple">
-            <svg width="26" height="26" viewBox="0 0 24 24" fill="none"><path d="M18.37 2.63L14 7l-1.59-1.59a2 2 0 00-2.82 0L8 7l9 9 1.59-1.59a2 2 0 000-2.82L17 10l4.37-4.37a.6.6 0 000-.85l-2.15-2.15a.6.6 0 00-.85 0z" fill="#fff"/><path d="M3 21v-3.5l8-8" stroke="#fff" stroke-width="2" stroke-linecap="round"/><circle cx="4.5" cy="19.5" r="1.5" fill="#fff"/></svg>
+        <button class="cat-card-h" data-target="painting">
+          <div class="cat-card-h-icon cat-purple">
+            <svg width="22" height="22" viewBox="0 0 24 24" fill="none"><rect x="2" y="4" width="15" height="7" rx="2" stroke="white" stroke-width="2"/><path d="M17 7.5h2a1 1 0 011 1v1a1 1 0 01-1 1h-2" stroke="white" stroke-width="2" stroke-linecap="round"/><path d="M9 11v3a2 2 0 002 2h0a2 2 0 002-2v-3" stroke="white" stroke-width="2" stroke-linecap="round"/><path d="M13 16v4M11 20h4" stroke="white" stroke-width="2" stroke-linecap="round"/></svg>
           </div>
-          <span class="hv2-cat-name">Painting</span>
-          <small class="hv2-cat-sub">Colors that inspire</small>
+          <div class="cat-card-h-text">
+            <span class="cat-card-h-name">Painting</span>
+            <span class="cat-card-h-sub">Interior &amp; Exterior</span>
+          </div>
+          <svg class="cat-card-h-arrow" width="14" height="14" viewBox="0 0 24 24" fill="none"><path d="M9 18l6-6-6-6" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
         </button>
       </section>
 
@@ -90,7 +100,7 @@
         </div>
         <div class="pop-grid">
 
-          <div class="pop-card" onclick="navigateTo('emergency')">
+          <div class="pop-card" onclick="showBookingModal('Electrician')">
             <div class="pop-card-img">
               <img src="electrician.png.png" alt="Electrician" />
             </div>
@@ -100,7 +110,7 @@
             </button>
           </div>
 
-          <div class="pop-card" onclick="navigateTo('emergency')">
+          <div class="pop-card" onclick="showBookingModal('Plumber')">
             <div class="pop-card-img">
               <img src="plumber.png" alt="Plumber" />
             </div>
@@ -110,7 +120,7 @@
             </button>
           </div>
 
-          <div class="pop-card" onclick="navigateTo('painting')">
+          <div class="pop-card" onclick="showBookingModal('Car Painter')">
             <div class="pop-card-img">
               <img src="carpainter.png" alt="Car Painter" />
             </div>
@@ -776,151 +786,45 @@
 
       <!-- All -->
       <div class="tab-content active" id="tab-all-bookings">
-        <section class="section">
-          <div class="booking-list">
-            <div class="booking-item">
-              <div class="bk2-icon bk2-red">
-                <svg width="20" height="20" viewBox="0 0 24 24" fill="none"><path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z" fill="currentColor"/></svg>
-              </div>
-              <div class="booking-details">
-                <h3>Electrician</h3>
-                <p class="booking-sub">Electrical wiring issue</p>
-                <p class="booking-date">12 May 2024 · 10:30 AM</p>
-              </div>
-              <span class="booking-status pending">Pending</span>
-            </div>
-
-            <div class="booking-item">
-              <div class="bk2-icon bk2-blue">
-                <svg width="20" height="20" viewBox="0 0 24 24" fill="none"><path d="M12 2C8 2 5 5 5 9c0 2.4 1.2 4.5 3 5.7V20h2v2h4v-2h2v-5.3c1.8-1.2 3-3.3 3-5.7 0-4-3-7-7-7z" fill="currentColor"/></svg>
-              </div>
-              <div class="booking-details">
-                <h3>Plumber</h3>
-                <p class="booking-sub">Bathroom pipe leakage</p>
-                <p class="booking-date">11 May 2024 · 04:00 PM</p>
-              </div>
-              <span class="booking-status confirmed">Confirmed</span>
-            </div>
-
-            <div class="booking-item">
-              <div class="bk2-icon bk2-cyan">
-                <svg width="20" height="20" viewBox="0 0 24 24" fill="none"><path d="M12 2a5 5 0 00-5 5c0 3 2 5.5 5 7 3-1.5 5-4 5-7a5 5 0 00-5-5z" fill="currentColor"/></svg>
-              </div>
-              <div class="booking-details">
-                <h3>AC Repair</h3>
-                <p class="booking-sub">AC not cooling</p>
-                <p class="booking-date">10 May 2024 · 02:30 PM</p>
-              </div>
-              <span class="booking-status completed">Completed</span>
-            </div>
-
-            <div class="booking-item">
-              <div class="bk2-icon bk2-teal">
-                <svg width="20" height="20" viewBox="0 0 24 24" fill="none"><rect x="2" y="13" width="20" height="3" rx="1" fill="currentColor"/><path d="M4 13V8a2 2 0 012-2h12a2 2 0 012 2v5" stroke="currentColor" stroke-width="2"/></svg>
-              </div>
-              <div class="booking-details">
-                <h3>Bedroom Furniture</h3>
-                <p class="booking-sub">Modern wardrobe design</p>
-                <p class="booking-date">09 May 2024 · 11:00 AM</p>
-              </div>
-              <span class="booking-status confirmed">Confirmed</span>
-            </div>
-
-            <div class="booking-item">
-              <div class="bk2-icon bk2-purple">
-                <svg width="20" height="20" viewBox="0 0 24 24" fill="none"><path d="M18.37 2.63L14 7l-1.59-1.59a2 2 0 00-2.82 0L8 7l9 9 1.59-1.59a2 2 0 000-2.82L17 10l4.37-4.37a.6.6 0 000-.85l-2.15-2.15a.6.6 0 00-.85 0z" fill="currentColor"/><path d="M3 21v-3.5l8-8" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>
-              </div>
-              <div class="booking-details">
-                <h3>Bedroom Painting</h3>
-                <p class="booking-sub">Pastel color painting</p>
-                <p class="booking-date">08 May 2024 · 01:00 PM</p>
-              </div>
-              <span class="booking-status completed">Completed</span>
-            </div>
-          </div>
-        </section>
+        <div class="booking-list" id="list-all"></div>
+        <div class="booking-empty" id="empty-all">
+          <div class="bk-empty-icon">📋</div>
+          <h3>No Bookings Yet</h3>
+          <p>Book a service to see it here</p>
+        </div>
         <div class="bottom-spacer"></div>
       </div>
 
       <!-- Pending -->
       <div class="tab-content" id="tab-pending-bookings">
-        <section class="section">
-          <div class="booking-list">
-            <div class="booking-item">
-              <div class="bk2-icon bk2-red">
-                <svg width="20" height="20" viewBox="0 0 24 24" fill="none"><path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z" fill="currentColor"/></svg>
-              </div>
-              <div class="booking-details">
-                <h3>Electrician</h3>
-                <p class="booking-sub">Electrical wiring issue</p>
-                <p class="booking-date">12 May 2024 · 10:30 AM</p>
-              </div>
-              <span class="booking-status pending">Pending</span>
-            </div>
-          </div>
-        </section>
+        <div class="booking-list" id="list-pending"></div>
+        <div class="booking-empty" id="empty-pending">
+          <div class="bk-empty-icon">⏳</div>
+          <h3>No Pending Bookings</h3>
+          <p>Your pending services will appear here</p>
+        </div>
         <div class="bottom-spacer"></div>
       </div>
 
       <!-- Confirmed -->
       <div class="tab-content" id="tab-confirmed-bookings">
-        <section class="section">
-          <div class="booking-list">
-            <div class="booking-item">
-              <div class="bk2-icon bk2-blue">
-                <svg width="20" height="20" viewBox="0 0 24 24" fill="none"><path d="M12 2C8 2 5 5 5 9c0 2.4 1.2 4.5 3 5.7V20h2v2h4v-2h2v-5.3c1.8-1.2 3-3.3 3-5.7 0-4-3-7-7-7z" fill="currentColor"/></svg>
-              </div>
-              <div class="booking-details">
-                <h3>Plumber</h3>
-                <p class="booking-sub">Bathroom pipe leakage</p>
-                <p class="booking-date">11 May 2024 · 04:00 PM</p>
-              </div>
-              <span class="booking-status confirmed">Confirmed</span>
-            </div>
-            <div class="booking-item">
-              <div class="bk2-icon bk2-teal">
-                <svg width="20" height="20" viewBox="0 0 24 24" fill="none"><rect x="2" y="13" width="20" height="3" rx="1" fill="currentColor"/><path d="M4 13V8a2 2 0 012-2h12a2 2 0 012 2v5" stroke="currentColor" stroke-width="2"/></svg>
-              </div>
-              <div class="booking-details">
-                <h3>Bedroom Furniture</h3>
-                <p class="booking-sub">Modern wardrobe design</p>
-                <p class="booking-date">09 May 2024 · 11:00 AM</p>
-              </div>
-              <span class="booking-status confirmed">Confirmed</span>
-            </div>
-          </div>
-        </section>
+        <div class="booking-list" id="list-confirmed"></div>
+        <div class="booking-empty" id="empty-confirmed">
+          <div class="bk-empty-icon">✅</div>
+          <h3>No Confirmed Bookings</h3>
+          <p>Confirmed services will appear here</p>
+        </div>
         <div class="bottom-spacer"></div>
       </div>
 
       <!-- Completed -->
       <div class="tab-content" id="tab-completed-bookings">
-        <section class="section">
-          <div class="booking-list">
-            <div class="booking-item">
-              <div class="bk2-icon bk2-cyan">
-                <svg width="20" height="20" viewBox="0 0 24 24" fill="none"><path d="M12 2a5 5 0 00-5 5c0 3 2 5.5 5 7 3-1.5 5-4 5-7a5 5 0 00-5-5z" fill="currentColor"/></svg>
-              </div>
-              <div class="booking-details">
-                <h3>AC Repair</h3>
-                <p class="booking-sub">AC not cooling</p>
-                <p class="booking-date">10 May 2024 · 02:30 PM</p>
-              </div>
-              <span class="booking-status completed">Completed</span>
-            </div>
-            <div class="booking-item">
-              <div class="bk2-icon bk2-purple">
-                <svg width="20" height="20" viewBox="0 0 24 24" fill="none"><path d="M18.37 2.63L14 7l-1.59-1.59a2 2 0 00-2.82 0L8 7l9 9 1.59-1.59a2 2 0 000-2.82L17 10l4.37-4.37a.6.6 0 000-.85l-2.15-2.15a.6.6 0 00-.85 0z" fill="currentColor"/></svg>
-              </div>
-              <div class="booking-details">
-                <h3>Bedroom Painting</h3>
-                <p class="booking-sub">Pastel color painting</p>
-                <p class="booking-date">08 May 2024 · 01:00 PM</p>
-              </div>
-              <span class="booking-status completed">Completed</span>
-            </div>
-          </div>
-        </section>
+        <div class="booking-list" id="list-completed"></div>
+        <div class="booking-empty" id="empty-completed">
+          <div class="bk-empty-icon">🎉</div>
+          <h3>No Completed Bookings</h3>
+          <p>Finished services will appear here</p>
+        </div>
         <div class="bottom-spacer"></div>
       </div>
 
@@ -931,35 +835,116 @@
   <nav class="bottom-nav">
     <button class="nav-item active" data-screen="home">
       <div class="nav-icon">
-        <svg width="22" height="22" viewBox="0 0 24 24" fill="none"><path d="M3 9l9-7 9 7v11a2 2 0 01-2 2H5a2 2 0 01-2-2z" stroke="currentColor" stroke-width="2" stroke-linejoin="round"/><polyline points="9 22 9 12 15 12 15 22" stroke="currentColor" stroke-width="2" stroke-linejoin="round"/></svg>
+        <!-- Home — house with chimney -->
+        <svg width="22" height="22" viewBox="0 0 24 24" fill="none">
+          <path d="M3 11.5L12 4l9 7.5" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+          <path d="M5 10v9a1 1 0 001 1h4v-4h4v4h4a1 1 0 001-1v-9" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
       </div>
       <span>Home</span>
     </button>
     <button class="nav-item" data-screen="emergency">
       <div class="nav-icon">
-        <svg width="22" height="22" viewBox="0 0 24 24" fill="none"><path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z" stroke="currentColor" stroke-width="2" stroke-linejoin="round"/></svg>
+        <!-- Emergency — shield with bolt -->
+        <svg width="22" height="22" viewBox="0 0 24 24" fill="none">
+          <path d="M12 2L4 6v6c0 5 3.5 9.7 8 11 4.5-1.3 8-6 8-11V6l-8-4z" stroke="currentColor" stroke-width="2" stroke-linejoin="round"/>
+          <path d="M12 8v4M12 15h.01" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+        </svg>
       </div>
       <span>Emergency</span>
     </button>
     <button class="nav-item nav-center-btn" data-screen="furniture">
       <div class="nav-icon nav-center-icon">
-        <svg width="22" height="22" viewBox="0 0 24 24" fill="none"><rect x="2" y="13" width="20" height="3" rx="1" stroke="currentColor" stroke-width="2"/><path d="M4 13V8a2 2 0 012-2h12a2 2 0 012 2v5" stroke="currentColor" stroke-width="2"/><path d="M6 16v3M18 16v3" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>
+        <!-- Furniture — sofa/couch -->
+        <svg width="24" height="24" viewBox="0 0 24 24" fill="none">
+          <rect x="3" y="11" width="18" height="7" rx="2" stroke="white" stroke-width="2"/>
+          <path d="M3 14V9a2 2 0 014 0v2" stroke="white" stroke-width="2" stroke-linecap="round"/>
+          <path d="M21 14V9a2 2 0 00-4 0v2" stroke="white" stroke-width="2" stroke-linecap="round"/>
+          <path d="M5 18v2M19 18v2" stroke="white" stroke-width="2" stroke-linecap="round"/>
+        </svg>
       </div>
       <span>Furniture</span>
     </button>
     <button class="nav-item" data-screen="painting">
       <div class="nav-icon">
-        <svg width="22" height="22" viewBox="0 0 24 24" fill="none"><path d="M2 20h20M6 20V10l6-8 6 8v10" stroke="currentColor" stroke-width="2" stroke-linejoin="round"/></svg>
+        <!-- Painting — paint roller -->
+        <svg width="22" height="22" viewBox="0 0 24 24" fill="none">
+          <rect x="2" y="4" width="15" height="7" rx="2" stroke="currentColor" stroke-width="2"/>
+          <path d="M12 7.5h3" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+          <path d="M17 7.5h2a1 1 0 011 1v1a1 1 0 01-1 1h-2" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+          <path d="M9 11v3a2 2 0 002 2h0a2 2 0 002-2v-3" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+          <path d="M13 16v4" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+          <path d="M11 20h4" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+        </svg>
       </div>
       <span>Painting</span>
     </button>
-    <button class="nav-item" data-screen="bookings">
+    <button class="nav-item" id="profileNavBtn" onclick="openProfileSheet()">
       <div class="nav-icon">
-        <svg width="22" height="22" viewBox="0 0 24 24" fill="none"><circle cx="12" cy="8" r="4" stroke="currentColor" stroke-width="2"/><path d="M4 20c0-4 3.6-7 8-7s8 3 8 7" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>
+        <!-- Profile — person silhouette -->
+        <svg width="22" height="22" viewBox="0 0 24 24" fill="none">
+          <circle cx="12" cy="7" r="4" stroke="currentColor" stroke-width="2"/>
+          <path d="M4 21c0-4.4 3.6-8 8-8s8 3.6 8 8" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+        </svg>
       </div>
       <span>Profile</span>
     </button>
   </nav>
+
+  <!-- ═══════════════════════════════════════ PROFILE SHEET ═══════════════════════════════════════ -->
+  <div class="profile-overlay" id="profileOverlay" onclick="closeProfileSheet()">
+    <div class="profile-sheet" onclick="event.stopPropagation()">
+      <div class="profile-drag"></div>
+
+      <!-- User Info -->
+      <div class="profile-user-row">
+        <div class="profile-avatar">S</div>
+        <div class="profile-user-info">
+          <h3>Shivam Singh</h3>
+          <p>sawaisinghbusiness@gmail.com</p>
+        </div>
+      </div>
+
+      <div class="profile-divider"></div>
+
+      <!-- Options -->
+      <button class="profile-option" onclick="closeProfileSheet(); navigateTo('bookings')">
+        <div class="profile-opt-icon opt-booking">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none"><rect x="3" y="4" width="18" height="18" rx="2" stroke="currentColor" stroke-width="2"/><path d="M16 2v4M8 2v4M3 10h18" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>
+        </div>
+        <div class="profile-opt-text">
+          <span>My Bookings</span>
+          <small>View all your service history</small>
+        </div>
+        <svg class="profile-opt-arrow" width="16" height="16" viewBox="0 0 24 24" fill="none"><path d="M9 18l6-6-6-6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+      </button>
+
+      <button class="profile-option" onclick="showToast('Profile settings coming soon')">
+        <div class="profile-opt-icon opt-profile">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none"><circle cx="12" cy="7" r="4" stroke="currentColor" stroke-width="2"/><path d="M4 21c0-4.4 3.6-8 8-8s8 3.6 8 8" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>
+        </div>
+        <div class="profile-opt-text">
+          <span>My Profile</span>
+          <small>Edit personal details & address</small>
+        </div>
+        <svg class="profile-opt-arrow" width="16" height="16" viewBox="0 0 24 24" fill="none"><path d="M9 18l6-6-6-6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+      </button>
+
+      <button class="profile-option profile-logout" onclick="closeProfileSheet(); showToast('Logged out successfully')">
+        <div class="profile-opt-icon opt-logout">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none"><path d="M9 21H5a2 2 0 01-2-2V5a2 2 0 012-2h4M16 17l5-5-5-5M21 12H9" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        </div>
+        <div class="profile-opt-text">
+          <span>Log Out</span>
+          <small>Sign out of your account</small>
+        </div>
+      </button>
+
+      <div class="profile-sheet-close">
+        <button onclick="closeProfileSheet()">Cancel</button>
+      </div>
+    </div>
+  </div>
 
   <!-- ═══════════════════════════════════════ BOOKING MODAL ═══════════════════════════════════════ -->
   <div class="modal-overlay" id="bookingModal">
@@ -968,17 +953,20 @@
       <h2 class="modal-title" id="modalTitle">Book Service</h2>
       <p class="modal-sub">Fill in your details and we'll confirm your booking</p>
 
-      <div class="form-group">
+      <div class="form-group" id="fg-name">
         <label>Your Name</label>
-        <input type="text" value="Shivam Singh" placeholder="Full name" />
+        <input type="text" id="field-name" placeholder="Full name" autocomplete="name" />
+        <span class="field-error" id="err-name">Please enter your name</span>
       </div>
-      <div class="form-group">
+      <div class="form-group" id="fg-phone">
         <label>Phone Number</label>
-        <input type="tel" placeholder="+91 XXXXX XXXXX" />
+        <input type="tel" id="field-phone" placeholder="+91 XXXXX XXXXX" maxlength="13" autocomplete="tel" />
+        <span class="field-error" id="err-phone">Please enter a valid 10-digit number</span>
       </div>
-      <div class="form-group">
+      <div class="form-group" id="fg-date">
         <label>Preferred Date</label>
-        <input type="date" />
+        <input type="date" id="field-date" />
+        <span class="field-error" id="err-date">Please select a date</span>
       </div>
       <div class="form-group">
         <label>Preferred Time</label>
@@ -989,8 +977,8 @@
         </div>
       </div>
       <div class="form-group">
-        <label>Additional Notes</label>
-        <textarea placeholder="Describe your requirement..." rows="3"></textarea>
+        <label>Additional Notes <span style="color:var(--text-4);font-weight:400">(Optional)</span></label>
+        <textarea id="field-notes" placeholder="Describe your requirement..." rows="3"></textarea>
       </div>
       <div class="modal-actions">
         <button class="modal-cancel-btn" onclick="closeModal()">Cancel</button>
