@@ -1,0 +1,31 @@
+.pt-header { padding-bottom: 20px; }
+
+/* Services with rates */
+.pt-services { display: flex; flex-direction: column; gap: 10px; }
+.pt-service { display: flex; align-items: center; gap: 12px; background: #fff; border: 1px solid var(--border); border-radius: 14px; padding: 13px; }
+.pt-service-ic { width: 42px; height: 42px; border-radius: 11px; flex-shrink: 0; background: var(--primary-lt); color: var(--primary); display: flex; align-items: center; justify-content: center; }
+.pt-service-info { flex: 1; min-width: 0; }
+.pt-service-info strong { display: block; font-size: 14px; font-weight: 700; color: var(--text-1); }
+.pt-service-info small { font-size: 11.5px; color: var(--text-4); }
+.pt-rate { font-size: 12px; font-weight: 800; color: var(--primary); text-align: right; flex-shrink: 0; }
+
+/* Tabs */
+.pt-tabs { display: flex; gap: 8px; margin-bottom: 14px; overflow-x: auto; scrollbar-width: none; }
+.pt-tabs::-webkit-scrollbar { display: none; }
+.pt-tab { flex-shrink: 0; padding: 8px 16px; border-radius: 20px; font-size: 12.5px; font-weight: 700; color: var(--text-3); background: #f4f6f6; }
+.pt-tab.active { background: var(--primary); color: #fff; }
+
+/* Style gallery */
+.pt-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+.pt-card { position: relative; aspect-ratio: 1 / 1.1; border-radius: 16px; overflow: hidden; background: #f1f4f4; }
+.pt-card img { width: 100%; height: 100%; object-fit: cover; }
+.pt-heart { position: absolute; top: 9px; right: 9px; width: 30px; height: 30px; border-radius: 50%; background: rgba(255,255,255,.9); color: var(--text-3); display: flex; align-items: center; justify-content: center; backdrop-filter: blur(4px); }
+.pt-heart.on { color: var(--danger); }
+.pt-heart.on .ic { fill: var(--danger); }
+.pt-card-overlay { position: absolute; left: 0; right: 0; bottom: 0; padding: 18px 12px 11px; background: linear-gradient(transparent, rgba(0,0,0,.78)); color: #fff; }
+.pt-card-overlay strong { display: block; font-size: 13.5px; font-weight: 700; }
+.pt-card-overlay small { font-size: 11px; opacity: .85; }
+
+/* Quote sheet title */
+.pt-sheet-title { font-size: 20px; font-weight: 800; color: var(--text-1); }
+.pt-sheet-tag { font-size: 13px; color: var(--text-3); margin: 3px 0 16px; }

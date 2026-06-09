@@ -3,6 +3,8 @@ import { ToastProvider } from './components/Toast';
 import BottomNav from './components/BottomNav';
 import Home from './pages/Home';
 import Emergency from './pages/Emergency';
+import Furniture from './pages/Furniture';
+import Painting from './pages/Painting';
 import Profile from './pages/Profile';
 import EditProfile from './pages/EditProfile';
 import MyBookings from './pages/MyBookings';
@@ -10,7 +12,6 @@ import SavedAddresses from './pages/SavedAddresses';
 import Wallet from './pages/Wallet';
 import Notifications from './pages/Notifications';
 import Help from './pages/Help';
-import Placeholder from './pages/Placeholder';
 import './App.css';
 
 // bottom nav sirf in main tabs pe dikhe
@@ -26,8 +27,8 @@ export default function App() {
         <Routes>
           <Route path="/" element={<Home />} />
           <Route path="/emergency" element={<Emergency />} />
-          <Route path="/furniture" element={<Placeholder title="Furniture" sub="Custom design & furniture" />} />
-          <Route path="/painting" element={<Placeholder title="Painting" sub="Interior & exterior painting" />} />
+          <Route path="/furniture" element={<Furniture />} />
+          <Route path="/painting" element={<Painting />} />
           <Route path="/profile" element={<Profile />} />
           {/* Profile sub-pages */}
           <Route path="/profile/edit" element={<EditProfile />} />
