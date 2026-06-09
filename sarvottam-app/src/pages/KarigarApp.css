@@ -1,0 +1,69 @@
+.ka-screen { flex: 1; overflow-y: auto; background: var(--bg); display: flex; flex-direction: column; animation: pageFade .35s ease-out both; }
+
+/* Header */
+.ka-header { background: linear-gradient(150deg, var(--primary), var(--primary-mid)); color: #fff; padding: 20px 18px 22px; border-radius: 0 0 24px 24px; }
+.ka-head-row { display: flex; align-items: center; gap: 12px; }
+.ka-avatar { width: 50px; height: 50px; border-radius: 50%; background: rgba(255,255,255,.18); display: flex; align-items: center; justify-content: center; font-size: 20px; font-weight: 800; }
+.ka-head-info { flex: 1; }
+.ka-head-info h2 { font-size: 17px; font-weight: 800; }
+.ka-head-info p { font-size: 12.5px; opacity: .85; }
+.ka-logout { width: 36px; height: 36px; border-radius: 50%; background: rgba(255,255,255,.15); color: #fff; display: flex; align-items: center; justify-content: center; transform: rotate(180deg); }
+
+/* Online toggle */
+.ka-toggle { display: flex; align-items: center; gap: 12px; width: 100%; margin-top: 16px; padding: 13px 16px; border-radius: 14px; background: rgba(255,255,255,.12); color: #fff; }
+.ka-toggle-knob { width: 44px; height: 26px; border-radius: 14px; background: rgba(255,255,255,.3); position: relative; flex-shrink: 0; transition: background .2s; }
+.ka-toggle-knob::after { content: ''; position: absolute; top: 3px; left: 3px; width: 20px; height: 20px; border-radius: 50%; background: #fff; transition: transform .2s; }
+.ka-toggle.on .ka-toggle-knob { background: #4ade80; }
+.ka-toggle.on .ka-toggle-knob::after { transform: translateX(18px); }
+.ka-toggle-label { font-size: 13px; font-weight: 700; text-align: left; }
+
+/* Stats */
+.ka-stats { display: flex; background: #fff; margin: -12px 18px 0; border-radius: 16px; padding: 16px 8px; box-shadow: 0 6px 18px rgba(0,0,0,.06); position: relative; z-index: 2; }
+.ka-stat { flex: 1; text-align: center; position: relative; }
+.ka-stat:not(:last-child)::after { content: ''; position: absolute; right: 0; top: 15%; height: 70%; width: 1px; background: var(--border); }
+.ka-stat strong { display: block; font-size: 17px; font-weight: 800; color: var(--primary); }
+.ka-stat small { font-size: 11px; color: var(--text-4); }
+
+/* Body states */
+.ka-body { flex: 1; padding: 22px 18px; }
+.ka-waiting, .ka-offline { text-align: center; padding: 36px 20px; }
+.ka-waiting h3, .ka-offline h3 { font-size: 18px; font-weight: 800; color: var(--text-1); margin-bottom: 6px; }
+.ka-waiting p, .ka-offline p { font-size: 13.5px; color: var(--text-3); }
+.ka-offline-ic { width: 80px; height: 80px; border-radius: 24px; background: var(--primary-lt); color: var(--primary); display: flex; align-items: center; justify-content: center; margin: 0 auto 16px; }
+
+/* radar */
+.ka-radar { width: 130px; height: 130px; margin: 10px auto 22px; position: relative; display: flex; align-items: center; justify-content: center; color: var(--primary); }
+.ka-radar span { position: absolute; inset: 0; border-radius: 50%; border: 2px solid rgba(15,61,62,.4); animation: pulse 2.4s ease-out infinite; }
+.ka-radar span:nth-child(2) { animation-delay: .8s; }
+.ka-radar span:nth-child(3) { animation-delay: 1.6s; }
+
+/* Active job */
+.ka-active { background: #fff; border: 1px solid var(--border); border-radius: 18px; padding: 20px; }
+.ka-active-tag { font-size: 10.5px; font-weight: 800; letter-spacing: .5px; color: var(--success); background: #dcfce7; padding: 4px 10px; border-radius: 20px; }
+.ka-active h3 { font-size: 20px; font-weight: 800; color: var(--text-1); margin: 12px 0 4px; }
+.ka-active-prob { font-size: 13.5px; color: var(--text-3); margin-bottom: 14px; }
+.ka-active-row { display: flex; align-items: center; gap: 8px; font-size: 13.5px; color: var(--text-2); padding: 6px 0; }
+.ka-active-row .ic { color: var(--primary); }
+.ka-active-row b { color: var(--primary); }
+.ka-progress { display: flex; gap: 8px; margin: 18px 0; }
+.ka-prog-step { flex: 1; height: 6px; border-radius: 3px; background: #e5e7eb; overflow: hidden; }
+.ka-prog-step.on { background: var(--success); }
+.ka-action { width: 100%; background: var(--primary); color: #fff; font-size: 15.5px; font-weight: 700; padding: 16px; border-radius: 13px; }
+.ka-action:active { opacity: .85; }
+.ka-call { display: flex; align-items: center; justify-content: center; gap: 7px; margin-top: 12px; font-size: 13.5px; font-weight: 700; color: var(--success); }
+
+/* Incoming offer */
+.ka-offer-overlay { position: absolute; inset: 0; z-index: 200; background: rgba(0,0,0,.6); display: flex; align-items: center; justify-content: center; padding: 22px; animation: fadeIn .2s; }
+.ka-offer { width: 100%; background: #fff; border-radius: 22px; padding: 22px; text-align: center; animation: offerPop .3s cubic-bezier(.34,1.56,.64,1); }
+@keyframes offerPop { from { transform: scale(.85); opacity: 0; } to { transform: scale(1); opacity: 1; } }
+.ka-offer-timer { width: 52px; height: 52px; border-radius: 50%; background: var(--danger); color: #fff; font-size: 16px; font-weight: 800; display: flex; align-items: center; justify-content: center; margin: 0 auto 14px; animation: dotPulse 1s infinite; }
+.ka-offer-tag { font-size: 10.5px; font-weight: 800; letter-spacing: .5px; color: var(--danger); }
+.ka-offer h2 { font-size: 22px; font-weight: 800; color: var(--text-1); margin: 8px 0 4px; }
+.ka-offer-prob { font-size: 13px; color: var(--text-3); margin-bottom: 16px; }
+.ka-offer-rows { text-align: left; background: #f8fafa; border-radius: 14px; padding: 14px; margin-bottom: 18px; }
+.ka-offer-rows > div { display: flex; align-items: center; gap: 9px; font-size: 13.5px; color: var(--text-2); padding: 5px 0; }
+.ka-offer-rows .ic { color: var(--primary); }
+.ka-offer-pay b { color: var(--primary); font-size: 15px; }
+.ka-offer-btns { display: flex; gap: 12px; }
+.ka-reject { flex: 1; background: #f4f6f6; color: var(--text-2); font-size: 15px; font-weight: 700; padding: 15px; border-radius: 13px; }
+.ka-accept { flex: 2; background: var(--success); color: #fff; font-size: 15px; font-weight: 700; padding: 15px; border-radius: 13px; }

@@ -14,24 +14,24 @@ import Wallet from './pages/Wallet';
 import Notifications from './pages/Notifications';
 import Help from './pages/Help';
 import Login from './pages/Login';
-import RegisterKarigar from './pages/RegisterKarigar';
+import Register from './pages/Register';
+import KarigarApp from './pages/KarigarApp';
 import './App.css';
 
-// bottom nav sirf in main tabs pe dikhe
 const MAIN_TABS = ['/', '/emergency', '/furniture', '/painting', '/profile'];
 
 export default function App() {
   const { pathname } = useLocation();
   const { auth } = useAppData();
 
-  // Not logged in → sirf login / register screens
+  // Not logged in → only login / register
   if (!auth.loggedIn) {
     return (
       <ToastProvider>
         <div className="app-wrapper">
           <Routes>
             <Route path="/login" element={<Login />} />
-            <Route path="/register-karigar" element={<RegisterKarigar />} />
+            <Route path="/register" element={<Register />} />
             <Route path="*" element={<Navigate to="/login" replace />} />
           </Routes>
         </div>
@@ -39,8 +39,22 @@ export default function App() {
     );
   }
 
-  const showNav = MAIN_TABS.includes(pathname);
+  // Logged in as Karigar → Karigar app only
+  if (auth.role === 'karigar') {
+    return (
+      <ToastProvider>
+        <div className="app-wrapper">
+          <Routes>
+            <Route path="/karigar" element={<KarigarApp />} />
+            <Route path="*" element={<Navigate to="/karigar" replace />} />
+          </Routes>
+        </div>
+      </ToastProvider>
+    );
+  }
 
+  // Logged in as Customer → full customer app
+  const showNav = MAIN_TABS.includes(pathname);
   return (
     <ToastProvider>
       <div className="app-wrapper">

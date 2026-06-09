@@ -1,120 +1,79 @@
-import { useState, useRef, useEffect } from 'react';
+import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import Icon from '../components/Icon';
 import { useToast } from '../components/Toast';
 import { useAppData } from '../store/AppData';
 import './Login.css';
 
-const DEMO_OTP = '1234';
-
 export default function Login() {
   const nav = useNavigate();
   const toast = useToast();
   const { login } = useAppData();
 
-  const [mode, setMode] = useState('phone'); // phone | otp | signup
-  const [phone, setPhone] = useState('');
-  const [name, setName] = useState('');
-  const [otp, setOtp] = useState(['', '', '', '']);
-  const [signup, setSignup] = useState(false);
-  const otpRefs = [useRef(), useRef(), useRef(), useRef()];
+  const [identifier, setIdentifier] = useState('');
+  const [password, setPassword] = useState('');
+  const [showPw, setShowPw] = useState(false);
 
-  useEffect(() => {
-    if (mode === 'otp') setTimeout(() => otpRefs[0].current?.focus(), 350);
-  }, [mode]);
-
-  function sendOtp() {
-    if (phone.replace(/\D/g, '').length < 10) { toast('Sahi 10-digit number daalein'); return; }
-    if (signup && name.trim().length < 2) { toast('Apna naam daalein'); return; }
-    setMode('otp');
-    toast(`Demo: OTP hai ${DEMO_OTP}`);
-  }
-
-  function onOtpChange(i, val) {
-    const v = val.replace(/\D/g, '').slice(-1);
-    const next = [...otp];
-    next[i] = v;
-    setOtp(next);
-    if (v && i < 3) otpRefs[i + 1].current?.focus();
-  }
-
-  function verifyOtp() {
-    if (otp.join('') !== DEMO_OTP) { toast('Galat OTP. Demo OTP: ' + DEMO_OTP); return; }
-    login('+91 ' + phone.replace(/\D/g, ''), signup ? name.trim() : undefined);
-    toast('✓ Login ho gaya — swagat hai!');
-    nav('/');
+  function submit() {
+    if (!identifier.trim()) { toast('Enter your email or phone'); return; }
+    if (!password) { toast('Enter your password'); return; }
+    const res = login(identifier, password);
+    if (!res.ok) { toast(res.error); return; }
+    toast('Welcome back!');
+    nav(res.role === 'karigar' ? '/karigar' : '/');
   }
 
   return (
-    <div className="login-screen">
-      {/* Brand header */}
-      <div className="login-top">
-        <img className="login-peacock" src="/peacock.png" alt="" />
-        <h1 className="login-brand">SARVOTTAM</h1>
-        <p className="login-tagline">Ghar ki har service, ek tap mein</p>
+    <div className="auth-screen">
+      <div className="auth-brand">
+        <img className="auth-peacock" src="/peacock.png" alt="" />
+        <h1>SARVOTTAM</h1>
+        <p>Every home service, one tap away</p>
       </div>
 
-      <div className="login-card">
-        {mode === 'phone' && (
-          <>
-            <h2 className="login-h2">{signup ? 'Account banayein' : 'Login karein'}</h2>
-            <p className="login-sub">{signup ? 'Naya account — sirf phone se' : 'Phone number se aage badhein'}</p>
+      <div className="auth-card">
+        <h2 className="auth-h2">Log in</h2>
+        <p className="auth-sub">Welcome back — please sign in to continue</p>
 
-            {signup && (
-              <label className="login-field">
-                <span>Poora naam</span>
-                <div className="login-input"><Icon name="user" size={18} /><input value={name} onChange={(e) => setName(e.target.value)} placeholder="Aapka naam" /></div>
-              </label>
-            )}
+        <label className="auth-field">
+          <span>Email or Phone</span>
+          <div className="auth-input">
+            <Icon name="user" size={18} />
+            <input value={identifier} onChange={(e) => setIdentifier(e.target.value)} placeholder="you@email.com or 98765 43210" autoComplete="username" />
+          </div>
+        </label>
 
-            <label className="login-field">
-              <span>Phone number</span>
-              <div className="login-input">
-                <span className="login-cc">+91</span>
-                <input value={phone} onChange={(e) => setPhone(e.target.value.replace(/\D/g, '').slice(0, 10))} placeholder="98765 43210" inputMode="numeric" />
-              </div>
-            </label>
+        <label className="auth-field">
+          <span>Password</span>
+          <div className="auth-input">
+            <Icon name="shield" size={18} />
+            <input type={showPw ? 'text' : 'password'} value={password} onChange={(e) => setPassword(e.target.value)} placeholder="Your password" autoComplete="current-password" />
+            <button type="button" className="auth-eye" onClick={() => setShowPw((v) => !v)}>{showPw ? 'Hide' : 'Show'}</button>
+          </div>
+        </label>
 
-            <button className="login-cta" onClick={sendOtp}>Get OTP</button>
+        <button className="auth-forgot" onClick={() => toast('Password reset — coming soon')}>Forgot password?</button>
 
-            <p className="login-switch">
-              {signup ? 'Pehle se account hai? ' : 'Naya user? '}
-              <button onClick={() => setSignup((v) => !v)}>{signup ? 'Login karein' : 'Account banayein'}</button>
-            </p>
-          </>
-        )}
+        <button className="auth-cta" onClick={submit}>Log in</button>
 
-        {mode === 'otp' && (
-          <>
-            <button className="login-back" onClick={() => setMode('phone')}><Icon name="back" size={18} /></button>
-            <h2 className="login-h2">OTP daalein</h2>
-            <p className="login-sub">+91 {phone} pe bheja gaya <span className="login-demohint">(demo: {DEMO_OTP})</span></p>
-
-            <div className="otp-row">
-              {otp.map((d, i) => (
-                <input key={i} ref={otpRefs[i]} className="otp-box" value={d} inputMode="numeric"
-                  onChange={(e) => onOtpChange(i, e.target.value)}
-                  onKeyDown={(e) => { if (e.key === 'Backspace' && !d && i > 0) otpRefs[i - 1].current?.focus(); }} />
-              ))}
-            </div>
-
-            <button className="login-cta" onClick={verifyOtp}>Verify & Continue</button>
-            <p className="login-switch"><button onClick={() => toast(`Demo: OTP ${DEMO_OTP} dobara bheja`)}>OTP dobara bhejein</button></p>
-          </>
-        )}
+        <p className="auth-switch">
+          New to SARVOTTAM? <button onClick={() => nav('/register')}>Create account</button>
+        </p>
       </div>
 
-      {/* Register as Karigar */}
-      <button className="login-karigar" onClick={() => nav('/register-karigar')}>
-        <div className="lk-ic"><Icon name="wrench" size={20} /></div>
-        <div className="lk-text">
-          <strong>Karigar ban kar kamayein</strong>
-          <small>Electrician, plumber, painter? Yahan register karein</small>
+      <div className="auth-divider"><span>or</span></div>
+
+      <button className="auth-karigar" onClick={() => nav('/register?role=karigar')}>
+        <div className="ak-ic"><Icon name="wrench" size={20} /></div>
+        <div className="ak-text">
+          <strong>Earn as a Karigar</strong>
+          <small>Electrician, plumber, painter — register here</small>
         </div>
         <Icon name="chevron" size={16} />
       </button>
 
-      <p className="login-terms">Aage badhne par aap hamari Terms & Privacy se sehmat hain</p>
+      <p className="auth-terms">By continuing you agree to our Terms &amp; Privacy Policy</p>
+      <p className="auth-demo">Demo login → email: demo@sarvottam.com · password: 1234</p>
     </div>
   );
 }

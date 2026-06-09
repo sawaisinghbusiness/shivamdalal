@@ -196,8 +196,18 @@ HTML demo ab "blueprint" ban gaya. Asli app `sarvottam-app/` folder mein React (
       style gallery (tabs), Get Free Quote sheet.
 - [x] Animations smooth ki (single page fade), profile overlap glitch fix.
 
-### AGLA (React app mein):
-- (Customer app ke saare main pages ho gaye!)
+### Login & Karigar Registration:
+- [x] **Login screen** — app khulte hi aata hai, Phone + OTP (demo OTP = 1234), customer signup
+      toggle, peacock branding. Login ke baad Home.
+- [x] **Register as Karigar** — alag form: naam, phone, skill (electrician/plumber/etc.), area,
+      experience, ID upload (demo), success screen ("team 24-48h mein sampark karegi").
+- [x] **Auth gate** — login bina sirf login/register dikhe. Profile se Logout → wapas login.
+      localStorage v3 mein auth state.
+
+### AGLA (jab aap kaho):
+- Karigar (worker) app — notification, accept, status update, earnings (Phase 2 core idea)
+- Ya asli backend (real OTP, database) — Phase 1
+- (Customer app ke saare main pages + login ho gaye!)
 - My Bookings page (booking history)
 - Phir asli backend (login OTP, database, real Karigar matching) — Phase 1
 - Baad mein: Karigar app, Admin panel
