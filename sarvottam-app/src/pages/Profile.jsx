@@ -7,7 +7,7 @@ import './Profile.css';
 export default function Profile() {
   const nav = useNavigate();
   const toast = useToast();
-  const { user, bookings, addresses, notifications } = useAppData();
+  const { user, bookings, addresses, notifications, logout } = useAppData();
 
   const initial = (user.name.trim()[0] || 'U').toUpperCase();
   const unread = notifications.filter((n) => n.unread).length;
@@ -67,7 +67,7 @@ export default function Profile() {
         ))}
       </div>
 
-      <button className="pf-logout" onClick={() => toast('Logged out successfully')}>
+      <button className="pf-logout" onClick={() => { logout(); toast('Logged out'); }}>
         Log Out
       </button>
 

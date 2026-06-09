@@ -4,6 +4,7 @@ const AppDataContext = createContext(null);
 export const useAppData = () => useContext(AppDataContext);
 
 const DEFAULTS = {
+  auth: { loggedIn: false },
   user: {
     name: 'Shivam Singh',
     phone: '+91 98765 43210',
@@ -40,7 +41,7 @@ const DEFAULTS = {
   ],
 };
 
-const KEY = 'sarvottam_data_v2';
+const KEY = 'sarvottam_data_v3';
 
 function load() {
   try {
@@ -59,6 +60,15 @@ export function AppDataProvider({ children }) {
 
   const api = {
     ...data,
+
+    // Auth
+    login: (phone, name) =>
+      setData((d) => ({
+        ...d,
+        auth: { loggedIn: true },
+        user: { ...d.user, phone: phone || d.user.phone, ...(name ? { name } : {}) },
+      })),
+    logout: () => setData((d) => ({ ...d, auth: { loggedIn: false } })),
 
     updateUser: (patch) => setData((d) => ({ ...d, user: { ...d.user, ...patch } })),
 

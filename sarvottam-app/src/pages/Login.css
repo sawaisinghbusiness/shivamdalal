@@ -1,0 +1,60 @@
+.login-screen {
+  flex: 1; overflow-y: auto;
+  background: linear-gradient(160deg, var(--primary) 0%, var(--primary-mid) 38%, var(--bg) 38%);
+  display: flex; flex-direction: column; padding: 0 22px 22px;
+  animation: pageFade .35s ease-out both;
+}
+
+.login-top { text-align: center; padding: 30px 0 24px; color: #fff; position: relative; }
+.login-peacock { width: 92px; height: auto; margin-bottom: 6px; }
+.login-brand { font-size: 26px; font-weight: 800; letter-spacing: 2px; }
+.login-tagline { font-size: 13px; opacity: .85; margin-top: 4px; }
+
+.login-card {
+  background: #fff; border-radius: 22px; padding: 24px 20px;
+  box-shadow: 0 12px 40px rgba(0,0,0,.12); position: relative;
+}
+.login-back { position: absolute; top: 18px; left: 16px; width: 36px; height: 36px; border-radius: 50%; background: #f4f6f6; color: var(--primary); display: flex; align-items: center; justify-content: center; }
+.login-h2 { font-size: 21px; font-weight: 800; color: var(--text-1); text-align: center; }
+.login-sub { font-size: 13px; color: var(--text-3); text-align: center; margin: 6px 0 22px; }
+.login-demohint { color: var(--primary); font-weight: 700; }
+
+.login-field { display: block; margin-bottom: 16px; }
+.login-field > span { display: block; font-size: 12.5px; font-weight: 700; color: var(--text-2); margin-bottom: 7px; }
+.login-input {
+  display: flex; align-items: center; gap: 10px;
+  border: 1.5px solid var(--border); border-radius: 12px; padding: 0 14px;
+  color: var(--text-4); transition: border-color .18s, box-shadow .18s;
+}
+.login-input:focus-within { border-color: var(--primary); box-shadow: 0 0 0 3px rgba(15,61,62,.08); }
+.login-cc { font-size: 14.5px; font-weight: 700; color: var(--text-2); }
+.login-input input { flex: 1; border: none; outline: none; font-size: 15px; padding: 14px 0; color: var(--text-1); }
+
+.login-cta { width: 100%; background: var(--primary); color: #fff; font-size: 15.5px; font-weight: 700; padding: 16px; border-radius: 13px; margin-top: 4px; }
+.login-cta:active { opacity: .85; }
+
+.login-switch { text-align: center; font-size: 13px; color: var(--text-3); margin-top: 16px; }
+.login-switch button { color: var(--primary); font-weight: 700; }
+
+/* OTP boxes */
+.otp-row { display: flex; gap: 12px; justify-content: center; margin-bottom: 22px; }
+.otp-box {
+  width: 56px; height: 60px; text-align: center; font-size: 24px; font-weight: 800;
+  border: 1.5px solid var(--border); border-radius: 14px; color: var(--text-1); outline: none;
+  transition: border-color .18s, box-shadow .18s;
+}
+.otp-box:focus { border-color: var(--primary); box-shadow: 0 0 0 3px rgba(15,61,62,.08); }
+
+/* Register as Karigar */
+.login-karigar {
+  display: flex; align-items: center; gap: 13px; width: 100%;
+  background: #fff; border: 1.5px solid var(--border); border-radius: 16px;
+  padding: 14px; margin-top: 18px; text-align: left; color: var(--text-4);
+}
+.login-karigar:active { background: #f4f6f6; }
+.lk-ic { width: 44px; height: 44px; border-radius: 12px; flex-shrink: 0; background: var(--danger-lt); color: var(--danger); display: flex; align-items: center; justify-content: center; }
+.lk-text { flex: 1; }
+.lk-text strong { display: block; font-size: 14.5px; font-weight: 700; color: var(--text-1); }
+.lk-text small { font-size: 11.5px; color: var(--text-4); }
+
+.login-terms { text-align: center; font-size: 11px; color: var(--text-4); margin-top: 18px; line-height: 1.5; }

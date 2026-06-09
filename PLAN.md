@@ -185,8 +185,19 @@ HTML demo ab "blueprint" ban gaya. Asli app `sarvottam-app/` folder mein React (
 - [x] **Help & Support** — contact (call/chat/email) + FAQ accordion.
 - [x] SubHeader component (back+title) sabme. Sub-pages pe bottom nav chhupa. Build PASS (53 modules).
 
+### LIVE on Vercel! 🌐
+- [x] GitHub (shivamdalal repo) + Vercel pe live. Root dir = sarvottam-app, vercel.json SPA routing.
+- [x] Har push pe Vercel khud update karta hai.
+
+### Furniture & Painting pages:
+- [x] **Furniture** — category tabs (Bedroom/Kitchen/Office/Living), photo grid (Unsplash),
+      wishlist, detail sheet with features + Book This Item.
+- [x] **Painting** — service rates (interior/exterior/texture/waterproof per sq.ft),
+      style gallery (tabs), Get Free Quote sheet.
+- [x] Animations smooth ki (single page fade), profile overlap glitch fix.
+
 ### AGLA (React app mein):
-- Furniture / Painting pages (abhi placeholder)
+- (Customer app ke saare main pages ho gaye!)
 - My Bookings page (booking history)
 - Phir asli backend (login OTP, database, real Karigar matching) — Phase 1
 - Baad mein: Karigar app, Admin panel
