@@ -1,0 +1,71 @@
+/* ═══════════════════════════════════════════
+   SARVOTTAM — Global theme (React app)
+═══════════════════════════════════════════ */
+:root {
+  --primary:     #0F3D3E;
+  --primary-mid: #16686a;
+  --primary-lt:  #e8f4f4;
+  --danger:      #ef4444;
+  --danger-lt:   #fee2e2;
+  --success:     #16a34a;
+  --amber:       #f59e0b;
+  --text-1:      #111827;
+  --text-2:      #4b5563;
+  --text-3:      #6b7280;
+  --text-4:      #9ca3af;
+  --bg:          #f6f8f8;
+  --card:        #ffffff;
+  --border:      #eef2f2;
+}
+
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+html, body, #root { height: 100%; }
+
+body {
+  font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  background: #11302f;
+  color: var(--text-1);
+  -webkit-font-smoothing: antialiased;
+}
+
+#root { display: flex; align-items: center; justify-content: center; }
+
+button { font-family: inherit; cursor: pointer; border: none; background: none; }
+input, textarea, select { font-family: inherit; }
+a { text-decoration: none; color: inherit; }
+
+/* Reusable SVG icon helper */
+.ic { width: 1em; height: 1em; display: inline-block; vertical-align: -0.125em; fill: currentColor; flex-shrink: 0; }
+
+/* ═══════════════════════════════════════════
+   GLOBAL ANIMATIONS (subtle & smooth — no glitch)
+═══════════════════════════════════════════ */
+
+/* Page entry — ek hi soft fade. Sirf page-level, children pe nahi (double/jhatka avoid). */
+@keyframes pageFade {
+  from { opacity: 0; transform: translateY(8px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+.page, .sub-page {
+  animation: pageFade .32s ease-out both;
+}
+
+/* riseIn — sirf FAQ answer jaise specific jagah ke liye reuse hota hai */
+@keyframes riseIn {
+  from { opacity: 0; transform: translateY(6px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+/* Tap feedback — bahut halka (sirf opacity, scale nahi taaki jhatka na lage) */
+button:active, a:active { opacity: .7; }
+.cat-card:active, .pop-card:active, .pf-option:active,
+.em-card:active, .bk-card:active, .addr-card:active { background: #f4f6f6; }
+
+/* Smooth focus for inputs */
+input, textarea { transition: border-color .18s ease, box-shadow .18s ease; }
+
+/* Respect users who prefer no motion */
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after { animation-duration: .01ms !important; animation-iteration-count: 1 !important; transition-duration: .01ms !important; }
+}

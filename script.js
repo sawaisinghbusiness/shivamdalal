@@ -1,5 +1,5 @@
 /* ═══════════════════════════════════════════
-   CRAFTCONNECT — App Script
+   SARVOTTAM — App Script
 ═══════════════════════════════════════════ */
 
 /* ── Screen Navigation ── */
@@ -58,10 +58,11 @@ document.querySelectorAll('.sub-tab-bar').forEach(bar => {
 document.querySelectorAll('.wishlist-btn').forEach(btn => {
   btn.addEventListener('click', e => {
     e.stopPropagation();
-    const filled = btn.textContent === '♥';
-    btn.textContent = filled ? '♡' : '♥';
-    btn.style.color = filled ? '' : '#ef4444';
-    showToast(filled ? 'Removed from wishlist' : 'Added to wishlist ♥');
+    const filled = btn.classList.toggle('liked');
+    btn.style.color = filled ? '#ef4444' : '';
+    const svg = btn.querySelector('.ic');
+    if (svg) svg.style.fill = filled ? '#ef4444' : 'none';
+    showToast(filled ? 'Added to wishlist' : 'Removed from wishlist');
   });
 });
 
@@ -388,3 +389,293 @@ function closeProfileSheet() {
     });
   });
 })();
+
+/* ═══════════════════════════════════════════
+   EMERGENCY TRACKING FLOW (Rapido jaisa)
+═══════════════════════════════════════════ */
+let trackStage = 1;       // 1 = searching, 2 = found
+let trackStep  = 1;       // which live step is active (0..3)
+let searchTimer;
+
+const karigarBySkill = {
+  'Electrician': { name: 'Ramesh Kumar', initial: 'R', skill: 'Electrician', eta: 8,  service: 400, ico: 'i-bolt' },
+  'Plumber':     { name: 'Suresh Mali',  initial: 'S', skill: 'Plumber',     eta: 10, service: 350, ico: 'i-wrench' },
+  'Carpenter':   { name: 'Mahesh Suthar',initial: 'M', skill: 'Carpenter',   eta: 12, service: 450, ico: 'i-wrench' },
+  'AC Repair':   { name: 'Dinesh Jain',  initial: 'D', skill: 'AC Repair',   eta: 15, service: 600, ico: 'i-snow' },
+  'Urgent Service': { name: 'Ramesh Kumar', initial: 'R', skill: 'Urgent help', eta: 7, service: 400, ico: 'i-bolt' },
+};
+
+let currentKarigar = null;   // jo abhi assign hua
+let currentAddr = '';        // user ne jo address chuna/bhara
+// note: currentService pehle se upar declared hai (booking modal ke liye)
+
+const VISIT_CHARGE = 50;
+
+/* STEP 1: Book Now dabate hi pehle address + charges sheet kholo (Karigar abhi NAHI dhoondhega) */
+function startTracking(serviceName) {
+  currentService = serviceName;
+  const k = karigarBySkill[serviceName] || karigarBySkill['Urgent Service'];
+
+  document.getElementById('ebookIco').innerHTML = '<svg class="ic"><use href="#' + k.ico + '"/></svg>';
+  document.getElementById('ebookTitle').textContent = serviceName;
+  document.getElementById('ebookSvc').textContent = '₹' + k.service;
+  document.getElementById('ebookSvcLabel').textContent = serviceName + ' charge (approx)';
+  const lo = k.service + VISIT_CHARGE;
+  const hi = Math.round((k.service * 1.2 + VISIT_CHARGE) / 10) * 10;
+  document.getElementById('ebookApprox').textContent = '₹' + lo + ' – ₹' + hi;
+
+  // reset address selection (Ghar default)
+  const addrs = document.querySelectorAll('.ebook-addr');
+  addrs.forEach((a, i) => a.classList.toggle('active', i === 0));
+  currentAddr = addrs[0] ? addrs[0].dataset.addr : '';
+  document.getElementById('ebookNewAddr').value = '';
+  document.getElementById('ebookNewAddr').style.display = 'none';
+  document.getElementById('ebookProblem').value = '';
+
+  document.getElementById('ebookOverlay').classList.add('open');
+  document.body.style.overflow = 'hidden';
+}
+
+function pickAddr(btn) {
+  document.querySelectorAll('.ebook-addr').forEach(a => a.classList.remove('active'));
+  btn.classList.add('active');
+  currentAddr = btn.dataset.addr;
+  document.getElementById('ebookNewAddr').style.display = 'none';
+}
+
+function toggleNewAddr() {
+  const box = document.getElementById('ebookNewAddr');
+  const show = box.style.display === 'none';
+  box.style.display = show ? 'block' : 'none';
+  if (show) {
+    document.querySelectorAll('.ebook-addr').forEach(a => a.classList.remove('active'));
+    box.focus();
+  }
+}
+
+function closeEbook() {
+  document.getElementById('ebookOverlay').classList.remove('open');
+  document.body.style.overflow = '';
+}
+
+/* STEP 2: Confirm dabaya → ab Karigar dhoondhna shuru (tracking) */
+function confirmBookingAndFind() {
+  const newAddr = document.getElementById('ebookNewAddr').value.trim();
+  const newAddrVisible = document.getElementById('ebookNewAddr').style.display !== 'none';
+
+  // address pakka karo
+  if (newAddrVisible) {
+    if (newAddr.length < 6) { showToast('Pura address daalein (area, landmark)'); return; }
+    currentAddr = 'Naya — ' + newAddr + (newAddr.toLowerCase().includes('barmer') ? '' : ', Barmer');
+  }
+  if (!currentAddr) { showToast('Pehle address chunein ya daalein'); return; }
+
+  closeEbook();
+  beginTracking(currentService);
+}
+
+/* Karigar dhoondhna + tracking (pehle ye startTracking mein tha) */
+function beginTracking(serviceName) {
+
+  const overlay = document.getElementById('trackOverlay');
+  const k = karigarBySkill[serviceName] || karigarBySkill['Urgent Service'];
+  currentKarigar = k;
+
+  // reset to searching stage
+  trackStage = 1;
+  trackStep = 1;
+  document.getElementById('trackSearching').style.display = 'block';
+  document.getElementById('trackFound').style.display = 'none';
+  document.getElementById('trackHeadTitle').textContent = serviceName + ' · Emergency';
+  document.getElementById('searchTitle').textContent = 'Karigar dhoondh rahe hain…';
+
+  // fill karigar details for when found
+  document.querySelector('.tk-avatar').textContent = k.initial;
+  document.querySelector('.tk-info h3').textContent = k.name;
+  document.getElementById('trackKarigarSkill').innerHTML =
+    '<span class="tk-verified"><svg class="ic"><use href="#i-shield-check"/></svg> Verified</span> · ' + k.skill;
+  document.getElementById('trackEta').textContent = k.eta + ' min';
+  document.querySelector('.tow-eta-label').textContent = 'door';
+  document.getElementById('trackToAddr').innerHTML = '<svg class="ic"><use href="#i-pin"/></svg> ' + currentAddr;
+
+  // searching screen pe address dikhao
+  document.getElementById('trackAddr').textContent = currentAddr;
+
+  overlay.classList.add('open');
+  document.body.style.overflow = 'hidden';
+
+  // after 3.5s → Karigar found, phir status apne aap aage badhega
+  clearTimeout(searchTimer);
+  searchTimer = setTimeout(() => {
+    trackStage = 2;
+    document.getElementById('trackSearching').style.display = 'none';
+    document.getElementById('trackFound').style.display = 'block';
+    resetSteps();
+    showToast('✓ ' + k.name + ' ne aapki request accept ki');
+    autoAdvance();   // Karigar dusri taraf se update kar raha hai (demo: auto)
+  }, 3500);
+}
+
+let autoTimer;
+
+function paintSteps() {
+  document.querySelectorAll('#trackSteps .track-step').forEach(s => {
+    const n = +s.dataset.step;
+    s.classList.toggle('done',   n < trackStep);
+    s.classList.toggle('active', n === trackStep);
+  });
+}
+
+function resetSteps() {
+  trackStep = 1;          // step 0 (mila) done, step 1 (aa raha hai) active
+  paintSteps();
+  setLiveNote('Karigar aapke ghar aa raha hai…');
+}
+
+function setLiveNote(text) {
+  const el = document.getElementById('trackLiveText');
+  if (el) el.textContent = text;
+}
+
+/* Status apne aap aage badhta hai — asli mein Karigar dusri app se update karta hai.
+   User sirf dekhta hai (read-only), khud koi button nahi dabata. */
+function autoAdvance() {
+  clearTimeout(autoTimer);
+  // aa raha hai (step1) → 3s baad kaam chalu (step2)
+  autoTimer = setTimeout(() => {
+    trackStep = 2;
+    paintSteps();
+    document.getElementById('trackEta').textContent = 'अभी';
+    document.querySelector('.tow-eta-label').textContent = 'kaam chalu';
+    setLiveNote('Karigar ne kaam shuru kar diya hai…');
+    showToast('🔧 Karigar ne kaam shuru kiya');
+
+    // 3.5s baad kaam poora (step3) → payment
+    autoTimer = setTimeout(() => {
+      trackStep = 3;
+      paintSteps();
+      document.getElementById('trackEta').textContent = '✓';
+      document.querySelector('.tow-eta-label').textContent = 'poora';
+      setLiveNote('Kaam poora ho gaya — ab payment');
+      showToast('✓ Karigar ne kaam poora kiya');
+      setTimeout(openPayment, 900);
+    }, 3500);
+  }, 3000);
+}
+
+/* ── Payment ── */
+let payMethod = 'online';
+
+function openPayment() {
+  const k = currentKarigar || karigarBySkill['Urgent Service'];
+  const service = k.service;
+  const visit = 50;
+  const tax = Math.round((service + visit) * 0.05);
+  const total = service + visit + tax;
+
+  document.getElementById('paySub').textContent = k.name + ' · ' + k.skill;
+  document.getElementById('payService').textContent = '₹' + service;
+  document.getElementById('payTax').textContent = '₹' + tax;
+  document.getElementById('payTotal').textContent = '₹' + total;
+
+  // default method = online
+  payMethod = 'online';
+  document.querySelectorAll('.pay-method').forEach(m =>
+    m.classList.toggle('active', m.dataset.method === 'online'));
+  updatePayCta(total);
+
+  document.getElementById('payOverlay').dataset.total = total;
+  document.getElementById('payOverlay').classList.add('open');
+  document.body.style.overflow = 'hidden';
+}
+
+function selectPayMethod(btn) {
+  document.querySelectorAll('.pay-method').forEach(m => m.classList.remove('active'));
+  btn.classList.add('active');
+  payMethod = btn.dataset.method;
+  updatePayCta(+document.getElementById('payOverlay').dataset.total);
+}
+
+function updatePayCta(total) {
+  const cta = document.getElementById('payCta');
+  cta.textContent = payMethod === 'online'
+    ? '₹' + total + ' Online Pay karein'
+    : '₹' + total + ' Cash mein dein';
+}
+
+function confirmPayment() {
+  const total = document.getElementById('payOverlay').dataset.total;
+  document.getElementById('payOverlay').classList.remove('open');
+  closeTracking();
+  if (payMethod === 'online') {
+    showToast('✓ ₹' + total + ' online paid — dhanyavaad!');
+  } else {
+    showToast('✓ ₹' + total + ' cash — Karigar ko dein. Dhanyavaad!');
+  }
+  // Payment ke baad rating kholo
+  setTimeout(openRating, 700);
+}
+
+/* ── Rating ── */
+let rateValue = 0;
+const rateWords = ['', 'Bahut kharab 😞', 'Theek nahi 😕', 'Theek-thaak 🙂', 'Achha 😊', 'Behtareen! 🤩'];
+
+function openRating() {
+  const k = currentKarigar || karigarBySkill['Urgent Service'];
+  document.getElementById('rateAvatar').textContent = k.initial;
+  document.getElementById('rateSub').textContent = k.name + ' · ' + k.skill;
+
+  // reset
+  rateValue = 0;
+  paintStars();
+  const word = document.getElementById('rateWord');
+  word.textContent = 'Star tap karke rating dein';
+  word.classList.remove('filled');
+  document.querySelectorAll('.rate-chip').forEach(c => c.classList.remove('on'));
+  document.getElementById('rateText').value = '';
+
+  document.getElementById('rateOverlay').classList.add('open');
+  document.body.style.overflow = 'hidden';
+}
+
+function paintStars() {
+  document.querySelectorAll('.rate-star').forEach(s => {
+    s.classList.toggle('on', +s.dataset.val <= rateValue);
+  });
+}
+
+function setRating(val) {
+  rateValue = val;
+  paintStars();
+  const word = document.getElementById('rateWord');
+  word.textContent = rateWords[val];
+  word.classList.add('filled');
+}
+
+function toggleChip(btn) { btn.classList.toggle('on'); }
+
+function submitRating() {
+  if (rateValue === 0) {
+    showToast('Pehle star tap karke rating dein');
+    return;
+  }
+  closeRating();
+  showToast('🙏 Aapki ' + rateValue + '★ rating ke liye dhanyavaad!');
+}
+
+function closeRating() {
+  document.getElementById('rateOverlay').classList.remove('open');
+  document.body.style.overflow = '';
+}
+
+// Star tap/click listeners
+document.querySelectorAll('.rate-star').forEach(star => {
+  star.addEventListener('click', () => setRating(+star.dataset.val));
+});
+
+function closeTracking() {
+  clearTimeout(searchTimer);
+  clearTimeout(autoTimer);
+  document.getElementById('trackOverlay').classList.remove('open');
+  document.body.style.overflow = '';
+}

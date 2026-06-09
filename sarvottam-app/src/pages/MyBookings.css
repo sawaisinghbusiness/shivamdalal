@@ -1,0 +1,35 @@
+.bk-tabs { display: flex; gap: 8px; padding: 14px 18px; background: #fff; }
+.bk-tab {
+  flex: 1; padding: 10px; border-radius: 10px; font-size: 13px; font-weight: 700;
+  color: var(--text-3); background: #f4f6f6;
+}
+.bk-tab.active { background: var(--primary); color: #fff; }
+
+.bk-list { padding: 16px 18px; display: flex; flex-direction: column; gap: 12px; }
+.bk-card {
+  display: flex; gap: 13px; background: #fff; border: 1px solid var(--border);
+  border-radius: 16px; padding: 14px;
+}
+.bk-ic {
+  width: 48px; height: 48px; border-radius: 13px; flex-shrink: 0;
+  background: var(--primary-lt); color: var(--primary);
+  display: flex; align-items: center; justify-content: center;
+}
+.bk-info { flex: 1; min-width: 0; }
+.bk-top { display: flex; align-items: center; justify-content: space-between; gap: 8px; }
+.bk-top h3 { font-size: 15.5px; font-weight: 700; color: var(--text-1); }
+.bk-badge { font-size: 10.5px; font-weight: 700; padding: 4px 9px; border-radius: 20px; flex-shrink: 0; }
+.badge-up { background: #e0f2fe; color: #0369a1; }
+.badge-done { background: #dcfce7; color: #15803d; }
+.badge-cancel { background: #fee2e2; color: #b91c1c; }
+.bk-karigar { font-size: 12.5px; color: var(--text-2); margin-top: 5px; }
+.bk-date { font-size: 12px; color: var(--text-4); margin-top: 2px; }
+.bk-foot { display: flex; align-items: center; justify-content: space-between; margin-top: 10px; }
+.bk-amt { font-size: 15px; font-weight: 800; color: var(--primary); }
+.bk-action { font-size: 12.5px; font-weight: 700; color: #fff; background: var(--primary); padding: 8px 16px; border-radius: 10px; margin-left: auto; }
+.bk-action.ghost { background: var(--primary-lt); color: var(--primary); }
+
+.bk-empty { text-align: center; padding: 60px 30px; }
+.bk-empty-ic { width: 72px; height: 72px; border-radius: 20px; background: var(--primary-lt); color: var(--primary); display: flex; align-items: center; justify-content: center; margin: 0 auto 14px; }
+.bk-empty h3 { font-size: 16px; color: var(--text-1); }
+.bk-empty p { font-size: 13px; color: var(--text-4); margin-top: 4px; }

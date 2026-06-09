@@ -3,13 +3,35 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
-  <title>CraftConnect – Carpenter & Home Services</title>
+  <title>SARVOTTAM – Home Services & Emergency Repair</title>
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
   <link rel="stylesheet" href="style.css" />
 </head>
 <body>
+
+<!-- ═══════════════════════════════════════ SVG ICON LIBRARY (sprite) ═══════════════════════════════════════ -->
+<svg width="0" height="0" style="position:absolute" aria-hidden="true">
+  <symbol id="i-bolt" viewBox="0 0 24 24"><path d="M13 2 4.5 13.5a.5.5 0 0 0 .4.8H11l-1 7.7 8.5-11.5a.5.5 0 0 0-.4-.8H12l1-7.7Z" fill="currentColor"/></symbol>
+  <symbol id="i-home" viewBox="0 0 24 24"><path d="M3 10.5 12 3l9 7.5V20a1 1 0 0 1-1 1h-5v-6H9v6H4a1 1 0 0 1-1-1v-9.5Z" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"/></symbol>
+  <symbol id="i-building" viewBox="0 0 24 24"><path d="M5 21V5a2 2 0 0 1 2-2h6a2 2 0 0 1 2 2v16M15 9h2a2 2 0 0 1 2 2v10M8 7h2M8 11h2M8 15h2" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></symbol>
+  <symbol id="i-pin" viewBox="0 0 24 24"><path d="M12 21s7-5.5 7-11a7 7 0 1 0-14 0c0 5.5 7 11 7 11Z" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"/><circle cx="12" cy="10" r="2.5" fill="none" stroke="currentColor" stroke-width="1.8"/></symbol>
+  <symbol id="i-phone" viewBox="0 0 24 24"><path d="M22 16.9v2.6a2 2 0 0 1-2.2 2 19.8 19.8 0 0 1-8.6-3.1 19.5 19.5 0 0 1-6-6A19.8 19.8 0 0 1 2.1 4.2 2 2 0 0 1 4.1 2h2.6a2 2 0 0 1 2 1.7c.1.9.3 1.8.6 2.6a2 2 0 0 1-.5 2.1L7.6 9.6a16 16 0 0 0 6 6l1.2-1.2a2 2 0 0 1 2.1-.5c.8.3 1.7.5 2.6.6a2 2 0 0 1 1.7 2Z" fill="currentColor"/></symbol>
+  <symbol id="i-star" viewBox="0 0 24 24"><path d="M12 2.5l2.9 6 6.6.9-4.8 4.6 1.2 6.5L12 17.8 6.1 20.5l1.2-6.5L2.5 9.4l6.6-.9 2.9-6Z" fill="currentColor"/></symbol>
+  <symbol id="i-check" viewBox="0 0 24 24"><path d="M20 6 9 17l-5-5" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/></symbol>
+  <symbol id="i-check-circle" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10" fill="currentColor"/><path d="M17 9l-6.5 6.5L7 12" fill="none" stroke="#fff" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></symbol>
+  <symbol id="i-scooter" viewBox="0 0 48 24"><circle cx="11" cy="18" r="4" fill="none" stroke="currentColor" stroke-width="2"/><circle cx="37" cy="18" r="4" fill="none" stroke="currentColor" stroke-width="2"/><path d="M15 18h18M37 14V8h-4M33 8l-6 10M8 11h7l4 7M4 8h6" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></symbol>
+  <symbol id="i-card" viewBox="0 0 24 24"><rect x="2" y="5" width="20" height="14" rx="2.5" fill="none" stroke="currentColor" stroke-width="1.8"/><path d="M2 10h20M6 15h4" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></symbol>
+  <symbol id="i-cash" viewBox="0 0 24 24"><rect x="2" y="6" width="20" height="12" rx="2" fill="none" stroke="currentColor" stroke-width="1.8"/><circle cx="12" cy="12" r="2.5" fill="none" stroke="currentColor" stroke-width="1.8"/><path d="M5 9v6M19 9v6" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></symbol>
+  <symbol id="i-wrench" viewBox="0 0 24 24"><path d="M14.7 6.3a4 4 0 0 0 5 5l-7 7a2.1 2.1 0 0 1-3-3l5-5a4 4 0 0 1 0-4Z" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></symbol>
+  <symbol id="i-snow" viewBox="0 0 24 24"><path d="M12 2v20M4 7l16 10M20 7 4 17M12 5l3 2-3 2-3-2 3-2ZM12 22l3-2-3-2-3 2 3 2Z" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></symbol>
+  <symbol id="i-plus" viewBox="0 0 24 24"><path d="M12 5v14M5 12h14" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></symbol>
+  <symbol id="i-clipboard" viewBox="0 0 24 24"><rect x="5" y="4" width="14" height="17" rx="2" fill="none" stroke="currentColor" stroke-width="1.8"/><path d="M9 4a3 3 0 0 1 6 0M9 11h6M9 15h4" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></symbol>
+  <symbol id="i-heart" viewBox="0 0 24 24"><path d="M12 20s-7-4.4-9.2-9C1.3 8 2.6 4.5 6 4.5c2 0 3.3 1.2 4 2.4.7-1.2 2-2.4 4-2.4 3.4 0 4.7 3.5 3.2 6.5C19 15.6 12 20 12 20Z" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"/></symbol>
+  <symbol id="i-shield-check" viewBox="0 0 24 24"><path d="M12 2 4 5.5v6c0 5 3.4 8.7 8 10 4.6-1.3 8-5 8-10v-6L12 2Z" fill="currentColor"/><path d="M8.5 12l2.5 2.5L16 9.5" fill="none" stroke="#fff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></symbol>
+</svg>
+
 <div class="app-wrapper">
 
   <!-- ═══════════════════════════════════════ HOME SCREEN ═══════════════════════════════════════ -->
@@ -22,9 +44,10 @@
       <div class="hv2-topbar">
         <button class="hv2-location-btn">
           <svg width="13" height="16" viewBox="0 0 14 16" fill="none"><path d="M7 0C4.24 0 2 2.24 2 5c0 3.75 5 11 5 11s5-7.25 5-11c0-2.76-2.24-5-5-5zm0 6.5c-.83 0-1.5-.67-1.5-1.5S6.17 3.5 7 3.5 8.5 4.17 8.5 5 7.83 6.5 7 6.5z" fill="#0F3D3E"/></svg>
-          <span>Jodhpur</span>
+          <span>Barmer</span>
           <svg width="10" height="6" viewBox="0 0 10 6" fill="none"><path d="M1 1l4 4 4-4" stroke="#0F3D3E" stroke-width="1.8" stroke-linecap="round"/></svg>
         </button>
+        <span class="hv2-brand">SARVOTTAM</span>
         <button class="hv2-notif-btn" id="notifBtn">
           <svg width="20" height="20" viewBox="0 0 24 24" fill="none"><path d="M12 22c1.1 0 2-.9 2-2h-4c0 1.1.9 2 2 2zm6-6v-5c0-3.07-1.64-5.64-4.5-6.32V4c0-.83-.67-1.5-1.5-1.5s-1.5.67-1.5 1.5v.68C7.63 5.36 6 7.92 6 11v5l-2 2v1h16v-1l-2-2z" fill="#374151"/></svg>
           <span class="hv2-notif-dot"></span>
@@ -200,7 +223,7 @@
               <p>Quick electrical help at your home</p>
             </div>
           </div>
-          <button class="em2-btn em2-btn-red" onclick="showBookingModal('Electrician')">Book Now</button>
+          <button class="em2-btn em2-btn-red" onclick="startTracking('Electrician')">Book Now</button>
         </div>
 
         <div class="em2-card">
@@ -213,7 +236,7 @@
               <p>Leakage, pipe fitting, bathroom, kitchen</p>
             </div>
           </div>
-          <button class="em2-btn em2-btn-blue" onclick="showBookingModal('Plumber')">Book Now</button>
+          <button class="em2-btn em2-btn-blue" onclick="startTracking('Plumber')">Book Now</button>
         </div>
 
         <div class="em2-card">
@@ -226,7 +249,7 @@
               <p>Door, hinge fix, lock change, furniture repair</p>
             </div>
           </div>
-          <button class="em2-btn em2-btn-teal" onclick="showBookingModal('Carpenter')">Book Now</button>
+          <button class="em2-btn em2-btn-teal" onclick="startTracking('Carpenter')">Book Now</button>
         </div>
 
         <div class="em2-card">
@@ -239,12 +262,12 @@
               <p>Installation, repair, service &amp; cleaning</p>
             </div>
           </div>
-          <button class="em2-btn em2-btn-cyan" onclick="showBookingModal('AC Repair')">Book Now</button>
+          <button class="em2-btn em2-btn-cyan" onclick="startTracking('AC Repair')">Book Now</button>
         </div>
 
       </div>
 
-      <button class="em2-urgent" onclick="showBookingModal('Urgent Service')">
+      <button class="em2-urgent" onclick="startTracking('Urgent Service')">
         <span class="em2-urgent-icon">⚡</span>
         <div class="em2-urgent-text">
           <strong>Book Urgent Service</strong>
@@ -290,7 +313,7 @@
             <div class="furniture-card" onclick="showItemDetail('Modern Minimal Bed', '₹18,500 – ₹32,000')">
               <div class="furniture-img">
                 <img src="https://images.unsplash.com/photo-1586023492125-27b2c045efd7?auto=format&fit=crop&w=400&q=80" alt="Modern Minimal Bed" loading="lazy" />
-                <button class="wishlist-btn">♡</button>
+                <button class="wishlist-btn"><svg class="ic"><use href="#i-heart"/></svg></button>
               </div>
               <div class="furniture-info">
                 <h3>Modern Minimal Bed</h3>
@@ -305,7 +328,7 @@
             <div class="furniture-card" onclick="showItemDetail('Classic Four-Post Bed', '₹24,000 – ₹45,000')">
               <div class="furniture-img">
                 <img src="https://images.unsplash.com/photo-1524758631624-e2822e304c36?auto=format&fit=crop&w=400&q=80" alt="Classic Four-Post" loading="lazy" />
-                <button class="wishlist-btn">♡</button>
+                <button class="wishlist-btn"><svg class="ic"><use href="#i-heart"/></svg></button>
               </div>
               <div class="furniture-info">
                 <h3>Classic Four-Post Bed</h3>
@@ -320,7 +343,7 @@
             <div class="furniture-card" onclick="showItemDetail('Sliding Wardrobe', '₹28,000 – ₹55,000')">
               <div class="furniture-img">
                 <img src="https://images.unsplash.com/photo-1540574163026-643ea20ade25?auto=format&fit=crop&w=400&q=80" alt="Sliding Wardrobe" loading="lazy" />
-                <button class="wishlist-btn">♡</button>
+                <button class="wishlist-btn"><svg class="ic"><use href="#i-heart"/></svg></button>
               </div>
               <div class="furniture-info">
                 <h3>Sliding Wardrobe</h3>
@@ -335,7 +358,7 @@
             <div class="furniture-card" onclick="showItemDetail('Dressing Table', '₹8,000 – ₹15,000')">
               <div class="furniture-img">
                 <img src="https://images.unsplash.com/photo-1493663284031-b7e3aefcae8e?auto=format&fit=crop&w=400&q=80" alt="Dressing Table" loading="lazy" />
-                <button class="wishlist-btn">♡</button>
+                <button class="wishlist-btn"><svg class="ic"><use href="#i-heart"/></svg></button>
               </div>
               <div class="furniture-info">
                 <h3>Dressing Table</h3>
@@ -368,7 +391,7 @@
             <div class="furniture-card" onclick="showItemDetail('L-Shape Modular Kitchen', '₹55,000 – ₹1,20,000')">
               <div class="furniture-img">
                 <img src="https://images.unsplash.com/photo-1556909114-f6e7ad7d3136?auto=format&fit=crop&w=400&q=80" alt="Modular Kitchen" loading="lazy" />
-                <button class="wishlist-btn">♡</button>
+                <button class="wishlist-btn"><svg class="ic"><use href="#i-heart"/></svg></button>
               </div>
               <div class="furniture-info">
                 <h3>L-Shape Modular Kitchen</h3>
@@ -383,7 +406,7 @@
             <div class="furniture-card" onclick="showItemDetail('Straight Kitchen', '₹35,000 – ₹65,000')">
               <div class="furniture-img">
                 <img src="https://images.unsplash.com/photo-1556909172-54557c7e4fb7?auto=format&fit=crop&w=400&q=80" alt="Straight Kitchen" loading="lazy" />
-                <button class="wishlist-btn">♡</button>
+                <button class="wishlist-btn"><svg class="ic"><use href="#i-heart"/></svg></button>
               </div>
               <div class="furniture-info">
                 <h3>Straight Kitchen</h3>
@@ -398,7 +421,7 @@
             <div class="furniture-card" onclick="showItemDetail('Island Kitchen', '₹80,000 – ₹1,80,000')">
               <div class="furniture-img">
                 <img src="https://images.unsplash.com/photo-1565183928294-7063f23ce0f8?auto=format&fit=crop&w=400&q=80" alt="Island Kitchen" loading="lazy" />
-                <button class="wishlist-btn">♡</button>
+                <button class="wishlist-btn"><svg class="ic"><use href="#i-heart"/></svg></button>
               </div>
               <div class="furniture-info">
                 <h3>Island Kitchen</h3>
@@ -413,7 +436,7 @@
             <div class="furniture-card" onclick="showItemDetail('Open Shelving Kitchen', '₹20,000 – ₹38,000')">
               <div class="furniture-img">
                 <img src="https://images.unsplash.com/photo-1556909172-54557c7e4fb7?auto=format&fit=crop&w=400&q=80" alt="Open Kitchen" loading="lazy" />
-                <button class="wishlist-btn">♡</button>
+                <button class="wishlist-btn"><svg class="ic"><use href="#i-heart"/></svg></button>
               </div>
               <div class="furniture-info">
                 <h3>Open Shelving Kitchen</h3>
@@ -445,7 +468,7 @@
             <div class="furniture-card" onclick="showItemDetail('Executive Desk', '₹12,000 – ₹28,000')">
               <div class="furniture-img">
                 <img src="https://images.unsplash.com/photo-1593642632559-0c6d3fc62b89?auto=format&fit=crop&w=400&q=80" alt="Executive Desk" loading="lazy" />
-                <button class="wishlist-btn">♡</button>
+                <button class="wishlist-btn"><svg class="ic"><use href="#i-heart"/></svg></button>
               </div>
               <div class="furniture-info">
                 <h3>Executive Desk</h3>
@@ -460,7 +483,7 @@
             <div class="furniture-card" onclick="showItemDetail('Workstation Setup', '₹8,500 – ₹22,000')">
               <div class="furniture-img">
                 <img src="https://images.unsplash.com/photo-1547586696-ea22b4d4235d?auto=format&fit=crop&w=400&q=80" alt="Workstation" loading="lazy" />
-                <button class="wishlist-btn">♡</button>
+                <button class="wishlist-btn"><svg class="ic"><use href="#i-heart"/></svg></button>
               </div>
               <div class="furniture-info">
                 <h3>Workstation Setup</h3>
@@ -475,7 +498,7 @@
             <div class="furniture-card" onclick="showItemDetail('Bookshelf Unit', '₹5,000 – ₹14,000')">
               <div class="furniture-img">
                 <img src="https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?auto=format&fit=crop&w=400&q=80" alt="Bookshelf" loading="lazy" />
-                <button class="wishlist-btn">♡</button>
+                <button class="wishlist-btn"><svg class="ic"><use href="#i-heart"/></svg></button>
               </div>
               <div class="furniture-info">
                 <h3>Bookshelf Unit</h3>
@@ -490,7 +513,7 @@
             <div class="furniture-card" onclick="showItemDetail('Conference Table', '₹22,000 – ₹60,000')">
               <div class="furniture-img">
                 <img src="https://images.unsplash.com/photo-1497366216548-37526070297c?auto=format&fit=crop&w=400&q=80" alt="Conference Table" loading="lazy" />
-                <button class="wishlist-btn">♡</button>
+                <button class="wishlist-btn"><svg class="ic"><use href="#i-heart"/></svg></button>
               </div>
               <div class="furniture-info">
                 <h3>Conference Table</h3>
@@ -522,7 +545,7 @@
             <div class="furniture-card" onclick="showItemDetail('3-Seater Sofa', '₹15,000 – ₹35,000')">
               <div class="furniture-img">
                 <img src="https://images.unsplash.com/photo-1555041469-a586c61ea9bc?auto=format&fit=crop&w=400&q=80" alt="Sofa" loading="lazy" />
-                <button class="wishlist-btn">♡</button>
+                <button class="wishlist-btn"><svg class="ic"><use href="#i-heart"/></svg></button>
               </div>
               <div class="furniture-info">
                 <h3>3-Seater Sofa</h3>
@@ -537,7 +560,7 @@
             <div class="furniture-card" onclick="showItemDetail('TV Unit Cabinet', '₹9,000 – ₹22,000')">
               <div class="furniture-img">
                 <img src="https://images.unsplash.com/photo-1558618666-fcd25c85cd64?auto=format&fit=crop&w=400&q=80" alt="TV Unit" loading="lazy" />
-                <button class="wishlist-btn">♡</button>
+                <button class="wishlist-btn"><svg class="ic"><use href="#i-heart"/></svg></button>
               </div>
               <div class="furniture-info">
                 <h3>TV Unit Cabinet</h3>
@@ -552,7 +575,7 @@
             <div class="furniture-card" onclick="showItemDetail('Wooden Coffee Table', '₹5,500 – ₹12,000')">
               <div class="furniture-img">
                 <img src="https://images.unsplash.com/photo-1555041469-a586c61ea9bc?auto=format&fit=crop&w=400&q=80" alt="Coffee Table" loading="lazy" />
-                <button class="wishlist-btn">♡</button>
+                <button class="wishlist-btn"><svg class="ic"><use href="#i-heart"/></svg></button>
               </div>
               <div class="furniture-info">
                 <h3>Wooden Coffee Table</h3>
@@ -567,7 +590,7 @@
             <div class="furniture-card" onclick="showItemDetail('Display Shelving', '₹4,000 – ₹9,000')">
               <div class="furniture-img">
                 <img src="https://images.unsplash.com/photo-1493663284031-b7e3aefcae8e?auto=format&fit=crop&w=400&q=80" alt="Display Unit" loading="lazy" />
-                <button class="wishlist-btn">♡</button>
+                <button class="wishlist-btn"><svg class="ic"><use href="#i-heart"/></svg></button>
               </div>
               <div class="furniture-info">
                 <h3>Display Shelving</h3>
@@ -626,28 +649,28 @@
         <div class="paint-img-grid">
           <div class="paint-img-card" onclick="showBookingModal('Pastel Dreams')">
             <img src="https://images.unsplash.com/photo-1560185007-5f0bb1866cab?auto=format&fit=crop&w=400&q=80" alt="Pastel Dreams" loading="lazy" />
-            <button class="paint-img-heart wishlist-btn">♡</button>
+            <button class="paint-img-heart wishlist-btn"><svg class="ic"><use href="#i-heart"/></svg></button>
             <div class="paint-img-overlay">
               <span class="paint-img-name">Pastel Dreams</span>
             </div>
           </div>
           <div class="paint-img-card" onclick="showBookingModal('Royal Elegance')">
             <img src="https://images.unsplash.com/photo-1618221195710-dd6b41faaea6?auto=format&fit=crop&w=400&q=80" alt="Royal Elegance" loading="lazy" />
-            <button class="paint-img-heart wishlist-btn">♡</button>
+            <button class="paint-img-heart wishlist-btn"><svg class="ic"><use href="#i-heart"/></svg></button>
             <div class="paint-img-overlay">
               <span class="paint-img-name">Royal Elegance</span>
             </div>
           </div>
           <div class="paint-img-card" onclick="showBookingModal('Modern Texture')">
             <img src="https://images.unsplash.com/photo-1600210492493-0946911123ea?auto=format&fit=crop&w=400&q=80" alt="Modern Texture" loading="lazy" />
-            <button class="paint-img-heart wishlist-btn">♡</button>
+            <button class="paint-img-heart wishlist-btn"><svg class="ic"><use href="#i-heart"/></svg></button>
             <div class="paint-img-overlay">
               <span class="paint-img-name">Modern Texture</span>
             </div>
           </div>
           <div class="paint-img-card" onclick="showBookingModal('Creative Patterns')">
             <img src="https://images.unsplash.com/photo-1586023492125-27b2c045efd7?auto=format&fit=crop&w=400&q=80" alt="Creative Patterns" loading="lazy" />
-            <button class="paint-img-heart wishlist-btn">♡</button>
+            <button class="paint-img-heart wishlist-btn"><svg class="ic"><use href="#i-heart"/></svg></button>
             <div class="paint-img-overlay">
               <span class="paint-img-name">Creative Patterns</span>
             </div>
@@ -674,28 +697,28 @@
         <div class="paint-img-grid">
           <div class="paint-img-card" onclick="showBookingModal('Warm Neutrals')">
             <img src="https://images.unsplash.com/photo-1555041469-a586c61ea9bc?auto=format&fit=crop&w=400&q=80" alt="Warm Neutrals" loading="lazy" />
-            <button class="paint-img-heart wishlist-btn">♡</button>
+            <button class="paint-img-heart wishlist-btn"><svg class="ic"><use href="#i-heart"/></svg></button>
             <div class="paint-img-overlay">
               <span class="paint-img-name">Warm Neutrals</span>
             </div>
           </div>
           <div class="paint-img-card" onclick="showBookingModal('Bold Statement')">
             <img src="https://images.unsplash.com/photo-1600566752355-35792bedcfea?auto=format&fit=crop&w=400&q=80" alt="Bold Statement" loading="lazy" />
-            <button class="paint-img-heart wishlist-btn">♡</button>
+            <button class="paint-img-heart wishlist-btn"><svg class="ic"><use href="#i-heart"/></svg></button>
             <div class="paint-img-overlay">
               <span class="paint-img-name">Bold Statement</span>
             </div>
           </div>
           <div class="paint-img-card" onclick="showBookingModal('All White Minimal')">
             <img src="https://images.unsplash.com/photo-1615529328331-f8917597711f?auto=format&fit=crop&w=400&q=80" alt="Minimal" loading="lazy" />
-            <button class="paint-img-heart wishlist-btn">♡</button>
+            <button class="paint-img-heart wishlist-btn"><svg class="ic"><use href="#i-heart"/></svg></button>
             <div class="paint-img-overlay">
               <span class="paint-img-name">All-White Minimal</span>
             </div>
           </div>
           <div class="paint-img-card" onclick="showBookingModal('Mural Art')">
             <img src="https://images.unsplash.com/photo-1493663284031-b7e3aefcae8e?auto=format&fit=crop&w=400&q=80" alt="Mural" loading="lazy" />
-            <button class="paint-img-heart wishlist-btn">♡</button>
+            <button class="paint-img-heart wishlist-btn"><svg class="ic"><use href="#i-heart"/></svg></button>
             <div class="paint-img-overlay">
               <span class="paint-img-name">Hand-Painted Mural</span>
             </div>
@@ -722,28 +745,28 @@
         <div class="paint-img-grid">
           <div class="paint-img-card" onclick="showBookingModal('Corporate Blue')">
             <img src="https://images.unsplash.com/photo-1497366216548-37526070297c?auto=format&fit=crop&w=400&q=80" alt="Corporate" loading="lazy" />
-            <button class="paint-img-heart wishlist-btn">♡</button>
+            <button class="paint-img-heart wishlist-btn"><svg class="ic"><use href="#i-heart"/></svg></button>
             <div class="paint-img-overlay">
               <span class="paint-img-name">Corporate Blue</span>
             </div>
           </div>
           <div class="paint-img-card" onclick="showBookingModal('Energetic Orange')">
             <img src="https://images.unsplash.com/photo-1593642632559-0c6d3fc62b89?auto=format&fit=crop&w=400&q=80" alt="Energetic" loading="lazy" />
-            <button class="paint-img-heart wishlist-btn">♡</button>
+            <button class="paint-img-heart wishlist-btn"><svg class="ic"><use href="#i-heart"/></svg></button>
             <div class="paint-img-overlay">
               <span class="paint-img-name">Energetic Orange</span>
             </div>
           </div>
           <div class="paint-img-card" onclick="showBookingModal('Zen Green Office')">
             <img src="https://images.unsplash.com/photo-1547586696-ea22b4d4235d?auto=format&fit=crop&w=400&q=80" alt="Zen Green" loading="lazy" />
-            <button class="paint-img-heart wishlist-btn">♡</button>
+            <button class="paint-img-heart wishlist-btn"><svg class="ic"><use href="#i-heart"/></svg></button>
             <div class="paint-img-overlay">
               <span class="paint-img-name">Zen Green</span>
             </div>
           </div>
           <div class="paint-img-card" onclick="showBookingModal('Modern Minimal Office')">
             <img src="https://images.unsplash.com/photo-1524758631624-e2822e304c36?auto=format&fit=crop&w=400&q=80" alt="Modern Minimal" loading="lazy" />
-            <button class="paint-img-heart wishlist-btn">♡</button>
+            <button class="paint-img-heart wishlist-btn"><svg class="ic"><use href="#i-heart"/></svg></button>
             <div class="paint-img-overlay">
               <span class="paint-img-name">Modern Minimal</span>
             </div>
@@ -788,7 +811,7 @@
       <div class="tab-content active" id="tab-all-bookings">
         <div class="booking-list" id="list-all"></div>
         <div class="booking-empty" id="empty-all">
-          <div class="bk-empty-icon">📋</div>
+          <div class="bk-empty-icon"><svg class="ic"><use href="#i-clipboard"/></svg></div>
           <h3>No Bookings Yet</h3>
           <p>Book a service to see it here</p>
         </div>
@@ -843,27 +866,27 @@
       </div>
       <span>Home</span>
     </button>
-    <button class="nav-item" data-screen="emergency">
+    <button class="nav-item" data-screen="furniture">
       <div class="nav-icon">
-        <!-- Emergency — shield with bolt -->
-        <svg width="22" height="22" viewBox="0 0 24 24" fill="none">
-          <path d="M12 2L4 6v6c0 5 3.5 9.7 8 11 4.5-1.3 8-6 8-11V6l-8-4z" stroke="currentColor" stroke-width="2" stroke-linejoin="round"/>
-          <path d="M12 8v4M12 15h.01" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
-        </svg>
-      </div>
-      <span>Emergency</span>
-    </button>
-    <button class="nav-item nav-center-btn" data-screen="furniture">
-      <div class="nav-icon nav-center-icon">
         <!-- Furniture — sofa/couch -->
-        <svg width="24" height="24" viewBox="0 0 24 24" fill="none">
-          <rect x="3" y="11" width="18" height="7" rx="2" stroke="white" stroke-width="2"/>
-          <path d="M3 14V9a2 2 0 014 0v2" stroke="white" stroke-width="2" stroke-linecap="round"/>
-          <path d="M21 14V9a2 2 0 00-4 0v2" stroke="white" stroke-width="2" stroke-linecap="round"/>
-          <path d="M5 18v2M19 18v2" stroke="white" stroke-width="2" stroke-linecap="round"/>
+        <svg width="22" height="22" viewBox="0 0 24 24" fill="none">
+          <rect x="3" y="11" width="18" height="7" rx="2" stroke="currentColor" stroke-width="2"/>
+          <path d="M3 14V9a2 2 0 014 0v2" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+          <path d="M21 14V9a2 2 0 00-4 0v2" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+          <path d="M5 18v2M19 18v2" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
         </svg>
       </div>
       <span>Furniture</span>
+    </button>
+    <button class="nav-item nav-center-btn" data-screen="emergency">
+      <div class="nav-icon nav-center-icon">
+        <!-- Emergency — shield with bolt -->
+        <svg width="24" height="24" viewBox="0 0 24 24" fill="none">
+          <path d="M12 2L4 6v6c0 5 3.5 9.7 8 11 4.5-1.3 8-6 8-11V6l-8-4z" stroke="white" stroke-width="2" stroke-linejoin="round"/>
+          <path d="M12 8v4M12 15h.01" stroke="white" stroke-width="2" stroke-linecap="round"/>
+        </svg>
+      </div>
+      <span>Emergency</span>
     </button>
     <button class="nav-item" data-screen="painting">
       <div class="nav-icon">
@@ -946,6 +969,209 @@
     </div>
   </div>
 
+  <!-- ═══════════════════════════════════════ EMERGENCY BOOKING SHEET (address + charges) ═══════════════════════════════════════ -->
+  <div class="ebook-overlay" id="ebookOverlay">
+    <div class="ebook-sheet">
+      <div class="pay-drag"></div>
+
+      <div class="ebook-head">
+        <div class="ebook-ico" id="ebookIco"><svg class="ic"><use href="#i-bolt"/></svg></div>
+        <div>
+          <h2 class="ebook-title" id="ebookTitle">Electrician</h2>
+          <p class="ebook-sub">Emergency service · Barmer</p>
+        </div>
+      </div>
+
+      <!-- Saved addresses -->
+      <p class="ebook-label">Kahan aana hai? <span class="ebook-req">*</span></p>
+      <div class="ebook-saved">
+        <button class="ebook-addr active" data-addr="Ghar — 12, Indra Colony, Barmer" onclick="pickAddr(this)">
+          <span class="ea-ico"><svg class="ic"><use href="#i-home"/></svg></span>
+          <span class="ea-text"><strong>Ghar</strong><small>12, Indra Colony, Barmer</small></span>
+          <span class="ea-check"><svg class="ic"><use href="#i-check"/></svg></span>
+        </button>
+        <button class="ebook-addr" data-addr="Office — Shop 4, Station Road, Barmer" onclick="pickAddr(this)">
+          <span class="ea-ico"><svg class="ic"><use href="#i-building"/></svg></span>
+          <span class="ea-text"><strong>Office</strong><small>Shop 4, Station Road, Barmer</small></span>
+          <span class="ea-check"><svg class="ic"><use href="#i-check"/></svg></span>
+        </button>
+      </div>
+
+      <!-- New address toggle -->
+      <button class="ebook-newaddr-btn" id="ebookNewBtn" onclick="toggleNewAddr()"><svg class="ic"><use href="#i-plus"/></svg> Naya address daalein</button>
+      <textarea class="ebook-input" id="ebookNewAddr" placeholder="Ghar/dukaan no., area, landmark… (Barmer)" rows="2" style="display:none"></textarea>
+
+      <!-- Problem -->
+      <p class="ebook-label">Kya problem hai? (optional)</p>
+      <textarea class="ebook-input" id="ebookProblem" placeholder="Jaise: switch board kaam nahi kar raha…" rows="2"></textarea>
+
+      <!-- Charges -->
+      <div class="ebook-charges">
+        <div class="ebook-charge-row"><span>Visit / inspection charge</span><span id="ebookVisit">₹50</span></div>
+        <div class="ebook-charge-row"><span id="ebookSvcLabel">Service charge (approx)</span><span id="ebookSvc">₹400</span></div>
+        <div class="ebook-charge-row ebook-charge-note">Final bill kaam ke hisaab se · GST alag</div>
+        <div class="ebook-charge-row ebook-charge-total"><span>Approx total</span><span id="ebookApprox">₹450 – ₹520</span></div>
+      </div>
+
+      <button class="ebook-cta" id="ebookCta" onclick="confirmBookingAndFind()">Confirm karein & Karigar dhoondhein</button>
+      <button class="rate-skip" onclick="closeEbook()">Cancel</button>
+    </div>
+  </div>
+
+  <!-- ═══════════════════════════════════════ EMERGENCY TRACKING OVERLAY ═══════════════════════════════════════ -->
+  <div class="track-overlay" id="trackOverlay">
+    <div class="track-screen">
+
+      <!-- Header -->
+      <div class="track-header">
+        <button class="track-close" onclick="closeTracking()">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none"><path d="M18 6L6 18M6 6l12 12" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"/></svg>
+        </button>
+        <span class="track-head-title" id="trackHeadTitle">Emergency Service</span>
+      </div>
+
+      <!-- STAGE 1: Searching -->
+      <div class="track-stage" id="trackSearching">
+        <div class="track-radar">
+          <span class="radar-ring r1"></span>
+          <span class="radar-ring r2"></span>
+          <span class="radar-ring r3"></span>
+          <div class="radar-core"><svg class="ic"><use href="#i-bolt"/></svg></div>
+        </div>
+        <h2 class="track-big" id="searchTitle">Karigar dhoondh rahe hain…</h2>
+        <p class="track-sub">Aapke aas-paas ke verified Karigar ko request bheji ja rahi hai</p>
+        <div class="track-line"><span class="track-line-pin"><svg class="ic"><use href="#i-pin"/></svg></span> <span id="trackAddr">Barmer · Aapka location</span></div>
+      </div>
+
+      <!-- STAGE 2: Karigar found / coming -->
+      <div class="track-stage" id="trackFound" style="display:none">
+        <!-- Clean "on the way" banner -->
+        <div class="track-onway">
+          <div class="tow-route">
+            <svg class="tow-scooter" viewBox="0 0 48 24"><use href="#i-scooter"/></svg>
+            <div class="tow-line"><span class="tow-line-fill"></span></div>
+            <svg class="tow-homeic" viewBox="0 0 24 24"><use href="#i-home"/></svg>
+          </div>
+          <div class="tow-right">
+            <span class="tow-eta" id="trackEta">8 min</span>
+            <span class="tow-eta-label">door</span>
+          </div>
+        </div>
+        <p class="track-addr-line" id="trackToAddr"><svg class="ic"><use href="#i-pin"/></svg> Ghar — 12, Indra Colony, Barmer</p>
+
+        <!-- Karigar card -->
+        <div class="track-karigar-card">
+          <div class="tk-avatar">R</div>
+          <div class="tk-info">
+            <h3>Ramesh Kumar</h3>
+            <p id="trackKarigarSkill"><span class="tk-verified"><svg class="ic"><use href="#i-shield-check"/></svg> Verified</span> · Electrician</p>
+            <div class="tk-rating"><svg class="ic"><use href="#i-star"/></svg> 4.8 <span>· 320+ kaam</span></div>
+          </div>
+          <a class="tk-call" href="tel:0000000000" onclick="event.preventDefault(); showToast('Karigar ko call ho rahi hai…')">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none"><path d="M22 16.92v3a2 2 0 01-2.18 2 19.79 19.79 0 01-8.63-3.07 19.5 19.5 0 01-6-6 19.79 19.79 0 01-3.07-8.67A2 2 0 014.11 2h3a2 2 0 012 1.72c.13.96.36 1.9.7 2.81a2 2 0 01-.45 2.11L8.09 9.91a16 16 0 006 6l1.27-1.27a2 2 0 012.11-.45c.91.34 1.85.57 2.81.7A2 2 0 0122 16.92z" fill="currentColor"/></svg>
+          </a>
+        </div>
+
+        <!-- Live status steps -->
+        <div class="track-steps" id="trackSteps">
+          <div class="track-step done" data-step="0">
+            <span class="ts-dot"></span>
+            <div class="ts-text"><strong>Karigar mil gaya</strong><small>Ramesh ne aapki request accept ki</small></div>
+          </div>
+          <div class="track-step active" data-step="1">
+            <span class="ts-dot"></span>
+            <div class="ts-text"><strong>Aapke ghar aa raha hai</strong><small>Live location track ho rahi hai</small></div>
+          </div>
+          <div class="track-step" data-step="2">
+            <span class="ts-dot"></span>
+            <div class="ts-text"><strong>Kaam chalu</strong><small>Karigar kaam shuru karega</small></div>
+          </div>
+          <div class="track-step" data-step="3">
+            <span class="ts-dot"></span>
+            <div class="ts-text"><strong>Kaam poora</strong><small>Payment aur rating</small></div>
+          </div>
+        </div>
+
+        <div class="track-livenote" id="trackLiveNote">
+          <span class="track-live-dot"></span>
+          <span id="trackLiveText">Karigar aapke ghar aa raha hai…</span>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- ═══════════════════════════════════════ PAYMENT OVERLAY ═══════════════════════════════════════ -->
+  <div class="pay-overlay" id="payOverlay">
+    <div class="pay-sheet">
+      <div class="pay-drag"></div>
+
+      <div class="pay-done-icon"><svg class="ic"><use href="#i-check"/></svg></div>
+      <h2 class="pay-title">Kaam poora ho gaya!</h2>
+      <p class="pay-sub" id="paySub">Ramesh Kumar · Electrician</p>
+
+      <!-- Bill -->
+      <div class="pay-bill">
+        <div class="pay-row"><span>Service charge</span><span id="payService">₹400</span></div>
+        <div class="pay-row"><span>Visit / emergency charge</span><span>₹50</span></div>
+        <div class="pay-row"><span>Tax (GST)</span><span id="payTax">₹23</span></div>
+        <div class="pay-row pay-total"><span>Total</span><span id="payTotal">₹473</span></div>
+      </div>
+
+      <!-- Payment method -->
+      <p class="pay-method-label">Payment kaise karein?</p>
+      <div class="pay-methods">
+        <button class="pay-method active" data-method="online" onclick="selectPayMethod(this)">
+          <span class="pm-ico"><svg class="ic"><use href="#i-card"/></svg></span>
+          <div class="pm-text"><strong>Online (UPI / Card)</strong><small>GPay, PhonePe, Paytm, Card</small></div>
+          <span class="pm-radio"></span>
+        </button>
+        <button class="pay-method" data-method="cash" onclick="selectPayMethod(this)">
+          <span class="pm-ico"><svg class="ic"><use href="#i-cash"/></svg></span>
+          <div class="pm-text"><strong>Cash</strong><small>Karigar ko haath mein dein</small></div>
+          <span class="pm-radio"></span>
+        </button>
+      </div>
+
+      <button class="pay-cta" id="payCta" onclick="confirmPayment()">₹473 Online Pay karein</button>
+    </div>
+  </div>
+
+  <!-- ═══════════════════════════════════════ RATING OVERLAY ═══════════════════════════════════════ -->
+  <div class="rate-overlay" id="rateOverlay">
+    <div class="rate-sheet">
+      <div class="pay-drag"></div>
+
+      <div class="rate-avatar" id="rateAvatar">R</div>
+      <h2 class="rate-title">Karigar ko rating dein</h2>
+      <p class="rate-sub" id="rateSub">Ramesh Kumar · Electrician</p>
+
+      <!-- Stars -->
+      <div class="rate-stars" id="rateStars">
+        <span class="rate-star" data-val="1"><svg class="ic"><use href="#i-star"/></svg></span>
+        <span class="rate-star" data-val="2"><svg class="ic"><use href="#i-star"/></svg></span>
+        <span class="rate-star" data-val="3"><svg class="ic"><use href="#i-star"/></svg></span>
+        <span class="rate-star" data-val="4"><svg class="ic"><use href="#i-star"/></svg></span>
+        <span class="rate-star" data-val="5"><svg class="ic"><use href="#i-star"/></svg></span>
+      </div>
+      <p class="rate-word" id="rateWord">Star tap karke rating dein</p>
+
+      <!-- Quick feedback chips -->
+      <div class="rate-chips" id="rateChips">
+        <button class="rate-chip" onclick="toggleChip(this)">Time pe aaya</button>
+        <button class="rate-chip" onclick="toggleChip(this)">Achha kaam</button>
+        <button class="rate-chip" onclick="toggleChip(this)">Vyavhaar achha</button>
+        <button class="rate-chip" onclick="toggleChip(this)">Saaf-suthra</button>
+        <button class="rate-chip" onclick="toggleChip(this)">Uchit daam</button>
+      </div>
+
+      <textarea class="rate-text" id="rateText" placeholder="Kuch aur kehna hai? (optional)" rows="2"></textarea>
+
+      <button class="rate-cta" id="rateCta" onclick="submitRating()">Rating Submit karein</button>
+      <button class="rate-skip" onclick="closeRating()">Abhi nahi</button>
+    </div>
+  </div>
+
   <!-- ═══════════════════════════════════════ BOOKING MODAL ═══════════════════════════════════════ -->
   <div class="modal-overlay" id="bookingModal">
     <div class="modal-sheet">
@@ -1003,15 +1229,15 @@
         <input type="text" id="locSearchInput" placeholder="Jila dhundhe..." autocomplete="off" />
       </div>
       <ul class="loc-list" id="locList">
-        <li class="loc-item active" data-jila="Jodhpur">
-          <span class="loc-pin">📍</span> Jodhpur
-          <svg class="loc-check" width="16" height="16" viewBox="0 0 24 24" fill="none"><path d="M20 6L9 17l-5-5" stroke="#0F3D3E" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
-        </li>
+        <li class="loc-item" data-jila="Jodhpur"><span class="loc-pin">📍</span> Jodhpur</li>
         <li class="loc-item" data-jila="Ajmer"><span class="loc-pin">📍</span> Ajmer</li>
         <li class="loc-item" data-jila="Alwar"><span class="loc-pin">📍</span> Alwar</li>
         <li class="loc-item" data-jila="Banswara"><span class="loc-pin">📍</span> Banswara</li>
         <li class="loc-item" data-jila="Baran"><span class="loc-pin">📍</span> Baran</li>
-        <li class="loc-item" data-jila="Barmer"><span class="loc-pin">📍</span> Barmer</li>
+        <li class="loc-item active" data-jila="Barmer">
+          <span class="loc-pin">📍</span> Barmer
+          <svg class="loc-check" width="16" height="16" viewBox="0 0 24 24" fill="none"><path d="M20 6L9 17l-5-5" stroke="#0F3D3E" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        </li>
         <li class="loc-item" data-jila="Bharatpur"><span class="loc-pin">📍</span> Bharatpur</li>
         <li class="loc-item" data-jila="Bhilwara"><span class="loc-pin">📍</span> Bhilwara</li>
         <li class="loc-item" data-jila="Bikaner"><span class="loc-pin">📍</span> Bikaner</li>
