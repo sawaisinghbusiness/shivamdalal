@@ -14,6 +14,7 @@ import Wallet from './pages/Wallet';
 import Notifications from './pages/Notifications';
 import Help from './pages/Help';
 import Login from './pages/Login';
+import KarigarLogin from './pages/KarigarLogin';
 import Register from './pages/Register';
 import KarigarApp from './pages/KarigarApp';
 import './App.css';
@@ -31,6 +32,7 @@ export default function App() {
         <div className="app-wrapper">
           <Routes>
             <Route path="/login" element={<Login />} />
+            <Route path="/karigar-login" element={<KarigarLogin />} />
             <Route path="/register" element={<Register />} />
             <Route path="*" element={<Navigate to="/login" replace />} />
           </Routes>

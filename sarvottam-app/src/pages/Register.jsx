@@ -64,7 +64,7 @@ export default function Register() {
   return (
     <div className="auth-screen">
       <div className="auth-topbar">
-        <button className="auth-back" onClick={() => nav('/login')}><Icon name="back" size={18} /></button>
+        <button className="auth-back" onClick={() => nav(isKarigar ? '/karigar-login' : '/login')}><Icon name="back" size={18} /></button>
         <span>{isKarigar ? 'Karigar Registration' : 'Create Account'}</span>
       </div>
 
@@ -148,7 +148,7 @@ export default function Register() {
 
         <button className="auth-cta" onClick={submit}>{isKarigar ? 'Register as Karigar' : 'Create account'}</button>
 
-        <p className="auth-switch">Already have an account? <button onClick={() => nav('/login')}>Log in</button></p>
+        <p className="auth-switch">Already have an account? <button onClick={() => nav(isKarigar ? '/karigar-login' : '/login')}>Log in</button></p>
 
         {isKarigar && <p className="auth-terms">Your ID will be verified by the SARVOTTAM team before customers can see you.</p>}
       </div>

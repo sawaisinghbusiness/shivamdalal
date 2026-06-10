@@ -77,6 +77,12 @@
 .auth-terms { text-align: center; font-size: 11px; color: var(--text-4); margin: 18px 24px 0; line-height: 1.5; }
 .auth-demo { text-align: center; font-size: 11px; color: var(--primary); font-weight: 600; margin: 8px 24px 0; }
 
+/* Karigar login — distinct accent */
+.karigar-brand { background: linear-gradient(150deg, #c2410c, #ea580c); }
+.brand-pro { font-size: 13px; background: rgba(255,255,255,.22); padding: 2px 8px; border-radius: 8px; letter-spacing: 1px; vertical-align: middle; }
+.karigar-cta { background: #ea580c; }
+.ak-ic.customer-ic { background: var(--primary-lt); color: var(--primary); }
+
 /* Role toggle (register) */
 .role-toggle { display: flex; gap: 8px; background: #f4f6f6; padding: 5px; border-radius: 14px; margin-bottom: 18px; }
 .role-opt { flex: 1; display: flex; align-items: center; justify-content: center; gap: 7px; padding: 11px; border-radius: 10px; font-size: 13.5px; font-weight: 700; color: var(--text-3); }
