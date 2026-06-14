@@ -2,11 +2,11 @@ import { NavLink, useLocation } from 'react-router-dom';
 import Icon from './Icon';
 
 const ITEMS = [
-  { to: '/',          icon: 'home',     label: 'Home' },
-  { to: '/furniture', icon: 'clipboard',label: 'Furniture' },
-  { to: '/emergency', icon: 'bolt',     label: 'Emergency', center: true },
-  { to: '/painting',  icon: 'heart',    label: 'Painting' },
-  { to: '/profile',   icon: 'user',     label: 'Profile' },
+  { to: '/',          icon: 'home',   label: 'Home' },
+  { to: '/furniture', icon: 'sofa',   label: 'Furniture' },
+  { to: '/emergency', icon: 'bolt',   label: 'Emergency', center: true },
+  { to: '/painting',  icon: 'roller', label: 'Painting' },
+  { to: '/profile',   icon: 'user',   label: 'Profile' },
 ];
 
 export default function BottomNav() {

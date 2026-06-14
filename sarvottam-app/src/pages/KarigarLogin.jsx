@@ -13,15 +13,23 @@ export default function KarigarLogin() {
   const [identifier, setIdentifier] = useState('');
   const [password, setPassword] = useState('');
   const [showPw, setShowPw] = useState(false);
+  const [busy, setBusy] = useState(false);
+  const [formErr, setFormErr] = useState('');
+  const [shaking, setShaking] = useState(false);
 
-  function submit() {
-    if (!identifier.trim()) { toast('Enter your email or phone'); return; }
-    if (!password) { toast('Enter your password'); return; }
-    const res = login(identifier, password);
-    if (!res.ok) { toast(res.error); return; }
+  function fail(msg) { setFormErr(msg); setShaking(true); }
+
+  async function submit() {
+    if (busy) return;
+    if (!identifier.trim()) { fail('Please enter your email'); return; }
+    if (!password) { fail('Please enter your password'); return; }
+    setFormErr('');
+    setBusy(true);
+    const res = await login(identifier, password);
+    setBusy(false);
+    if (!res.ok) { fail(res.error); return; }
     if (res.role !== 'karigar') {
-      toast('This is a customer account — use Customer login');
-      nav('/');
+      fail('This is a customer account — use Customer login');
       return;
     }
     toast('Welcome back, Karigar!');
@@ -29,55 +37,93 @@ export default function KarigarLogin() {
   }
 
   return (
-    <div className="auth-screen">
-      <div className="auth-brand karigar-brand">
-        <img className="auth-peacock" src="/peacock.png" alt="" />
-        <h1>SARVOTTAM <span className="brand-pro">PRO</span></h1>
-        <p>For Karigars — work &amp; earn near you</p>
+    <div className="kl-screen">
+      {/* ── Hero ── */}
+      <header className="kl-hero">
+        <span className="kl-glow" aria-hidden="true" />
+        <span className="kl-pins" aria-hidden="true" />
+        <span className="kl-dots" aria-hidden="true" />
+
+        <div className="kl-logo">
+          <img className="kl-logo-img" src="/sarvottam-logo.png" alt="SARVOTTAM Partner"
+               onError={(e) => { const l = e.currentTarget.closest('.kl-logo'); if (l) l.classList.add('kl-logo--fallback'); }} />
+          <div className="kl-logo-fallback">
+            <strong>SARVOTTAM</strong>
+            <span className="kl-badge">PARTNER</span>
+          </div>
+        </div>
+
+        <div className="kl-headline">
+          <h1>Kaam dhoondhna band karo.<br /><span className="accent">Jobs ab aapke paas aayengi.</span></h1>
+        </div>
+        <img className="kl-tech" src="/karigar-tech.png" alt=""
+             onError={(e) => { e.currentTarget.onerror = null; e.currentTarget.src = '/karigar-hero.png'; }} />
+      </header>
+
+      {/* ── Benefits strip (glassmorphism) ── */}
+      <div className="kl-benefits">
+        <div className="kl-benefit">
+          <span className="kl-bic"><Icon name="bolt" size={18} /></span>
+          <div className="kl-btxt"><strong>Emergency Jobs</strong></div>
+        </div>
+        <div className="kl-benefit">
+          <span className="kl-bic"><Icon name="pin" size={18} /></span>
+          <div className="kl-btxt"><strong>Nearby Customers</strong></div>
+        </div>
+        <div className="kl-benefit">
+          <span className="kl-bic"><Icon name="cash" size={18} /></span>
+          <div className="kl-btxt"><strong>Weekly Payouts</strong></div>
+        </div>
       </div>
 
-      <div className="auth-card">
-        <h2 className="auth-h2">Karigar Login</h2>
-        <p className="auth-sub">Sign in to get jobs and track earnings</p>
+      {/* ── Login card ── */}
+      <div className={'kl-card' + (shaking ? ' shake' : '')} onAnimationEnd={() => setShaking(false)}>
+        <h2 className="kl-title">Karigar <span className="accent">Login</span></h2>
+        <p className="kl-cardsub">Login karein aur jobs &amp; earnings track karein</p>
+        {formErr && <div className="form-error"><Icon name="close" size={15} /> {formErr}</div>}
 
         <label className="auth-field">
-          <span>Email or Phone</span>
+          <span>Email or Mobile Number</span>
           <div className="auth-input">
             <Icon name="user" size={18} />
-            <input value={identifier} onChange={(e) => setIdentifier(e.target.value)} placeholder="you@email.com or 98765 43210" autoComplete="username" />
+            <input value={identifier} onChange={(e) => setIdentifier(e.target.value)} placeholder="Enter email or mobile number" autoComplete="username" />
           </div>
         </label>
 
         <label className="auth-field">
           <span>Password</span>
           <div className="auth-input">
-            <Icon name="shield" size={18} />
-            <input type={showPw ? 'text' : 'password'} value={password} onChange={(e) => setPassword(e.target.value)} placeholder="Your password" autoComplete="current-password" />
+            <Icon name="lock" size={18} />
+            <input type={showPw ? 'text' : 'password'} value={password} onChange={(e) => setPassword(e.target.value)} placeholder="Enter your password" autoComplete="current-password" />
             <button type="button" className="auth-eye" onClick={() => setShowPw((v) => !v)}>{showPw ? 'Hide' : 'Show'}</button>
           </div>
         </label>
 
-        <button className="auth-forgot" onClick={() => toast('Password reset — coming soon')}>Forgot password?</button>
+        <button className="kl-forgot" onClick={() => toast('Password reset — coming soon')}>Forgot Password?</button>
 
-        <button className="auth-cta karigar-cta" onClick={submit}>Log in</button>
+        <button className="kl-login" onClick={submit} disabled={busy}>
+          {busy ? 'Signing in…' : 'Login'} <Icon name="arrow" size={18} />
+        </button>
 
-        <p className="auth-switch">
-          New Karigar? <button onClick={() => nav('/register?role=karigar')}>Register here</button>
-        </p>
-      </div>
+        <div className="kl-or"><span>OR</span></div>
 
-      <div className="auth-divider"><span>or</span></div>
+        <button className="kl-register" onClick={() => nav('/register?role=karigar')}>
+          <Icon name="user" size={18} /> Register as Karigar
+        </button>
 
-      <button className="auth-karigar" onClick={() => nav('/login')}>
-        <div className="ak-ic customer-ic"><Icon name="user" size={20} /></div>
-        <div className="ak-text">
-          <strong>Looking for a service?</strong>
-          <small>Go to Customer login</small>
+        <div className="kl-trust">
+          <div className="kl-trust-item"><Icon name="shield" size={20} /><span>Verified Customers</span></div>
+          <div className="kl-trust-item"><Icon name="lock" size={20} /><span>Secure Payments</span></div>
+          <div className="kl-trust-item"><Icon name="bell" size={20} /><span>Real-time Job Alerts</span></div>
+          <div className="kl-trust-item"><Icon name="headset" size={20} /><span>24/7 Support</span></div>
         </div>
-        <Icon name="chevron" size={16} />
-      </button>
 
-      <p className="auth-terms">Karigar accounts are verified by the SARVOTTAM team.</p>
+        <p className="kl-secure"><Icon name="lock" size={14} /> Aapka data 100% secure hai</p>
+
+        <button className="kl-switch" onClick={() => nav('/login')}>
+          Looking for a service? <span>Customer Login</span>
+        </button>
+      </div>
     </div>
   );
 }

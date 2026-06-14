@@ -1,10 +1,10 @@
 // SARVOTTAM — Painting services & styles (demo data)
 
 export const PAINT_SERVICES = [
-  { id: 'interior', name: 'Interior Painting', desc: 'Bedroom, hall, full ghar', rate: '₹8 – ₹18 / sq.ft', icon: 'home' },
-  { id: 'exterior', name: 'Exterior Painting', desc: 'Bahari deewar, weatherproof', rate: '₹12 – ₹25 / sq.ft', icon: 'building' },
+  { id: 'interior', name: 'Interior Painting', desc: 'Bedroom, hall, full home', rate: '₹8 – ₹18 / sq.ft', icon: 'roller' },
+  { id: 'exterior', name: 'Exterior Painting', desc: 'Outer walls, weatherproof', rate: '₹12 – ₹25 / sq.ft', icon: 'building' },
   { id: 'texture',  name: 'Texture & Designer', desc: 'Designer walls, patterns', rate: '₹40 – ₹120 / sq.ft', icon: 'star' },
-  { id: 'waterproof', name: 'Waterproofing', desc: 'Seelan, leakage solution', rate: '₹15 – ₹35 / sq.ft', icon: 'shield' },
+  { id: 'waterproof', name: 'Waterproofing', desc: 'Seepage & leakage solution', rate: '₹15 – ₹35 / sq.ft', icon: 'droplet' },
 ];
 
 export const PAINT_CATEGORIES = ['Bedroom', 'Living Hall', 'Office', 'Exterior'];

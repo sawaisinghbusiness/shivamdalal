@@ -204,10 +204,38 @@ HTML demo ab "blueprint" ban gaya. Asli app `sarvottam-app/` folder mein React (
 - [x] **Auth gate** — login bina sirf login/register dikhe. Profile se Logout → wapas login.
       localStorage v3 mein auth state.
 
+### Auth redesign (user feedback — English only, professional):
+- [x] **Customer Login (default)** — email/phone + password, Create account link,
+      "Are you a Karigar?" button niche.
+- [x] **Karigar Login (alag page)** — orange "SARVOTTAM PRO" look, "New Karigar? Register",
+      "Looking for a service?" → customer login. Role check (galat role pe sahi jagah bhejta hai).
+- [x] **Register** — Name, Surname, Email, Phone, Password, Confirm + Customer/Karigar toggle
+      (Karigar pe skill/area/exp/ID inline). Demo customer: demo@sarvottam.com / 1234.
+- [x] **Karigar App (working demo)** — online toggle, auto job offers (20s countdown,
+      Accept/Reject), active job steps (Reached→Working→Done), earnings live badhti hai.
+- [x] Role-based routing. Sab LIVE Vercel pe.
+
+### BIG OVERHAUL (user feedback — "real company level banao"):
+- [x] **Perf fix** — saare backdrop-blur hataye (laggy scroll ka reason), sizes tight (zoom-in feel gaya),
+      login card overlap fix.
+- [x] **Proper icons** — sofa (furniture), paint-roller (painting), droplet (plumber), hammer
+      (carpenter), plug (electrician), fan (AC) + cart/truck/medal/chart/key/history/headset.
+- [x] **Flipkart-style Product page** (/product/:type/:id) — image, rating badge, price, offers,
+      warranty badges (1-yr/ISI/installation/support), specs table, ratings & reviews (write your own,
+      saved), related products carousel, sticky Add to Cart + Book Now (order → My Bookings).
+- [x] **Karigar Partner App rebuild** (Rapido Captain/UC Partner research se):
+      - 4 tabs: Home / Orders / Earnings / Profile
+      - Online toggle, today stats, **daily bonus incentive** (5 jobs → ₹200, progress bar)
+      - **Skill-matched jobs** (Electrician ko sirf electric kaam — fix!)
+      - **Real job flow**: Accept (25s) → Navigate+Call → Arrived → **job-start OTP** (demo 4321) →
+        Work → **Bill with 20% SARVOTTAM commission breakdown** → Collect cash/online → earning+history
+      - Orders tab (history with net/gross), Earnings tab (balance, withdraw, weekly chart), Profile tab
+        (ID verified, support).
+
 ### AGLA (jab aap kaho):
-- Karigar (worker) app — notification, accept, status update, earnings (Phase 2 core idea)
-- Ya asli backend (real OTP, database) — Phase 1
-- (Customer app ke saare main pages + login ho gaye!)
+- Asli backend (real OTP, database, sach ka matching) — Phase 1
+- Admin panel demo
+- Cart page (cart mein items dikhe)
 - My Bookings page (booking history)
 - Phir asli backend (login OTP, database, real Karigar matching) — Phase 1
 - Baad mein: Karigar app, Admin panel

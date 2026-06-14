@@ -13,12 +13,21 @@ export default function Login() {
   const [identifier, setIdentifier] = useState('');
   const [password, setPassword] = useState('');
   const [showPw, setShowPw] = useState(false);
+  const [busy, setBusy] = useState(false);
+  const [formErr, setFormErr] = useState('');
+  const [shaking, setShaking] = useState(false);
 
-  function submit() {
-    if (!identifier.trim()) { toast('Enter your email or phone'); return; }
-    if (!password) { toast('Enter your password'); return; }
-    const res = login(identifier, password);
-    if (!res.ok) { toast(res.error); return; }
+  function fail(msg) { setFormErr(msg); setShaking(true); }
+
+  async function submit() {
+    if (busy) return;
+    if (!identifier.trim()) { fail('Please enter your email'); return; }
+    if (!password) { fail('Please enter your password'); return; }
+    setFormErr('');
+    setBusy(true);
+    const res = await login(identifier, password);
+    setBusy(false);
+    if (!res.ok) { fail(res.error); return; }
     if (res.role === 'karigar') {
       toast('Tip: use the Karigar login for worker accounts');
       nav('/karigar');
@@ -29,56 +38,67 @@ export default function Login() {
   }
 
   return (
-    <div className="auth-screen">
-      <div className="auth-brand">
-        <img className="auth-peacock" src="/peacock.png" alt="" />
-        <h1>SARVOTTAM</h1>
-        <p>Every home service, one tap away</p>
+    <div className="cl-screen">
+      {/* Hero (logo + tagline + lifestyle scene baked into the image) */}
+      <img className="cl-hero" src="/customer-hero.png" alt="SARVOTTAM — Book trusted home services in minutes" />
+
+      {/* Feature strip */}
+      <div className="cl-features">
+        <div className="cl-feat"><span className="cl-fic"><Icon name="shield" size={20} /></span><strong>Verified<br />Karigars</strong></div>
+        <div className="cl-feat"><span className="cl-fic"><Icon name="bolt" size={20} /></span><strong>Fast<br />Response</strong></div>
+        <div className="cl-feat"><span className="cl-fic"><Icon name="lock" size={20} /></span><strong>Secure<br />Payments</strong></div>
+        <div className="cl-feat"><span className="cl-fic"><Icon name="pin" size={20} /></span><strong>Live<br />Tracking</strong></div>
       </div>
 
-      <div className="auth-card">
-        <h2 className="auth-h2">Customer Login</h2>
-        <p className="auth-sub">Welcome back — sign in to book services</p>
+      {/* Login card */}
+      <div className={'cl-card' + (shaking ? ' shake' : '')} onAnimationEnd={() => setShaking(false)}>
+        <h2 className="cl-title">Welcome Back <span className="cl-wave">👋</span></h2>
+        <p className="cl-sub">Login karein aur service booking continue karein</p>
+        {formErr && <div className="form-error"><Icon name="close" size={15} /> {formErr}</div>}
 
         <label className="auth-field">
-          <span>Email or Phone</span>
+          <span>Email or Mobile Number</span>
           <div className="auth-input">
             <Icon name="user" size={18} />
-            <input value={identifier} onChange={(e) => setIdentifier(e.target.value)} placeholder="you@email.com or 98765 43210" autoComplete="username" />
+            <input value={identifier} onChange={(e) => setIdentifier(e.target.value)} placeholder="Enter email or mobile number" autoComplete="username" />
           </div>
         </label>
 
         <label className="auth-field">
           <span>Password</span>
           <div className="auth-input">
-            <Icon name="shield" size={18} />
-            <input type={showPw ? 'text' : 'password'} value={password} onChange={(e) => setPassword(e.target.value)} placeholder="Your password" autoComplete="current-password" />
+            <Icon name="lock" size={18} />
+            <input type={showPw ? 'text' : 'password'} value={password} onChange={(e) => setPassword(e.target.value)} placeholder="Enter your password" autoComplete="current-password" />
             <button type="button" className="auth-eye" onClick={() => setShowPw((v) => !v)}>{showPw ? 'Hide' : 'Show'}</button>
           </div>
         </label>
 
-        <button className="auth-forgot" onClick={() => toast('Password reset — coming soon')}>Forgot password?</button>
+        <button className="cl-forgot" onClick={() => toast('Password reset — coming soon')}>Forgot Password?</button>
 
-        <button className="auth-cta" onClick={submit}>Log in</button>
+        <button className="cl-login" onClick={submit} disabled={busy}>
+          {busy ? 'Signing in…' : 'Continue'} <Icon name="arrow" size={18} />
+        </button>
 
-        <p className="auth-switch">
-          New user? <button onClick={() => nav('/register')}>Create account</button>
-        </p>
+        <div className="cl-or"><span>OR</span></div>
+
+        <button className="cl-register" onClick={() => nav('/register')}>
+          <Icon name="user" size={18} /> New Customer? <span>Create Account</span>
+        </button>
       </div>
 
-      <div className="auth-divider"><span>or</span></div>
-
-      <button className="auth-karigar" onClick={() => nav('/karigar-login')}>
-        <div className="ak-ic"><Icon name="wrench" size={20} /></div>
-        <div className="ak-text">
-          <strong>Are you a Karigar?</strong>
-          <small>Log in or register to start earning</small>
+      {/* Karigar CTA banner */}
+      <div className="cl-karigar">
+        <img className="cl-karigar-img" src="/karigar-hero.png" alt="" />
+        <div className="cl-karigar-txt">
+          <strong>Earn with Sarvottam</strong>
+          <small>Become a verified Karigar and receive nearby jobs.</small>
         </div>
-        <Icon name="chevron" size={16} />
-      </button>
+        <button className="cl-karigar-btn" onClick={() => nav('/karigar-login')}>
+          Join as Karigar <Icon name="arrow" size={16} />
+        </button>
+      </div>
 
-      <p className="auth-terms">By continuing you agree to our Terms &amp; Privacy Policy</p>
-      <p className="auth-demo">Demo customer → demo@sarvottam.com · password: 1234</p>
+      <p className="cl-secure"><Icon name="lock" size={14} /> Aapka data 100% secure hai</p>
     </div>
   );
 }

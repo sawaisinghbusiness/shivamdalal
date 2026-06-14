@@ -1,0 +1,59 @@
+.ve-screen {
+  flex: 1; overflow-y: auto; overflow-x: hidden;
+  background:
+    radial-gradient(120% 50% at 50% 0%, #E9F5EF 0%, #F3F8F6 46%, #F3F8F6 100%);
+  display: flex; flex-direction: column; align-items: center;
+  padding: 16px 22px 28px; text-align: center;
+}
+
+.ve-top { width: 100%; display: flex; align-items: center; justify-content: space-between; }
+.ve-back {
+  width: 40px; height: 40px; border-radius: 13px;
+  background: #fff; border: 1px solid var(--border); color: var(--text-1);
+  display: flex; align-items: center; justify-content: center;
+  box-shadow: var(--sh-sm);
+}
+.ve-logo { font-size: 19px; font-weight: 800; letter-spacing: 1.5px; color: #0E6B52; }
+.ve-spacer { width: 40px; }
+
+.ve-illus { width: 200px; height: auto; margin: 18px 0 6px; filter: drop-shadow(0 14px 24px rgba(14,107,82,.18)); }
+
+.ve-title { font-size: 28px; font-weight: 800; color: #0F2E26; line-height: 1.15; letter-spacing: -.4px; }
+.ve-sub { font-size: 14px; color: var(--text-3); line-height: 1.6; margin-top: 12px; }
+.ve-sub strong { color: #0E6B52; font-weight: 750; }
+
+.ve-otp { display: flex; gap: 10px; margin: 26px 0 4px; }
+.ve-box {
+  width: 48px; height: 58px; border-radius: 14px;
+  border: 1.6px solid #DCE6E1; background: #fff;
+  text-align: center; font-size: 24px; font-weight: 700; color: #0F2E26;
+  outline: none; transition: all .15s var(--ease);
+}
+.ve-box:focus { border-color: #0E7467; box-shadow: 0 0 0 4px rgba(14,116,103,.12); }
+.ve-box.filled { border-color: #0E7467; }
+
+.ve-resend { display: flex; align-items: center; justify-content: center; gap: 7px; flex-wrap: wrap; font-size: 13px; color: var(--text-3); margin: 18px 0 24px; }
+.ve-resend .ic { color: var(--text-4); }
+.ve-resend b { color: #0E6B52; font-weight: 750; }
+.ve-resend-btn { color: #0E6B52; font-weight: 750; font-size: 13px; }
+
+.ve-verify {
+  width: 100%; height: 58px; border-radius: 15px;
+  background: linear-gradient(135deg, #0E5C46, #0A3F2C); color: #fff;
+  font-size: 16px; font-weight: 700;
+  display: flex; align-items: center; justify-content: center; gap: 9px;
+  box-shadow: 0 12px 26px rgba(10,63,44,.30);
+}
+.ve-verify:disabled { opacity: .7; }
+
+.ve-note {
+  width: 100%; display: flex; align-items: center; gap: 11px;
+  background: #EAF6EF; border: 1px solid #D6EBDF; border-radius: 16px;
+  padding: 14px 15px; margin-top: 18px; text-align: left;
+}
+.ve-note-ic {
+  width: 38px; height: 38px; border-radius: 11px; flex-shrink: 0;
+  background: #D6EBDF; color: #0E6B52;
+  display: flex; align-items: center; justify-content: center;
+}
+.ve-note span:last-child { font-size: 13px; color: #3A6B57; line-height: 1.4; }

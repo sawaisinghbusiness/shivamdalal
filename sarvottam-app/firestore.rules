@@ -1,0 +1,10 @@
+rules_version = '2';
+// Each authenticated user can read and write ONLY their own profile doc.
+// Paste these into: Firebase Console → Firestore Database → Rules → Publish.
+service cloud.firestore {
+  match /databases/{database}/documents {
+    match /users/{uid} {
+      allow read, write: if request.auth != null && request.auth.uid == uid;
+    }
+  }
+}

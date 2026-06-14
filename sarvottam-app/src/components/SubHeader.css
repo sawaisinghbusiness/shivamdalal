@@ -1,20 +1,26 @@
 .subheader {
-  display: flex; align-items: center; gap: 12px;
+  display: flex; align-items: center; gap: 13px;
   padding: 16px 18px;
-  background: #fff;
+  background: rgba(255,255,255,.92);
+  
   border-bottom: 1px solid var(--border);
   position: sticky; top: 0; z-index: 10;
 }
 .sub-back {
-  width: 38px; height: 38px; border-radius: 50%;
-  background: #f4f6f6; color: var(--primary);
+  width: 38px; height: 38px; border-radius: 13px;
+  background: #fff; border: 1px solid var(--border);
+  color: var(--primary); box-shadow: var(--sh-xs);
   display: flex; align-items: center; justify-content: center; flex-shrink: 0;
 }
 .sub-titles { flex: 1; min-width: 0; }
 .sub-titles h1 { font-size: 18px; font-weight: 800; color: var(--text-1); }
-.sub-titles p { font-size: 12.5px; color: var(--text-4); }
+.sub-titles p { font-size: 12px; color: var(--text-4); margin-top: 1px; }
 .sub-right { flex-shrink: 0; }
 
 /* shared sub-page utility styles */
-.sub-page { flex: 1; overflow-y: auto; padding-bottom: 24px; background: var(--bg); }
-.sub-section-label { font-size: 13px; font-weight: 700; color: var(--text-3); padding: 18px 18px 8px; }
+.sub-page { flex: 1; overflow-y: auto; padding-bottom: 26px; background: var(--bg); }
+.sub-section-label {
+  font-size: 11.5px; font-weight: 750; color: var(--text-3);
+  padding: 20px 18px 9px;
+  text-transform: uppercase; letter-spacing: .8px;
+}

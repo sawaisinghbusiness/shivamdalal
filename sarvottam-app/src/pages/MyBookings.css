@@ -1,35 +1,50 @@
-.bk-tabs { display: flex; gap: 8px; padding: 14px 18px; background: #fff; }
+.bk-tabs { display: flex; gap: 8px; padding: 14px 18px; background: #fff; border-bottom: 1px solid var(--border); }
 .bk-tab {
-  flex: 1; padding: 10px; border-radius: 10px; font-size: 13px; font-weight: 700;
-  color: var(--text-3); background: #f4f6f6;
+  flex: 1; padding: 11px; border-radius: 12px;
+  font-size: 13px; font-weight: 700;
+  color: var(--text-3); background: #F1F4F4;
+  transition: all .18s var(--ease);
 }
-.bk-tab.active { background: var(--primary); color: #fff; }
+.bk-tab.active { background: var(--g-primary); color: #fff; box-shadow: var(--sh-primary); }
 
 .bk-list { padding: 16px 18px; display: flex; flex-direction: column; gap: 12px; }
 .bk-card {
-  display: flex; gap: 13px; background: #fff; border: 1px solid var(--border);
-  border-radius: 16px; padding: 14px;
+  display: flex; gap: 13px;
+  background: #fff; border: 1px solid var(--border);
+  border-radius: var(--r-lg); padding: 15px;
+  box-shadow: var(--sh-sm);
 }
 .bk-ic {
-  width: 48px; height: 48px; border-radius: 13px; flex-shrink: 0;
+  width: 50px; height: 50px; border-radius: 15px; flex-shrink: 0;
   background: var(--primary-lt); color: var(--primary);
   display: flex; align-items: center; justify-content: center;
 }
 .bk-info { flex: 1; min-width: 0; }
 .bk-top { display: flex; align-items: center; justify-content: space-between; gap: 8px; }
-.bk-top h3 { font-size: 15.5px; font-weight: 700; color: var(--text-1); }
-.bk-badge { font-size: 10.5px; font-weight: 700; padding: 4px 9px; border-radius: 20px; flex-shrink: 0; }
-.badge-up { background: #e0f2fe; color: #0369a1; }
-.badge-done { background: #dcfce7; color: #15803d; }
-.badge-cancel { background: #fee2e2; color: #b91c1c; }
-.bk-karigar { font-size: 12.5px; color: var(--text-2); margin-top: 5px; }
+.bk-top h3 { font-size: 15.5px; font-weight: 750; color: var(--text-1); }
+.bk-badge { font-size: 10px; font-weight: 800; letter-spacing: .4px; padding: 5px 10px; border-radius: 20px; flex-shrink: 0; text-transform: uppercase; }
+.badge-up { background: #E3F1FD; color: #0B6BBF; }
+.badge-done { background: var(--success-lt); color: #1D7A4C; }
+.badge-cancel { background: var(--danger-lt); color: #C03338; }
+.bk-karigar { font-size: 12.5px; color: var(--text-2); margin-top: 6px; }
 .bk-date { font-size: 12px; color: var(--text-4); margin-top: 2px; }
-.bk-foot { display: flex; align-items: center; justify-content: space-between; margin-top: 10px; }
-.bk-amt { font-size: 15px; font-weight: 800; color: var(--primary); }
-.bk-action { font-size: 12.5px; font-weight: 700; color: #fff; background: var(--primary); padding: 8px 16px; border-radius: 10px; margin-left: auto; }
-.bk-action.ghost { background: var(--primary-lt); color: var(--primary); }
+.bk-foot { display: flex; align-items: center; justify-content: space-between; margin-top: 11px; }
+.bk-amt { font-size: 15px; font-weight: 800; color: var(--primary); font-variant-numeric: tabular-nums; }
+.bk-action {
+  font-size: 12.5px; font-weight: 700; color: #fff;
+  background: var(--g-primary);
+  padding: 9px 18px; border-radius: 11px; margin-left: auto;
+  box-shadow: var(--sh-primary);
+}
+.bk-action.ghost { background: var(--primary-lt); color: var(--primary); box-shadow: none; }
 
-.bk-empty { text-align: center; padding: 60px 30px; }
-.bk-empty-ic { width: 72px; height: 72px; border-radius: 20px; background: var(--primary-lt); color: var(--primary); display: flex; align-items: center; justify-content: center; margin: 0 auto 14px; }
-.bk-empty h3 { font-size: 16px; color: var(--text-1); }
-.bk-empty p { font-size: 13px; color: var(--text-4); margin-top: 4px; }
+.bk-empty { text-align: center; padding: 64px 30px; }
+.bk-empty-ic {
+  width: 76px; height: 76px; border-radius: 24px;
+  background: #fff; border: 1px solid var(--border);
+  color: var(--text-4); box-shadow: var(--sh-sm);
+  display: flex; align-items: center; justify-content: center;
+  margin: 0 auto 16px;
+}
+.bk-empty h3 { font-size: 16px; color: var(--text-1); font-weight: 750; }
+.bk-empty p { font-size: 13px; color: var(--text-4); margin-top: 5px; }

@@ -1,11 +1,43 @@
 .em-list { padding: 18px; display: flex; flex-direction: column; gap: 12px; }
-.em-card { display: flex; align-items: center; gap: 13px; background: #fff; border: 1px solid var(--border); border-radius: 16px; padding: 14px; }
-.em-ic { width: 52px; height: 52px; border-radius: 14px; display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
-.em-info { flex: 1; }
-.em-info h3 { font-size: 15.5px; font-weight: 700; color: var(--text-1); }
-.em-info p { font-size: 12px; color: var(--text-3); margin-top: 2px; }
-.em-btn { background: var(--primary); color: #fff; font-size: 13px; font-weight: 700; padding: 10px 16px; border-radius: 11px; flex-shrink: 0; }
+.em-card {
+  display: flex; align-items: center; gap: 14px;
+  background: var(--card);
+  border: 1px solid var(--border);
+  border-radius: var(--r-lg);
+  padding: 15px;
+  box-shadow: var(--sh-sm);
+}
+.em-ic {
+  width: 54px; height: 54px; border-radius: 16px;
+  display: flex; align-items: center; justify-content: center; flex-shrink: 0;
+  box-shadow: inset 0 0 0 1px rgba(16,24,40,.04);
+}
+.em-info { flex: 1; min-width: 0; }
+.em-info h3 { font-size: 15.5px; font-weight: 750; color: var(--text-1); }
+.em-info p { font-size: 12px; color: var(--text-3); margin-top: 3px; line-height: 1.4; }
+.em-btn {
+  background: var(--g-primary); color: #fff;
+  font-size: 12.5px; font-weight: 700;
+  padding: 11px 16px; border-radius: 12px; flex-shrink: 0;
+  box-shadow: var(--sh-primary);
+}
 
-.em-urgent { display: flex; align-items: center; gap: 14px; margin: 6px 18px 0; padding: 16px 18px; border-radius: 16px; background: linear-gradient(135deg, #ef4444, #dc2626); color: #fff; text-align: left; width: calc(100% - 36px); cursor: default; }
-.em-urgent strong { display: block; font-size: 15px; font-weight: 700; }
-.em-urgent small { font-size: 12px; opacity: .9; }
+.em-urgent {
+  display: flex; align-items: center; gap: 14px;
+  margin: 8px 18px 0; padding: 18px;
+  border-radius: var(--r-lg);
+  background: var(--g-danger);
+  color: #fff; text-align: left;
+  width: calc(100% - 36px);
+  cursor: default;
+  box-shadow: var(--sh-danger);
+  position: relative; overflow: hidden;
+}
+.em-urgent::before {
+  content: '';
+  position: absolute; right: -30px; top: -40px;
+  width: 140px; height: 140px; border-radius: 50%;
+  background: radial-gradient(circle, rgba(255,255,255,.18), transparent 65%);
+}
+.em-urgent strong { display: block; font-size: 15px; font-weight: 750; }
+.em-urgent small { font-size: 12px; opacity: .88; }

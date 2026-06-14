@@ -6,9 +6,9 @@ import { EMERGENCY_SERVICES, POPULAR, TRUST_STATS } from '../data/services';
 import './Home.css';
 
 const CATEGORIES = [
-  { id: 'emergency', to: '/emergency', icon: 'bolt',      name: 'Emergency', sub: '24x7 Available',   color: '#ef4444' },
-  { id: 'furniture', to: '/furniture', icon: 'clipboard', name: 'Furniture', sub: 'Design & Custom',  color: '#0F3D3E' },
-  { id: 'painting',  to: '/painting',  icon: 'heart',     name: 'Painting',  sub: 'Interior & Exterior', color: '#7c3aed' },
+  { id: 'emergency', to: '/emergency', icon: 'bolt',   name: 'Emergency', sub: '24x7 Available',      color: '#E5484D' },
+  { id: 'furniture', to: '/furniture', icon: 'sofa',   name: 'Furniture', sub: 'Design & Custom',     color: '#0E3D3E' },
+  { id: 'painting',  to: '/painting',  icon: 'roller', name: 'Painting',  sub: 'Interior & Exterior', color: '#7C3AED' },
 ];
 
 function greeting() {

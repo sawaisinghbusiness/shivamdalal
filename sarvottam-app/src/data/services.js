@@ -1,13 +1,13 @@
 // SARVOTTAM — demo data (baad mein ye backend/API se aayega)
 
 export const EMERGENCY_SERVICES = [
-  { id: 'electrician', name: 'Electrician', icon: 'bolt',   color: '#ef4444', desc: 'Quick electrical help at your home',
+  { id: 'electrician', name: 'Electrician', icon: 'plug',    color: '#E5484D', desc: 'Quick electrical help at your home',
     karigar: { name: 'Ramesh Kumar', initial: 'R', rating: 4.8, jobs: 320, eta: 8 },  service: 400 },
-  { id: 'plumber',     name: 'Plumber',     icon: 'wrench', color: '#3b82f6', desc: 'Leakage, pipe fitting, bathroom, kitchen',
+  { id: 'plumber',     name: 'Plumber',     icon: 'droplet', color: '#0B6BBF', desc: 'Leakage, pipe fitting, bathroom, kitchen',
     karigar: { name: 'Suresh Mali', initial: 'S', rating: 4.7, jobs: 210, eta: 10 },  service: 350 },
-  { id: 'carpenter',   name: 'Carpenter',   icon: 'wrench', color: '#0F3D3E', desc: 'Door, hinge fix, lock change, repair',
+  { id: 'carpenter',   name: 'Carpenter',   icon: 'hammer',  color: '#A05A0B', desc: 'Door, hinge fix, lock change, repair',
     karigar: { name: 'Mahesh Suthar', initial: 'M', rating: 4.9, jobs: 415, eta: 12 }, service: 450 },
-  { id: 'ac',          name: 'AC Repair',   icon: 'snow',   color: '#06b6d4', desc: 'Installation, repair, service & cleaning',
+  { id: 'ac',          name: 'AC Repair',   icon: 'fan',     color: '#0891B2', desc: 'Installation, repair, service & cleaning',
     karigar: { name: 'Dinesh Jain', initial: 'D', rating: 4.6, jobs: 180, eta: 15 },  service: 600 },
 ];
 
