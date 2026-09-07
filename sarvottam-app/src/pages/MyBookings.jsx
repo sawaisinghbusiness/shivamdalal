@@ -44,25 +44,7 @@ export default function MyBookings() {
     <div className="sub-page my-bookings-page">
       <SubHeader title="My Bookings" sub="Managed bookings &amp; status updates" />
 
-      {/* ── 1. LOGGED-IN CUSTOMER CARD ── */}
-      <div className="mb-user-card">
-        <div className="mb-uc-avatar">
-          {(user?.name || 'S').charAt(0).toUpperCase()}
-        </div>
-        <div className="mb-uc-info">
-          <div className="mb-uc-name-row">
-            <strong className="mb-uc-name">{user?.name || 'Customer'}</strong>
-            <span className="mb-verified-pill">
-              <Icon name="shield" size={12} />
-              <span>Verified</span>
-            </span>
-          </div>
-          <span className="mb-uc-phone">{user?.phone || '+91 9876543210'} · Barmer</span>
-        </div>
-        <div className="mb-count-pill">
-          <span>{bookings.length} Bookings</span>
-        </div>
-      </div>
+      {/* ── USER CARD REMOVED AS REQUESTED ── */}
 
       {/* ── 2. STATUS FILTER TABS ── */}
       <div className="mb-tabs-scroll">
