@@ -388,23 +388,22 @@
 }
 
 
-/* ── 5. LOCKED / STICKY TRUST FOOTER (Never moves, pinned right above nav) ── */
+/* ── 5. PROMINENT TRUST BANNER (Inside Sheet Content, elevated above bottom nav) ── */
 .home-trust-banner-wrapper {
-  padding: 6px 16px 12px;
-  background: #FFFFFF;
-  border-top: 1px solid rgba(226, 232, 240, 0.6);
-  flex-shrink: 0;
-  z-index: 36;
+  padding: 4px 0 36px;
+  background: transparent;
+  width: 100%;
 }
 
 .home-trust-banner {
-  background: #F8FAFC;
+  background: #FFFFFF;
   border: 1px solid #E2E8F0;
-  border-radius: 16px;
-  padding: 8px 14px;
+  border-radius: 18px;
+  padding: 10px 14px;
   display: flex;
   align-items: center;
   justify-content: space-between;
+  box-shadow: 0 2px 8px rgba(15, 23, 42, 0.04);
 }
 
 .htb-col {

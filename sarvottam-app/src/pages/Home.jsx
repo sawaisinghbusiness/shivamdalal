@@ -8,8 +8,8 @@ import { useToast } from '../components/Toast';
 import { EMERGENCY_SERVICES } from '../data/services';
 import './Home.css';
 
-// 3 Core Services matching the uploaded UI screenshot
-const HOME_SERVICES = [
+// 3 Core Featured Services (Top Horizontal Cards)
+const TOP_SERVICES = [
   {
     id: 'electrician',
     name: 'Electrician',
@@ -63,6 +63,29 @@ const HOME_SERVICES = [
   },
 ];
 
+// Lower Section Service (Carpenter with photo)
+const EXPANDED_SERVICES = [
+  {
+    id: 'carpenter',
+    name: 'Carpenter',
+    sub: 'Door locks, furniture, hinges & woodwork',
+    img: '/carpainter.png',
+    badgeIcon: 'hammer',
+    badgeColor: '#A05A0B',
+    btnColor: '#A05A0B',
+    eta: '12 mins',
+    price: '₹450',
+    serviceData: EMERGENCY_SERVICES.find((s) => s.id === 'carpenter') || {
+      name: 'Carpenter',
+      icon: 'hammer',
+      color: '#A05A0B',
+      service: 450,
+    },
+  },
+];
+
+const ALL_SERVICES = [...TOP_SERVICES, ...EXPANDED_SERVICES];
+
 export default function Home() {
   const nav = useNavigate();
   const toast = useToast();
@@ -83,19 +106,19 @@ export default function Home() {
   // Trigger booking from map marker or card
   const handleSelectService = (serviceName) => {
     const s =
-      HOME_SERVICES.find(
+      ALL_SERVICES.find(
         (item) => item.name.toLowerCase() === (serviceName || '').toLowerCase()
-      ) || HOME_SERVICES[0];
+      ) || TOP_SERVICES[0];
     setActiveBookingService(s.serviceData);
   };
 
   const handleSearchSubmit = (e) => {
     e.preventDefault();
     if (!searchQuery.trim()) {
-      toast('Service name search karein (e.g. Electrician)');
+      toast('Service name search karein (e.g. Electrician, Carpenter)');
       return;
     }
-    const found = HOME_SERVICES.find((s) =>
+    const found = ALL_SERVICES.find((s) =>
       s.name.toLowerCase().includes(searchQuery.toLowerCase().trim())
     );
     if (found) {
@@ -116,8 +139,8 @@ export default function Home() {
     document.documentElement.style.setProperty('--sheet-progress', String(progress));
   };
 
-  // Filtered services based on search
-  const filteredServices = HOME_SERVICES.filter((s) => {
+  // Filtered lower expanded services based on search
+  const filteredExpandedServices = EXPANDED_SERVICES.filter((s) => {
     if (!searchQuery.trim()) return true;
     return (
       s.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
@@ -145,7 +168,7 @@ export default function Home() {
               className="fth-input"
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
-              placeholder="Search for electrician, AC repair, plumber..."
+              placeholder="Search for electrician, AC repair, carpenter..."
             />
           </form>
 
@@ -187,41 +210,10 @@ export default function Home() {
             </button>
           </div>
         }
-        footer={
-          <div className="home-trust-banner-wrapper">
-            <div className="home-trust-banner">
-              <div className="htb-col htb-india">
-                {/* Round Indian Flag Badge */}
-                <span className="india-flag-badge">
-                  <span className="flag-circle">
-                    <span className="flag-stripe saffron" />
-                    <span className="flag-stripe white">
-                      <span className="chakra-dot" />
-                    </span>
-                    <span className="flag-stripe green" />
-                  </span>
-                </span>
-                <span className="htb-title">#MadeInIndia</span>
-              </div>
-
-              <div className="htb-divider" />
-
-              <div className="htb-col htb-rajasthan">
-                <span className="palace-icon-wrap">
-                  <Icon name="building" size={20} />
-                </span>
-                <div className="htb-raj-text">
-                  <strong className="htb-title">Crafted in Rajasthan</strong>
-                  <small className="htb-sub">Proudly local, proudly Indian</small>
-                </div>
-              </div>
-            </div>
-          </div>
-        }
       >
-        {/* Featured Service Cards Horizontal Row (Resting View) */}
+        {/* Featured Service Cards Horizontal Row (Top 3 Cards) */}
         <div className="service-cards-row">
-          {HOME_SERVICES.map((s) => (
+          {TOP_SERVICES.map((s) => (
             <div
               key={s.id}
               className="service-card-item"
@@ -261,17 +253,17 @@ export default function Home() {
           ))}
         </div>
 
-        {/* Expanded Services Content (Only Electrician, AC Repair, Plumber with Photos) */}
+        {/* Expanded Content: Lower Service Card (Carpenter) + #MadeInIndia Banner */}
         <div className="expanded-services-content">
           <div className="expanded-services-grid">
-            {filteredServices.map((srv) => (
+            {filteredExpandedServices.map((srv) => (
               <div
                 key={srv.id}
                 className="expanded-service-card"
                 onClick={() => setActiveBookingService(srv.serviceData)}
               >
                 <div className="esc-left">
-                  {/* Real Image Thumbnail Instead of Generic Icon */}
+                  {/* Real Image Thumbnail */}
                   <div className="esc-img-wrap">
                     <img src={srv.img} alt={srv.name} className="esc-thumb-img" />
                   </div>
@@ -296,6 +288,37 @@ export default function Home() {
                 </button>
               </div>
             ))}
+          </div>
+
+          {/* Prominently Positioned #MadeInIndia / Crafted in Rajasthan Trust Banner */}
+          <div className="home-trust-banner-wrapper">
+            <div className="home-trust-banner">
+              <div className="htb-col htb-india">
+                {/* Round Indian Flag Badge */}
+                <span className="india-flag-badge">
+                  <span className="flag-circle">
+                    <span className="flag-stripe saffron" />
+                    <span className="flag-stripe white">
+                      <span className="chakra-dot" />
+                    </span>
+                    <span className="flag-stripe green" />
+                  </span>
+                </span>
+                <span className="htb-title">#MadeInIndia</span>
+              </div>
+
+              <div className="htb-divider" />
+
+              <div className="htb-col htb-rajasthan">
+                <span className="palace-icon-wrap">
+                  <Icon name="building" size={20} />
+                </span>
+                <div className="htb-raj-text">
+                  <strong className="htb-title">Crafted in Rajasthan</strong>
+                  <small className="htb-sub">Proudly local, proudly Indian</small>
+                </div>
+              </div>
+            </div>
           </div>
         </div>
       </BottomSheet>
