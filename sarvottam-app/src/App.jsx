@@ -3,6 +3,7 @@ import { ToastProvider } from './components/Toast';
 import { useAppData } from './store/AppData';
 import BottomNav from './components/BottomNav';
 import Home from './pages/Home';
+import AllServices from './pages/AllServices';
 import Emergency from './pages/Emergency';
 import Furniture from './pages/Furniture';
 import Painting from './pages/Painting';
@@ -21,7 +22,7 @@ import ProductDetail from './pages/ProductDetail';
 import VerifyEmail from './pages/VerifyEmail';
 import './App.css';
 
-const MAIN_TABS = ['/', '/emergency', '/bookings', '/wallet', '/profile', '/furniture', '/painting'];
+const MAIN_TABS = ['/', '/services', '/emergency', '/bookings', '/wallet', '/profile', '/furniture', '/painting'];
 
 export default function App() {
   const { pathname } = useLocation();
@@ -92,6 +93,7 @@ export default function App() {
         <div className="route-view" key={pathname}>
           <Routes>
             <Route path="/" element={<Home />} />
+            <Route path="/services" element={<AllServices />} />
             <Route path="/emergency" element={<Emergency />} />
             <Route path="/furniture" element={<Furniture />} />
             <Route path="/painting" element={<Painting />} />
