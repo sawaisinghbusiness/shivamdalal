@@ -2,7 +2,7 @@ import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import Icon from '../components/Icon';
 import { EMERGENCY_SERVICES } from '../data/services';
-import EmergencyFlow from '../components/EmergencyFlow';
+import BookingWizard from '../components/BookingWizard';
 import './Emergency.css';
 
 export default function Emergency() {
@@ -42,7 +42,7 @@ export default function Emergency() {
 
       <div className="bottom-spacer" />
 
-      {active && <EmergencyFlow service={active} onClose={() => setActive(null)} />}
+      {active && <BookingWizard initialService={active} onClose={() => setActive(null)} />}
     </div>
   );
 }

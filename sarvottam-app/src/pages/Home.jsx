@@ -2,7 +2,7 @@ import { useState, useRef } from 'react';
 import { useNavigate } from 'react-router-dom';
 import Icon from '../components/Icon';
 import MapView from '../components/MapView';
-import EmergencyFlow from '../components/EmergencyFlow';
+import BookingWizard from '../components/BookingWizard';
 import BottomSheet, { DEFAULT_SHEET_SNAPS } from '../components/BottomSheet';
 import { useToast } from '../components/Toast';
 import { EMERGENCY_SERVICES } from '../data/services';
@@ -323,10 +323,10 @@ export default function Home() {
         </div>
       </BottomSheet>
 
-      {/* ── 3. EMERGENCY BOOKING MODAL (Connected) ── */}
+      {/* ── 3. BOOKING WIZARD MULTI-STEP MODAL ── */}
       {activeBookingService && (
-        <EmergencyFlow
-          service={activeBookingService}
+        <BookingWizard
+          initialService={activeBookingService}
           onClose={() => setActiveBookingService(null)}
         />
       )}

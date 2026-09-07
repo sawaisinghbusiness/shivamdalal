@@ -1,17 +1,17 @@
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import Icon from '../components/Icon';
-import EmergencyFlow from '../components/EmergencyFlow';
+import BookingWizard from '../components/BookingWizard';
 import { EMERGENCY_SERVICES } from '../data/services';
 import './AllServices.css';
 
-const CATEGORIES = ['All', '⚡ Quick Repair', '🛋️ Furniture', '🎨 Painting'];
+const CATEGORIES = ['All', 'Quick Repair', 'Furniture', 'Painting'];
 
 const ALL_CATALOG = [
   {
     id: 'electrician',
     name: 'Electrician',
-    category: '⚡ Quick Repair',
+    category: 'Quick Repair',
     desc: 'Wiring, switchboard, fuse & repair',
     img: '/electrician-card.jpg',
     badgeColor: '#2563EB',
@@ -28,7 +28,7 @@ const ALL_CATALOG = [
   {
     id: 'ac',
     name: 'AC Service & Repair',
-    category: '⚡ Quick Repair',
+    category: 'Quick Repair',
     desc: 'Deep clean, gas fill, cooling issue',
     img: '/ac-repair-card.jpg',
     badgeColor: '#EA580C',
@@ -45,7 +45,7 @@ const ALL_CATALOG = [
   {
     id: 'plumber',
     name: 'Plumber',
-    category: '⚡ Quick Repair',
+    category: 'Quick Repair',
     desc: 'Leakage, taps, pipes, bathroom fittings',
     img: '/plumber-card.jpg',
     badgeColor: '#0284C7',
@@ -62,7 +62,7 @@ const ALL_CATALOG = [
   {
     id: 'carpenter',
     name: 'Carpenter',
-    category: '⚡ Quick Repair',
+    category: 'Quick Repair',
     desc: 'Door locks, hinges, furniture repair',
     img: '/carpainter.png',
     badgeColor: '#A05A0B',
@@ -79,7 +79,7 @@ const ALL_CATALOG = [
   {
     id: 'furniture',
     name: 'Custom Furniture',
-    category: '🛋️ Furniture',
+    category: 'Furniture',
     desc: 'Beds, wardrobes, dining sets, sofa',
     img: '/karigar-hero.jpg',
     badgeColor: '#0D9488',
@@ -91,7 +91,7 @@ const ALL_CATALOG = [
   {
     id: 'painting',
     name: 'Wall Painting',
-    category: '🎨 Painting',
+    category: 'Painting',
     desc: 'Waterproofing, texture, full home paint',
     img: '/ac-repair-card.jpg',
     badgeColor: '#7C3AED',
@@ -204,8 +204,8 @@ export default function AllServices() {
       <div className="bottom-spacer" />
 
       {activeBooking && (
-        <EmergencyFlow
-          service={activeBooking}
+        <BookingWizard
+          initialService={activeBooking}
           onClose={() => setActiveBooking(null)}
         />
       )}
