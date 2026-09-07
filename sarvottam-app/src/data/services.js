@@ -9,6 +9,8 @@ export const EMERGENCY_SERVICES = [
     karigar: { name: 'Mahesh Suthar', initial: 'M', rating: 4.9, jobs: 415, eta: 12 }, service: 450 },
   { id: 'ac',          name: 'AC Repair',   icon: 'fan',     color: '#0891B2', desc: 'Installation, repair, service & cleaning',
     karigar: { name: 'Dinesh Jain', initial: 'D', rating: 4.6, jobs: 180, eta: 15 },  service: 600 },
+  { id: 'painter',     name: 'Painter',     icon: 'roller',  color: '#7C3AED', desc: 'Wall touch-up, waterproofing & painting',
+    karigar: { name: 'Kishan Gehlot', initial: 'K', rating: 4.8, jobs: 195, eta: 15 }, service: 500 },
 ];
 
 // Popular services with real photos (Home page)

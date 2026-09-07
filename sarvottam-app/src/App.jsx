@@ -21,7 +21,7 @@ import ProductDetail from './pages/ProductDetail';
 import VerifyEmail from './pages/VerifyEmail';
 import './App.css';
 
-const MAIN_TABS = ['/', '/emergency', '/furniture', '/painting', '/profile'];
+const MAIN_TABS = ['/', '/emergency', '/bookings', '/wallet', '/profile', '/furniture', '/painting'];
 
 export default function App() {
   const { pathname } = useLocation();

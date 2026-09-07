@@ -1,0 +1,97 @@
+.swipe-slider-container {
+  position: relative;
+  width: 100%;
+  height: 56px;
+  background: #E8EEEE;
+  border: 1px solid #D5DDDD;
+  border-radius: 28px;
+  padding: 4px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+  user-select: none;
+  box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.05);
+}
+
+.swipe-slider-bg-track {
+  position: absolute;
+  left: 4px;
+  top: 4px;
+  bottom: 4px;
+  background: var(--active-color, #2FA56C);
+  border-radius: 24px;
+  opacity: 0.85;
+  transition: width 0.05s linear;
+  max-width: calc(100% - 8px);
+}
+
+.swipe-slider-text {
+  position: relative;
+  z-index: 1;
+  font-size: 14px;
+  font-weight: 700;
+  color: #101828;
+  letter-spacing: -0.01em;
+  pointer-events: none;
+  transition: opacity 0.15s ease;
+}
+
+.swipe-slider-handle {
+  position: absolute;
+  left: 4px;
+  top: 4px;
+  width: 48px;
+  height: 48px;
+  background: #FFFFFF;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: grab;
+  box-shadow: 0 3px 8px rgba(16, 24, 40, 0.15), 0 1px 3px rgba(16, 24, 40, 0.1);
+  z-index: 2;
+  color: var(--active-color, #2FA56C);
+  transition: box-shadow 0.2s ease, transform 0.05s linear;
+}
+
+.swipe-slider-handle:active {
+  cursor: grabbing;
+  box-shadow: 0 4px 12px rgba(16, 24, 40, 0.25), 0 2px 4px rgba(16, 24, 40, 0.15);
+  transform: scale(0.98);
+}
+
+.swipe-slider-arrow {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  animation: slidePulse 1.8s infinite;
+}
+
+.swipe-slider-container.confirmed {
+  background: var(--active-color, #2FA56C);
+  border-color: var(--active-color, #2FA56C);
+  transition: all 0.3s ease;
+}
+
+.swipe-slider-container.confirmed .swipe-slider-text {
+  color: #FFFFFF;
+}
+
+.swipe-slider-container.confirmed .swipe-slider-handle {
+  background: #FFFFFF;
+  color: var(--active-color, #2FA56C);
+}
+
+.swipe-slider-container.dragging .swipe-slider-handle {
+  transition: none !important;
+}
+
+@keyframes slidePulse {
+  0%, 100% {
+    transform: translateX(0);
+  }
+  50% {
+    transform: translateX(3px);
+  }
+}
