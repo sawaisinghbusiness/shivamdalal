@@ -1,0 +1,259 @@
+/* ══════════════════════════════════════════════════════════════
+   SARVOTTAM — BOOKING SUCCESS PAGE
+   ══════════════════════════════════════════════════════════════ */
+
+.booking-success-page {
+  background-color: #F6F7F9;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: flex-start;
+  padding: 24px 16px 40px;
+}
+
+.bs-container {
+  width: 100%;
+  max-width: 440px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+}
+
+/* Green Check in Mint Ring */
+.bs-icon-wrapper {
+  margin: 16px 0 20px;
+}
+
+.bs-mint-ring {
+  width: 80px;
+  height: 80px;
+  border-radius: 50%;
+  background-color: #E6F4F1;
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.bs-check-glow {
+  position: absolute;
+  inset: -6px;
+  border-radius: 50%;
+  background-color: rgba(22, 163, 74, 0.15);
+  animation: bsPulse 2s infinite ease-in-out;
+}
+
+@keyframes bsPulse {
+  0% { transform: scale(0.95); opacity: 0.6; }
+  50% { transform: scale(1.08); opacity: 1; }
+  100% { transform: scale(0.95); opacity: 0.6; }
+}
+
+.bs-check-circle {
+  width: 52px;
+  height: 52px;
+  border-radius: 50%;
+  background-color: #16A34A;
+  color: #FFFFFF;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 2;
+  box-shadow: 0 6px 18px rgba(22, 163, 74, 0.35);
+}
+
+.bs-title {
+  margin: 0;
+  font-size: 24px;
+  font-weight: 800;
+  color: #1F2937;
+}
+
+.bs-subtitle {
+  margin: 8px 0 16px;
+  font-size: 14px;
+  color: #4B5563;
+  line-height: 1.45;
+  max-width: 360px;
+}
+
+/* Booking ID Pill */
+.bs-id-pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 8px 18px;
+  border-radius: 999px;
+  background-color: #E6F4F1;
+  border: 1px solid rgba(15, 118, 110, 0.25);
+  margin-bottom: 20px;
+}
+
+.bs-id-label {
+  font-size: 13px;
+  color: #0F766E;
+  font-weight: 600;
+}
+
+.bs-id-code {
+  font-size: 15px;
+  color: #0F766E;
+  font-weight: 800;
+  letter-spacing: 0.5px;
+}
+
+/* Summary Table Card */
+.bs-summary-card {
+  width: 100%;
+  background-color: #FFFFFF;
+  border: 1px solid #E5E7EB;
+  border-radius: 16px;
+  padding: 16px 18px;
+  box-shadow: 0 4px 18px rgba(31, 41, 55, 0.05);
+  text-align: left;
+  margin-bottom: 14px;
+}
+
+.bs-card-head {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 13px;
+  font-weight: 700;
+  color: #0F766E;
+  padding-bottom: 10px;
+  border-bottom: 1px solid #F3F4F6;
+  margin-bottom: 10px;
+}
+
+.bs-table-rows {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.bs-row {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 12px;
+  font-size: 13px;
+}
+
+.bs-col-label {
+  color: #6B7280;
+  flex-shrink: 0;
+}
+
+.bs-col-val {
+  color: #1F2937;
+  text-align: right;
+}
+
+.bs-col-val.bs-address {
+  max-width: 220px;
+  font-size: 12px;
+  line-height: 1.35;
+}
+
+.bs-total-row {
+  margin-top: 4px;
+  padding-top: 10px;
+  border-top: 1px dashed #E5E7EB;
+  align-items: center;
+}
+
+.bs-price {
+  color: #0F766E;
+  font-size: 15px;
+}
+
+.bs-pay-tag {
+  display: block;
+  font-size: 11px;
+  color: #16A34A;
+  font-weight: 600;
+}
+
+/* Informational Alert Note */
+.bs-info-banner {
+  width: 100%;
+  background-color: #EFF6FF;
+  border: 1px solid #BFDBFE;
+  border-radius: 12px;
+  padding: 10px 14px;
+  display: flex;
+  align-items: flex-start;
+  gap: 10px;
+  font-size: 12px;
+  color: #1E40AF;
+  text-align: left;
+  line-height: 1.4;
+  margin-bottom: 20px;
+}
+
+/* Action Buttons */
+.bs-actions {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  margin-bottom: 24px;
+}
+
+.bs-primary-btn {
+  width: 100%;
+  padding: 14px 18px;
+  border-radius: 12px;
+  border: none;
+  background-color: #0F766E;
+  color: #FFFFFF;
+  font-size: 15px;
+  font-weight: 700;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  cursor: pointer;
+  box-shadow: 0 4px 14px rgba(15, 118, 110, 0.25);
+  min-height: 48px;
+  transition: all 150ms ease;
+}
+
+.bs-primary-btn:hover {
+  background-color: #0d655e;
+}
+
+.bs-secondary-btn {
+  width: 100%;
+  padding: 12px 18px;
+  border-radius: 12px;
+  border: 1.5px solid #D1D5DB;
+  background-color: #FFFFFF;
+  color: #374151;
+  font-size: 14px;
+  font-weight: 600;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  text-decoration: none;
+  min-height: 44px;
+  transition: all 150ms ease;
+}
+
+.bs-secondary-btn:hover {
+  background-color: #F9FAFB;
+  border-color: #9CA3AF;
+}
+
+/* Muted Trust Footer */
+.bs-trust-footer {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 11px;
+  color: #9CA3AF;
+  font-weight: 500;
+}

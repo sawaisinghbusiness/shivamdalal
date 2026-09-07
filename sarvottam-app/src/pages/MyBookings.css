@@ -1,50 +1,704 @@
-.bk-tabs { display: flex; gap: 8px; padding: 14px 18px; background: #fff; border-bottom: 1px solid var(--border); }
-.bk-tab {
-  flex: 1; padding: 11px; border-radius: 12px;
-  font-size: 13px; font-weight: 700;
-  color: var(--text-3); background: #F1F4F4;
-  transition: all .18s var(--ease);
-}
-.bk-tab.active { background: var(--g-primary); color: #fff; box-shadow: var(--sh-primary); }
+/* ══════════════════════════════════════════════════════════════
+   SARVOTTAM — MY BOOKINGS REDESIGNED STYLES (STRICT DESIGN SYSTEM)
+   Palette: Teal #0F766E, Mint #E6F4F1, Amber #B45309/#FEF3C7, Red #DC2626, Green #16A34A
+   ══════════════════════════════════════════════════════════════ */
 
-.bk-list { padding: 16px 18px; display: flex; flex-direction: column; gap: 12px; }
-.bk-card {
-  display: flex; gap: 13px;
-  background: #fff; border: 1px solid var(--border);
-  border-radius: var(--r-lg); padding: 15px;
-  box-shadow: var(--sh-sm);
+.my-bookings-page {
+  padding-bottom: 90px;
+  background-color: #F6F7F9;
 }
-.bk-ic {
-  width: 50px; height: 50px; border-radius: 15px; flex-shrink: 0;
-  background: var(--primary-lt); color: var(--primary);
-  display: flex; align-items: center; justify-content: center;
-}
-.bk-info { flex: 1; min-width: 0; }
-.bk-top { display: flex; align-items: center; justify-content: space-between; gap: 8px; }
-.bk-top h3 { font-size: 15.5px; font-weight: 750; color: var(--text-1); }
-.bk-badge { font-size: 10px; font-weight: 800; letter-spacing: .4px; padding: 5px 10px; border-radius: 20px; flex-shrink: 0; text-transform: uppercase; }
-.badge-up { background: #E3F1FD; color: #0B6BBF; }
-.badge-done { background: var(--success-lt); color: #1D7A4C; }
-.badge-cancel { background: var(--danger-lt); color: #C03338; }
-.bk-karigar { font-size: 12.5px; color: var(--text-2); margin-top: 6px; }
-.bk-date { font-size: 12px; color: var(--text-4); margin-top: 2px; }
-.bk-foot { display: flex; align-items: center; justify-content: space-between; margin-top: 11px; }
-.bk-amt { font-size: 15px; font-weight: 800; color: var(--primary); font-variant-numeric: tabular-nums; }
-.bk-action {
-  font-size: 12.5px; font-weight: 700; color: #fff;
-  background: var(--g-primary);
-  padding: 9px 18px; border-radius: 11px; margin-left: auto;
-  box-shadow: var(--sh-primary);
-}
-.bk-action.ghost { background: var(--primary-lt); color: var(--primary); box-shadow: none; }
 
-.bk-empty { text-align: center; padding: 64px 30px; }
-.bk-empty-ic {
-  width: 76px; height: 76px; border-radius: 24px;
-  background: #fff; border: 1px solid var(--border);
-  color: var(--text-4); box-shadow: var(--sh-sm);
-  display: flex; align-items: center; justify-content: center;
-  margin: 0 auto 16px;
+/* ── 1. LOGGED-IN CUSTOMER CARD ── */
+.mb-user-card {
+  background-color: #FFFFFF;
+  border: 1px solid #E5E7EB;
+  border-radius: 14px;
+  padding: 12px 16px;
+  margin: 12px 16px 14px;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  box-shadow: 0 4px 16px rgba(31, 41, 55, 0.04);
 }
-.bk-empty h3 { font-size: 16px; color: var(--text-1); font-weight: 750; }
-.bk-empty p { font-size: 13px; color: var(--text-4); margin-top: 5px; }
+
+.mb-uc-avatar {
+  width: 42px;
+  height: 42px;
+  border-radius: 50%;
+  background-color: #0F766E;
+  color: #FFFFFF;
+  font-size: 18px;
+  font-weight: 700;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+
+.mb-uc-info {
+  flex: 1;
+}
+
+.mb-uc-name-row {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.mb-uc-name {
+  font-size: 15px;
+  font-weight: 700;
+  color: #1F2937;
+}
+
+.mb-verified-pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 3px;
+  background-color: #E6F4F1;
+  color: #0F766E;
+  font-size: 11px;
+  font-weight: 700;
+  padding: 2px 6px;
+  border-radius: 999px;
+}
+
+.mb-uc-phone {
+  display: block;
+  font-size: 12px;
+  color: #6B7280;
+  margin-top: 2px;
+}
+
+.mb-count-pill {
+  background-color: #F3F4F6;
+  color: #374151;
+  font-size: 12px;
+  font-weight: 700;
+  padding: 4px 10px;
+  border-radius: 999px;
+}
+
+/* ── 2. STATUS FILTER TABS ── */
+.mb-tabs-scroll {
+  overflow-x: auto;
+  padding: 0 16px 12px;
+  -webkit-overflow-scrolling: touch;
+}
+
+.mb-tabs {
+  display: flex;
+  gap: 8px;
+}
+
+.mb-tab {
+  padding: 7px 16px;
+  border-radius: 999px;
+  border: 1px solid #E5E7EB;
+  background-color: #FFFFFF;
+  font-size: 13px;
+  font-weight: 600;
+  color: #4B5563;
+  cursor: pointer;
+  white-space: nowrap;
+  transition: all 150ms ease;
+}
+
+.mb-tab.active {
+  background-color: #0F766E;
+  color: #FFFFFF;
+  border-color: #0F766E;
+}
+
+/* ── 3. BOOKINGS LIST ── */
+.mb-list-container {
+  padding: 0 16px;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+/* Status-based Card Styling */
+.mb-booking-card {
+  background-color: #FFFFFF;
+  border: 1px solid #E5E7EB;
+  border-left: 4px solid #9CA3AF;
+  border-radius: 14px;
+  padding: 14px 16px;
+  cursor: pointer;
+  box-shadow: 0 4px 16px rgba(31, 41, 55, 0.04);
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  transition: transform 150ms ease, box-shadow 150ms ease;
+}
+
+.mb-booking-card:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 6px 20px rgba(31, 41, 55, 0.08);
+}
+
+.mb-booking-card.status-processing {
+  border-left-color: #F59E0B;
+}
+
+.mb-booking-card.status-confirmed {
+  border-left-color: #0F766E;
+}
+
+.mb-booking-card.status-completed {
+  border-left-color: #16A34A;
+}
+
+.mb-booking-card.status-cancelled {
+  border-left-color: #DC2626;
+}
+
+.mb-bc-header {
+  display: flex;
+  align-items: flex-start;
+  gap: 12px;
+}
+
+.mb-bc-icon-tile {
+  width: 40px;
+  height: 40px;
+  border-radius: 10px;
+  background-color: #E6F4F1;
+  color: #0F766E;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+
+.mb-bc-titles {
+  flex: 1;
+}
+
+.mb-bc-service {
+  margin: 0;
+  font-size: 16px;
+  font-weight: 700;
+  color: #1F2937;
+}
+
+.mb-bc-sub {
+  margin: 2px 0 0;
+  font-size: 12px;
+  color: #6B7280;
+}
+
+/* Status Pills */
+.mb-status-pill {
+  font-size: 11px;
+  font-weight: 700;
+  padding: 3px 8px;
+  border-radius: 999px;
+  text-transform: uppercase;
+  letter-spacing: 0.3px;
+}
+
+.mb-status-pill.pill-processing {
+  background-color: #FEF3C7;
+  color: #B45309;
+}
+
+.mb-status-pill.pill-confirmed {
+  background-color: #E6F4F1;
+  color: #0F766E;
+}
+
+.mb-status-pill.pill-completed {
+  background-color: #DCFCE7;
+  color: #16A34A;
+}
+
+.mb-status-pill.pill-cancelled {
+  background-color: #FEE2E2;
+  color: #DC2626;
+}
+
+/* Date & Time Chips */
+.mb-bc-chips-row {
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+
+.mb-meta-chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  background-color: #F3F4F6;
+  color: #4B5563;
+  font-size: 12px;
+  font-weight: 600;
+  padding: 4px 8px;
+  border-radius: 6px;
+}
+
+/* Footer Row */
+.mb-bc-footer {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding-top: 8px;
+  border-top: 1px dashed #E5E7EB;
+}
+
+.mb-bc-id {
+  font-size: 12px;
+  font-weight: 700;
+  color: #9CA3AF;
+}
+
+.mb-bc-amount {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
+
+.mb-amt-label {
+  font-size: 12px;
+  color: #6B7280;
+}
+
+.mb-amt-val {
+  font-size: 14px;
+  font-weight: 800;
+  color: #0F766E;
+}
+
+/* Empty State Card */
+.mb-empty-card {
+  background-color: #FFFFFF;
+  border: 1px solid #E5E7EB;
+  border-radius: 16px;
+  padding: 32px 16px;
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 10px;
+  margin-top: 10px;
+}
+
+.mb-empty-vector {
+  margin-bottom: 4px;
+}
+
+.mb-empty-card h3 {
+  margin: 0;
+  font-size: 17px;
+  font-weight: 700;
+  color: #1F2937;
+}
+
+.mb-empty-card p {
+  margin: 0;
+  font-size: 13px;
+  color: #6B7280;
+  max-width: 260px;
+}
+
+.mb-empty-cta {
+  margin-top: 8px;
+  padding: 10px 20px;
+  border-radius: 10px;
+  border: none;
+  background-color: #0F766E;
+  color: #FFFFFF;
+  font-size: 14px;
+  font-weight: 700;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  cursor: pointer;
+}
+
+/* ── 4. INTERACTIVE DETAIL SHEET ── */
+.mb-sheet-overlay {
+  position: fixed;
+  inset: 0;
+  background-color: rgba(31, 41, 55, 0.45);
+  backdrop-filter: blur(3px);
+  z-index: 9999;
+  display: flex;
+  align-items: flex-end;
+  justify-content: center;
+  animation: mbFade 200ms ease forwards;
+}
+
+@keyframes mbFade {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+.mb-sheet-modal {
+  width: 100%;
+  max-width: 480px;
+  max-height: 85vh;
+  background-color: #FFFFFF;
+  border-top-left-radius: 20px;
+  border-top-right-radius: 20px;
+  overflow-y: auto;
+  display: flex;
+  flex-direction: column;
+  animation: mbSlideUp 200ms ease forwards;
+}
+
+@keyframes mbSlideUp {
+  from { transform: translateY(100%); }
+  to { transform: translateY(0); }
+}
+
+.mb-sm-header {
+  padding: 16px 18px 12px;
+  border-bottom: 1px solid #E5E7EB;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  position: sticky;
+  top: 0;
+  background-color: #FFFFFF;
+  z-index: 2;
+}
+
+.mb-sm-title {
+  margin: 0;
+  font-size: 18px;
+  font-weight: 800;
+  color: #1F2937;
+}
+
+.mb-sm-id {
+  font-size: 12px;
+  color: #6B7280;
+  font-weight: 600;
+}
+
+.mb-close-btn {
+  background: none;
+  border: none;
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #1F2937;
+  cursor: pointer;
+}
+
+.mb-sm-content {
+  padding: 16px 18px 30px;
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+  background-color: #F6F7F9;
+}
+
+.mb-sm-status-row {
+  background-color: #FFFFFF;
+  border: 1px solid #E5E7EB;
+  border-radius: 12px;
+  padding: 12px 14px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.mb-sm-status-label {
+  font-size: 13px;
+  font-weight: 600;
+  color: #374151;
+}
+
+.mb-block-box {
+  background-color: #FFFFFF;
+  border: 1px solid #E5E7EB;
+  border-radius: 14px;
+  padding: 14px;
+}
+
+.mb-box-title {
+  margin: 0 0 10px;
+  font-size: 14px;
+  font-weight: 700;
+  color: #1F2937;
+}
+
+/* Timeline */
+.mb-timeline-list {
+  display: flex;
+  flex-direction: column;
+}
+
+.mb-tl-item {
+  display: flex;
+  gap: 12px;
+}
+
+.mb-tl-dot-col {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: 16px;
+}
+
+.mb-tl-dot {
+  width: 12px;
+  height: 12px;
+  border-radius: 50%;
+  background-color: #D1D5DB;
+  margin-top: 3px;
+}
+
+.mb-tl-item.done .mb-tl-dot {
+  background-color: #0F766E;
+}
+
+.mb-tl-line {
+  flex: 1;
+  width: 2px;
+  background-color: #E5E7EB;
+  margin: 4px 0;
+  min-height: 24px;
+}
+
+.mb-tl-item.done .mb-tl-line {
+  background-color: #0F766E;
+}
+
+.mb-tl-info {
+  flex: 1;
+  padding-bottom: 12px;
+}
+
+.mb-tl-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.mb-tl-head strong {
+  font-size: 13px;
+  color: #1F2937;
+}
+
+.mb-tl-head small {
+  font-size: 11px;
+  color: #9CA3AF;
+}
+
+.mb-tl-info p {
+  margin: 2px 0 0;
+  font-size: 12px;
+  color: #6B7280;
+}
+
+/* Karigar Card inside Sheet */
+.mb-kb-card {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 8px 0;
+}
+
+.mb-kb-avatar {
+  width: 44px;
+  height: 44px;
+  border-radius: 50%;
+  background-color: #0F766E;
+  color: #FFFFFF;
+  font-size: 18px;
+  font-weight: 700;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.mb-kb-info {
+  flex: 1;
+}
+
+.mb-kb-name-row {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.mb-kb-name-row strong {
+  font-size: 15px;
+  color: #1F2937;
+}
+
+.mb-kb-skill {
+  margin: 2px 0;
+  font-size: 12px;
+  color: #6B7280;
+}
+
+.mb-kb-rating {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  font-size: 12px;
+  color: #F59E0B;
+  font-weight: 700;
+}
+
+.mb-kb-call {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  background-color: #E6F4F1;
+  color: #0F766E;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  text-decoration: none;
+}
+
+/* Schedule & Address */
+.mb-sa-row {
+  display: flex;
+  align-items: flex-start;
+  gap: 10px;
+  padding: 6px 0;
+  color: #0F766E;
+}
+
+.mb-sa-row strong {
+  display: block;
+  font-size: 13px;
+  color: #1F2937;
+}
+
+.mb-sa-row span {
+  font-size: 12px;
+  color: #6B7280;
+}
+
+/* Invoice Breakdown */
+.mb-inv-rows {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.mb-inv-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  font-size: 13px;
+  color: #4B5563;
+}
+
+.mb-inv-total {
+  margin-top: 4px;
+  padding-top: 8px;
+  border-top: 1px dashed #E5E7EB;
+}
+
+.mb-inv-total strong.teal {
+  color: #0F766E;
+  font-size: 15px;
+}
+
+/* Warranty Box */
+.mb-warranty-box {
+  background-color: #E6F4F1;
+  border: 1px solid rgba(15, 118, 110, 0.2);
+  border-radius: 12px;
+  padding: 10px 14px;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  color: #0F766E;
+}
+
+.mb-warranty-box strong {
+  display: block;
+  font-size: 13px;
+  font-weight: 700;
+}
+
+.mb-warranty-box p {
+  margin: 2px 0 0;
+  font-size: 11px;
+  color: #0F766E;
+}
+
+/* Rating Box */
+.mb-rb-sub {
+  margin: 0 0 8px;
+  font-size: 12px;
+  color: #6B7280;
+}
+
+.mb-rating-tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  margin-bottom: 12px;
+}
+
+.mb-rt-chip {
+  padding: 6px 12px;
+  border-radius: 999px;
+  border: 1px solid #D1D5DB;
+  background-color: #FFFFFF;
+  font-size: 12px;
+  color: #374151;
+  cursor: pointer;
+}
+
+.mb-rt-chip.active {
+  border-color: #0F766E;
+  background-color: #E6F4F1;
+  color: #0F766E;
+  font-weight: 700;
+}
+
+.mb-rating-submit-btn {
+  width: 100%;
+  padding: 10px;
+  border-radius: 8px;
+  border: none;
+  background-color: #0F766E;
+  color: #FFFFFF;
+  font-size: 13px;
+  font-weight: 700;
+  cursor: pointer;
+}
+
+/* Support Actions */
+.mb-support-actions {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 10px;
+}
+
+.mb-sup-btn {
+  padding: 12px;
+  border-radius: 12px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  font-size: 13px;
+  font-weight: 700;
+  text-decoration: none;
+}
+
+.mb-sup-btn.call {
+  background-color: #1F2937;
+  color: #FFFFFF;
+}
+
+.mb-sup-btn.whatsapp {
+  background-color: #16A34A;
+  color: #FFFFFF;
+}

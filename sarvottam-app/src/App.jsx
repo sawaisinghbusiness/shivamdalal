@@ -20,6 +20,7 @@ import Register from './pages/Register';
 import KarigarApp from './pages/KarigarApp';
 import ProductDetail from './pages/ProductDetail';
 import VerifyEmail from './pages/VerifyEmail';
+import BookingSuccess from './pages/BookingSuccess';
 import './App.css';
 
 const MAIN_TABS = ['/', '/services', '/emergency', '/bookings', '/wallet', '/profile', '/furniture', '/painting'];
@@ -101,6 +102,7 @@ export default function App() {
             <Route path="/profile" element={<Profile />} />
             <Route path="/profile/edit" element={<EditProfile />} />
             <Route path="/bookings" element={<MyBookings />} />
+            <Route path="/booking-success" element={<BookingSuccess />} />
             <Route path="/addresses" element={<SavedAddresses />} />
             <Route path="/wallet" element={<Wallet />} />
             <Route path="/notifications" element={<Notifications />} />

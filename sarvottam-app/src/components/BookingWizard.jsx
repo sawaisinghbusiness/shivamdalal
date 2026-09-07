@@ -1,8 +1,8 @@
 import { useState, useEffect, useRef, useMemo } from 'react';
+import { useNavigate } from 'react-router-dom';
 import Icon from './Icon';
 import { useToast } from './Toast';
 import { useAppData } from '../store/AppData';
-import { dispatchService } from '../services/dispatchService';
 import {
   PRICING_CONFIG,
   TRANSPARENCY_STEPS,
@@ -13,7 +13,7 @@ import './BookingWizard.css';
 
 const DRAFT_STORAGE_KEY = 'sarvottam_booking_draft';
 
-// Generate 5 days: "Today" + next 4 days
+// Generate 5 days: "Aaj" (Today) + next 4 days
 const generateBookingDays = () => {
   const days = [];
   const now = new Date();
@@ -23,41 +23,48 @@ const generateBookingDays = () => {
   for (let i = 0; i < 5; i++) {
     const d = new Date(now);
     d.setDate(now.getDate() + i);
-    const dayName = i === 0 ? 'Today' : i === 1 ? 'Tomorrow' : weekNames[d.getDay()];
-    const fullDateStr = weekNames[d.getDay()] + ', ' + d.getDate() + ' ' + monthNames[d.getMonth()];
+    const dayLabel = i === 0 ? 'Aaj' : i === 1 ? 'Kal' : weekNames[d.getDay()];
+    const fullDateStr = (i === 0 ? 'Today, ' : i === 1 ? 'Tomorrow, ' : weekNames[d.getDay()] + ', ') +
+      d.getDate() + ' ' + monthNames[d.getMonth()];
+
     days.push({
       index: i,
-      label: dayName,
+      label: dayLabel,
       dateNum: d.getDate(),
       month: monthNames[d.getMonth()],
       weekday: weekNames[d.getDay()],
       fullString: fullDateStr,
       isoDate: d.toISOString().split('T')[0],
-      hasSlots: i !== 4, // 5th day simulated fully booked to demonstrate edge case
+      hasSlots: i !== 4, // 5th day simulated fully booked
     });
   }
   return days;
 };
 
 export default function BookingWizard({ initialService, onClose }) {
+  const nav = useNavigate();
   const toast = useToast();
-  const { user } = useAppData();
+  const { user, addBooking } = useAppData();
 
-  // ── 1. WIZARD STATE (Persisted in localStorage) ──
-  const [step, setStep] = useState(0); // 0: Summary, 1: Date & Time, 2: Address, 3: Confirm, 4: Matching Flow
+  // Active target service config
+  const serviceKey = initialService?.id || 'electrician';
+  const serviceConfig = PRICING_CONFIG.serviceEstimates[serviceKey] || PRICING_CONFIG.serviceEstimates.electrician;
 
-  // Cart of services
-  const [cart, setCart] = useState(() => {
-    const fallbackId = initialService?.id || 'electrician';
-    const item = PRICING_CONFIG.serviceEstimates[fallbackId] || PRICING_CONFIG.serviceEstimates.electrician;
-    return [
-      {
-        ...item,
-        problem: initialService?.problem || item.defaultProblem,
-        selectedAttribute: item.attributeOptions[0] || '',
-      },
-    ];
-  });
+  // ── 1. WIZARD STEP STATE ──
+  // 'issue': S-ISSUE (Issue & Price Selection)
+  // 0: S0 Booking Summary
+  // 1: S1 Date & Time
+  // 2: S2 Address & Location
+  // 3: S3 Details & Confirm
+  const [step, setStep] = useState('issue');
+
+  // S-ISSUE State (Default = NOTHING selected; CTA disabled)
+  const [selectedIssueId, setSelectedIssueId] = useState(null);
+  const [brandInput, setBrandInput] = useState('');
+  const [modelInput, setModelInput] = useState('');
+
+  // Cart of booked services
+  const [cart, setCart] = useState([]);
 
   // Date & Slot state
   const availableDays = useMemo(() => generateBookingDays(), []);
@@ -72,37 +79,33 @@ export default function BookingWizard({ initialService, onClose }) {
   const [customPin, setCustomPin] = useState({ lat: 25.7532, lng: 71.3965 });
   const [isLocating, setIsLocating] = useState(false);
   const [showAddAddressSheet, setShowAddAddressSheet] = useState(false);
-  const [newAddrLabel, setNewAddrLabel] = useState('Home');
+  const [newAddrLabel, setNewAddrLabel] = useState('Ghar');
   const [newAddrText, setNewAddrText] = useState('');
 
   // Customer Contact & Notes state
-  const [custName, setCustName] = useState(user?.name || 'Customer');
+  const [custName, setCustName] = useState(user?.name || 'Shivam Singh');
   const [custPhone, setCustPhone] = useState(user?.phone?.replace('+91 ', '') || '9876543210');
   const [custNotes, setCustNotes] = useState('');
 
-  // UI State
+  // UI state
   const [transparencyOpen, setTransparencyOpen] = useState(false);
   const [showAddServiceSheet, setShowAddServiceSheet] = useState(false);
-  const [showTransparencyModal, setShowTransparencyModal] = useState(false);
   const [helpExpanded, setHelpExpanded] = useState(false);
-  const [activeTrip, setActiveTrip] = useState(null);
-  const [payMethod, setPayMethod] = useState('online');
-  const [stars, setStars] = useState(5);
-  const [ratingChips, setRatingChips] = useState(['On Time', 'Great Service']);
 
-  const simTimerRef = useRef(null);
   const scrollContainerRef = useRef(null);
   const lastScrollTopRef = useRef(0);
   const transparencyRef = useRef(null);
 
-  // ── 2. DRAFT RESTORATION & PERSISTENCE ──
+  // ── 2. DRAFT PERSISTENCE & RESTORATION ──
   useEffect(() => {
     try {
       const saved = localStorage.getItem(DRAFT_STORAGE_KEY);
       if (saved) {
         const d = JSON.parse(saved);
-        if (d.cart && d.cart.length > 0) setCart(d.cart);
-        if (typeof d.step === 'number' && d.step <= 3) setStep(d.step);
+        if (d.cart && d.cart.length > 0) {
+          setCart(d.cart);
+          if (d.step !== undefined) setStep(d.step);
+        }
         if (typeof d.selectedDayIdx === 'number') setSelectedDayIdx(d.selectedDayIdx);
         if (d.selectedSlot) setSelectedSlot(d.selectedSlot);
         if (d.addressDetail) setAddressDetail(d.addressDetail);
@@ -116,9 +119,9 @@ export default function BookingWizard({ initialService, onClose }) {
     }
   }, []);
 
-  // Auto-save draft on changes (when not in matching stage)
+  // Auto-save draft on changes
   useEffect(() => {
-    if (step <= 3 && cart.length > 0) {
+    if (cart.length > 0) {
       try {
         const draft = {
           cart,
@@ -138,32 +141,6 @@ export default function BookingWizard({ initialService, onClose }) {
       }
     }
   }, [cart, step, selectedDayIdx, selectedSlot, addressArea, addressDetail, customPin, custName, custPhone, custNotes]);
-
-  // Listen to live dispatch updates if trip active
-  useEffect(() => {
-    const unsubscribe = dispatchService.subscribe((event) => {
-      if (event.type === 'TRIP_UPDATED') {
-        const trip = event.trip;
-        if (trip && activeTrip && trip.id === activeTrip.id) {
-          setActiveTrip(trip);
-          if (trip.status === 'accepted') {
-            toast('Technician ' + trip.karigar.name + ' accepted your booking!');
-          } else if (trip.status === 'arrived') {
-            toast('Technician ' + trip.karigar.name + ' has arrived at your address!');
-          } else if (trip.status === 'working') {
-            toast('OTP Verified — Work in progress');
-          } else if (trip.status === 'completed') {
-            toast('Job completed — Final bill generated');
-          }
-        }
-      }
-    });
-
-    return () => {
-      unsubscribe();
-      if (simTimerRef.current) clearTimeout(simTimerRef.current);
-    };
-  }, [activeTrip]);
 
   // Collapse Help FAB on scroll down
   const handleScroll = (e) => {
@@ -189,9 +166,44 @@ export default function BookingWizard({ initialService, onClose }) {
   };
 
   // ── 3. PRICING CALCULATIONS ──
-  const pricingSummary = useMemo(() => {
-    const serviceMinSum = cart.reduce((acc, it) => acc + (it.minPrice || 350), 0);
-    const serviceMaxSum = cart.reduce((acc, it) => acc + (it.maxPrice || 550), 0);
+  const currentChosenIssue = useMemo(() => {
+    if (!selectedIssueId) return null;
+    return serviceConfig.issues.find((iss) => iss.id === selectedIssueId) || null;
+  }, [selectedIssueId, serviceConfig]);
+
+  const issueLivePrice = useMemo(() => {
+    if (!currentChosenIssue) return null;
+    const visit = PRICING_CONFIG.visitCharge;
+    const minLabor = currentChosenIssue.priceType === 'fixed' ? currentChosenIssue.price : currentChosenIssue.minPrice;
+    const maxLabor = currentChosenIssue.priceType === 'fixed' ? currentChosenIssue.price : currentChosenIssue.maxPrice;
+    const gstMin = Math.round((visit + minLabor) * PRICING_CONFIG.gstPct);
+    const gstMax = Math.round((visit + maxLabor) * PRICING_CONFIG.gstPct);
+    return {
+      minLabor,
+      maxLabor,
+      totalMin: visit + minLabor + gstMin,
+      totalMax: visit + maxLabor + gstMax,
+      isRange: minLabor !== maxLabor,
+      displayLabor: currentChosenIssue.displayPrice,
+    };
+  }, [currentChosenIssue]);
+
+  const cartPricingSummary = useMemo(() => {
+    if (cart.length === 0) {
+      return {
+        serviceMinSum: 0,
+        serviceMaxSum: 0,
+        visitCharge: PRICING_CONFIG.visitCharge,
+        gstMin: 0,
+        gstMax: 0,
+        totalMin: PRICING_CONFIG.visitCharge,
+        totalMax: PRICING_CONFIG.visitCharge,
+        savings: 0,
+      };
+    }
+
+    const serviceMinSum = cart.reduce((acc, it) => acc + (it.minPrice || 0), 0);
+    const serviceMaxSum = cart.reduce((acc, it) => acc + (it.maxPrice || 0), 0);
     const visitCharge = PRICING_CONFIG.visitCharge;
     const gstMin = Math.round((serviceMinSum + visitCharge) * PRICING_CONFIG.gstPct);
     const gstMax = Math.round((serviceMaxSum + visitCharge) * PRICING_CONFIG.gstPct);
@@ -211,12 +223,36 @@ export default function BookingWizard({ initialService, onClose }) {
     };
   }, [cart]);
 
-  // ── 4. STEP NAVIGATION ──
+  // ── 4. S-ISSUE CONFIRMATION & STEP NAVIGATION ──
+  const handleProceedFromIssue = () => {
+    if (!currentChosenIssue) {
+      toast('Please select an issue to continue / Issue chunein');
+      return;
+    }
+
+    const brandModelStr = [brandInput.trim(), modelInput.trim()].filter(Boolean).join(' ');
+
+    const newCartItem = {
+      id: serviceConfig.id,
+      name: serviceConfig.name,
+      photo: serviceConfig.photo,
+      badgeIcon: serviceConfig.badgeIcon,
+      problem: currentChosenIssue.label,
+      selectedIssue: currentChosenIssue,
+      minPrice: currentChosenIssue.priceType === 'fixed' ? currentChosenIssue.price : currentChosenIssue.minPrice,
+      maxPrice: currentChosenIssue.priceType === 'fixed' ? currentChosenIssue.price : currentChosenIssue.maxPrice,
+      displayPrice: currentChosenIssue.displayPrice,
+      brandModel: brandModelStr,
+    };
+
+    setCart([newCartItem]);
+    setStep(0); // Move to S0 (Booking Summary)
+    if (scrollContainerRef.current) scrollContainerRef.current.scrollTop = 0;
+  };
+
   const goToStep = (nextStep) => {
     setStep(nextStep);
-    if (scrollContainerRef.current) {
-      scrollContainerRef.current.scrollTop = 0;
-    }
+    if (scrollContainerRef.current) scrollContainerRef.current.scrollTop = 0;
   };
 
   // ── 5. CART ACTIONS ──
@@ -229,23 +265,31 @@ export default function BookingWizard({ initialService, onClose }) {
     toast('Service removed from cart');
   };
 
-  const handleAddServiceToCart = (serviceKey) => {
-    const s = PRICING_CONFIG.serviceEstimates[serviceKey];
+  const handleAddServiceToCart = (srvKey, issueObj) => {
+    const s = PRICING_CONFIG.serviceEstimates[srvKey];
     if (!s) return;
     if (cart.some((it) => it.id === s.id)) {
       toast(s.name + ' is already in your cart');
       return;
     }
-    setCart((prev) => [
-      ...prev,
-      {
-        ...s,
-        problem: s.defaultProblem,
-        selectedAttribute: s.attributeOptions[0] || '',
-      },
-    ]);
+
+    const defaultIssue = issueObj || s.issues[0];
+    const newCartItem = {
+      id: s.id,
+      name: s.name,
+      photo: s.photo,
+      badgeIcon: s.badgeIcon,
+      problem: defaultIssue.label,
+      selectedIssue: defaultIssue,
+      minPrice: defaultIssue.priceType === 'fixed' ? defaultIssue.price : defaultIssue.minPrice,
+      maxPrice: defaultIssue.priceType === 'fixed' ? defaultIssue.price : defaultIssue.maxPrice,
+      displayPrice: defaultIssue.displayPrice,
+      brandModel: '',
+    };
+
+    setCart((prev) => [...prev, newCartItem]);
     setShowAddServiceSheet(false);
-    toast(s.name + ' added to cart (Single visiting fee applied)');
+    toast(s.name + ' added to cart (Single visit charge applied)');
   };
 
   const handleClearDraft = () => {
@@ -268,7 +312,7 @@ export default function BookingWizard({ initialService, onClose }) {
         setCustomPin({ lat: latitude, lng: longitude });
         setAddressArea('Live GPS Location');
         setAddressDetail('GPS Pin (' + latitude.toFixed(4) + ', ' + longitude.toFixed(4) + '), Barmer, Rajasthan');
-        toast('GPS location set successfully');
+        toast('GPS location locked successfully');
       },
       (err) => {
         setIsLocating(false);
@@ -278,10 +322,9 @@ export default function BookingWizard({ initialService, onClose }) {
     );
   };
 
-  // Save new custom address
   const handleSaveNewAddress = () => {
     if (newAddrText.trim().length < 10) {
-      toast('Please enter a full address with at least 10 characters');
+      toast('Please enter a complete address with at least 10 characters');
       return;
     }
     const newId = 'addr_' + Date.now();
@@ -302,82 +345,97 @@ export default function BookingWizard({ initialService, onClose }) {
     toast('New address saved successfully');
   };
 
-  // ── 7. FINAL CONFIRMATION & HANDOFF ──
-  const handleConfirmAndMatch = () => {
+  // ── 7. FINAL BOOKING CONFIRMATION ──
+  const handleFinalConfirm = () => {
     if (!custPhone || custPhone.replace(/\D/g, '').length < 10) {
       toast('Please enter a valid 10-digit mobile number');
       return;
     }
 
-    // Clear draft from localStorage
-    localStorage.removeItem(DRAFT_STORAGE_KEY);
+    const bookingId = 'CP' + Math.floor(100000 + Math.random() * 900000);
 
-    // Call existing real-time dispatch service
-    const trip = dispatchService.createBooking({
-      service: cart.map((s) => s.name).join(' + '),
-      area: addressArea,
+    const newBooking = {
+      id: bookingId,
+      status: 'PROCESSING',
+      createdAt: new Date().toISOString(),
+      date: availableDays[selectedDayIdx].fullString,
+      slot: selectedSlot,
+      city: 'Barmer',
+      addressArea: addressArea,
       address: addressDetail,
-      problem: cart.map((s) => s.name + ': ' + (s.selectedAttribute || s.problem)).join('; '),
-      phone: '+91 ' + custPhone.replace(/\D/g, ''),
-      customerName: custName.trim() || 'Customer',
-    });
+      service: cart.map((s) => s.name).join(' + '),
+      subService: cart.map((s) => s.problem).join('; '),
+      icon: cart[0]?.badgeIcon || 'bolt',
+      customer: {
+        name: custName.trim() || 'Shivam Singh',
+        phone: '+91 ' + custPhone.replace(/\D/g, ''),
+        notes: custNotes.trim() || '',
+      },
+      services: cart.map((s) => ({
+        id: s.id,
+        name: s.name,
+        issue: s.problem,
+        price: s.displayPrice,
+        minPrice: s.minPrice,
+        maxPrice: s.maxPrice,
+        brandModel: s.brandModel || '',
+      })),
+      estimate: {
+        visitCharge: cartPricingSummary.visitCharge,
+        laborMin: cartPricingSummary.serviceMinSum,
+        laborMax: cartPricingSummary.serviceMaxSum,
+        gstMin: cartPricingSummary.gstMin,
+        gstMax: cartPricingSummary.gstMax,
+        totalMin: cartPricingSummary.totalMin,
+        totalMax: cartPricingSummary.totalMax,
+        savings: cartPricingSummary.savings,
+      },
+      amount: cartPricingSummary.totalMin,
+      karigar: null,
+      timeline: [
+        { status: 'PROCESSING', title: 'Booking Placed', desc: 'Assigned to platform operations desk', time: 'Just now', done: true },
+        { status: 'CONFIRMED', title: 'Karigar Assignment', desc: 'Platform assigning verified technician', time: 'In progress', done: false },
+        { status: 'IN_PROGRESS', title: 'Doorstep Inspection', desc: 'Technician reaches address on time', time: 'Pending', done: false },
+        { status: 'COMPLETED', title: 'Work Done & Final Bill', desc: 'Payment after complete satisfaction', time: 'Pending', done: false },
+      ],
+    };
 
-    setActiveTrip(trip);
-    setStep(4); // Switch to matching & live tracking stage
-    toast('Connecting with verified local technicians…');
-
-    // Auto-match fallback simulator after 10s if standalone
-    simTimerRef.current = setTimeout(() => {
-      const current = dispatchService.getActiveTrip();
-      if (current && current.id === trip.id && current.status === 'searching') {
-        dispatchService.acceptBooking(trip.id, {
-          name: 'Ramesh Suthar',
-          phone: '+91 94140 88214',
-          skill: cart[0]?.name || 'Electrician',
-          area: addressArea,
-          rating: 4.9,
-          jobsDone: 340,
-        });
-      }
-    }, 10000);
-  };
-
-  const handleCancelTrip = () => {
-    if (simTimerRef.current) clearTimeout(simTimerRef.current);
-    dispatchService.clearTrip();
-    setActiveTrip(null);
+    addBooking(newBooking);
+    localStorage.removeItem(DRAFT_STORAGE_KEY);
     onClose();
+    nav('/booking-success', { state: { booking: newBooking } });
   };
 
-  const handlePayment = () => {
-    toast(payMethod === 'online' ? ('Paid ₹' + pricingSummary.totalMin + ' via UPI successfully') : ('₹' + pricingSummary.totalMin + ' Cash payment collected by technician'));
-    setActiveTrip((t) => (t ? { ...t, status: 'rated' } : null));
-  };
-
-  const handleRatingSubmit = () => {
-    toast(stars + '-Star rating submitted. Thank you!');
-    handleCancelTrip();
-  };
-
-  const toggleRatingChip = (c) => {
-    setRatingChips((prev) => (prev.includes(c) ? prev.filter((x) => x !== c) : [...prev, c]));
-  };
-
-  // Address validation check
   const isAddressValid = addressDetail.trim().length >= 10;
 
   return (
     <div className="bw-overlay">
       <div className="bw-modal">
 
-        {/* ═══════════════════════ HEADER & SLIM STEPPER (Steps 1–3) ═══════════════════════ */}
+        {/* ═══════════════════════ S-ISSUE HEADER ═══════════════════════ */}
+        {step === 'issue' && (
+          <div className="bw-issue-header">
+            <div className="bw-ih-top">
+              <button type="button" className="bw-back-btn" onClick={onClose} aria-label="Close">
+                <Icon name="close" size={18} />
+              </button>
+              <h2 className="bw-step-main-title">{serviceConfig.name} Issue Selection</h2>
+              <div className="bw-ih-badge">
+                <Icon name={serviceConfig.badgeIcon} size={15} />
+              </div>
+            </div>
+            <p className="bw-ih-sub">Select your issue for upfront transparent pricing</p>
+          </div>
+        )}
+
+        {/* ═══════════════════════ STEPS 1–3 STEPPER HEADER ═══════════════════════ */}
         {step >= 1 && step <= 3 && (
           <div className="bw-stepper-header">
             <div className="bw-stepper-top">
               <button
                 type="button"
                 className="bw-back-btn"
-                onClick={() => goToStep(step - 1)}
+                onClick={() => goToStep(step === 1 ? 0 : step - 1)}
                 aria-label="Previous step"
               >
                 <Icon name="back" size={18} />
@@ -423,7 +481,69 @@ export default function BookingWizard({ initialService, onClose }) {
           </div>
         )}
 
-        {/* ═══════════════════════ STEP 0: BOOKING SUMMARY (Your Booking Summary) ═══════════════════════ */}
+        {/* ═══════════════════════ S-ISSUE: ISSUE & PRICE SELECTION ═══════════════════════ */}
+        {step === 'issue' && (
+          <div className="bw-view-scroll" ref={scrollContainerRef} onScroll={handleScroll}>
+            <div className="bw-issue-list">
+              {serviceConfig.issues.map((iss) => {
+                const isSelected = selectedIssueId === iss.id;
+                return (
+                  <div
+                    key={iss.id}
+                    className={'bw-issue-card' + (isSelected ? ' selected' : '') + (iss.recommended ? ' recommended' : '')}
+                    onClick={() => setSelectedIssueId(iss.id)}
+                  >
+                    {iss.recommended && (
+                      <div className="bw-rec-tag">
+                        <Icon name="star" size={12} />
+                        <span>Recommended</span>
+                      </div>
+                    )}
+
+                    <div className="bw-ic-radio-row">
+                      <div className={'bw-radio-circle' + (isSelected ? ' checked' : '')}>
+                        {isSelected && <span className="bw-rc-inner" />}
+                      </div>
+
+                      <div className="bw-ic-content">
+                        <div className="bw-ic-title-row">
+                          <strong className="bw-ic-label">{iss.label}</strong>
+                          <span className="bw-ic-price-tag">{iss.displayPrice}</span>
+                        </div>
+                        <p className="bw-ic-desc">{iss.desc}</p>
+                      </div>
+                    </div>
+                  </div>
+                );
+              })}
+            </div>
+
+            {/* Optional Brand / Model Inputs */}
+            <div className="bw-optional-appliance-box">
+              <span className="bw-oab-title">Appliance Details (Optional)</span>
+              <div className="bw-oab-grid">
+                <input
+                  type="text"
+                  className="bw-oab-input"
+                  placeholder="Brand (e.g. Havells, Voltas, Jaquar)"
+                  value={brandInput}
+                  onChange={(e) => setBrandInput(e.target.value)}
+                />
+                <input
+                  type="text"
+                  className="bw-oab-input"
+                  placeholder="Model / Capacity (e.g. 1.5 Ton, Inverter)"
+                  value={modelInput}
+                  onChange={(e) => setModelInput(e.target.value)}
+                />
+              </div>
+            </div>
+
+            <div className="bw-bottom-spacing" />
+          </div>
+        )}
+
+        {/* ═══════════════════════ STEP 0: BOOKING SUMMARY (S0) ═══════════════════════ */}
         {step === 0 && (
           <div className="bw-view-scroll" ref={scrollContainerRef} onScroll={handleScroll}>
             <div className="bw-summary-header">
@@ -463,24 +583,24 @@ export default function BookingWizard({ initialService, onClose }) {
                       )}
                     </div>
 
-                    {/* Problem/Requirement Pill */}
+                    {/* Selected Issue Pill */}
                     <div className="bw-sc-prob-pill">
                       <span className="bw-sc-prob-text">{item.problem}</span>
                     </div>
 
-                    {/* Attribute Chips (Rendered ONLY when value exists) */}
-                    {item.selectedAttribute && (
+                    {/* Brand/Model Pill (Rendered ONLY when entered) */}
+                    {item.brandModel && (
                       <div className="bw-attr-chips-row">
                         <span className="bw-attr-chip">
                           <Icon name="tag" size={11} />
-                          <span>{item.selectedAttribute}</span>
+                          <span>{item.brandModel}</span>
                         </span>
                       </div>
                     )}
 
                     <div className="bw-sc-price-row">
-                      <span className="bw-sc-estimate-label">Estimated Labor:</span>
-                      <span className="bw-sc-estimate-val">₹{item.minPrice} – ₹{item.maxPrice}</span>
+                      <span className="bw-sc-estimate-label">Labor Estimate:</span>
+                      <span className="bw-sc-estimate-val">{item.displayPrice}</span>
                     </div>
                   </div>
                 </div>
@@ -505,12 +625,12 @@ export default function BookingWizard({ initialService, onClose }) {
                 <Icon name="check" size={16} />
                 <div className="bw-savings-text">
                   <strong>Single Visit Guarantee – Pay Visiting Fee Only Once</strong>
-                  <p>You saved ₹{pricingSummary.savings} in multiple visitation charges</p>
+                  <p>You saved ₹{cartPricingSummary.savings} in multiple visitation charges</p>
                 </div>
               </div>
             )}
 
-            {/* ONE Shared Collapsible Transparency Card ("How It Works") */}
+            {/* ONE Shared Collapsible Transparency Card ("Kaam kaise hoga") */}
             <div className="bw-transparency-card" ref={transparencyRef}>
               <button
                 type="button"
@@ -522,7 +642,7 @@ export default function BookingWizard({ initialService, onClose }) {
                     <Icon name="shield" size={18} />
                   </span>
                   <div className="bw-tc-title-wrap">
-                    <strong className="bw-tc-title">How It Works</strong>
+                    <strong className="bw-tc-title">Kaam kaise hoga?</strong>
                     <span className="bw-tc-sub">SARVOTTAM Transparency Guarantee</span>
                   </div>
                 </div>
@@ -559,7 +679,7 @@ export default function BookingWizard({ initialService, onClose }) {
           </div>
         )}
 
-        {/* ═══════════════════════ STEP 1: DATE & TIME ═══════════════════════ */}
+        {/* ═══════════════════════ STEP 1: DATE & TIME (S1) ═══════════════════════ */}
         {step === 1 && (
           <div className="bw-view-scroll" ref={scrollContainerRef} onScroll={handleScroll}>
             <div className="bw-section-head">
@@ -567,7 +687,7 @@ export default function BookingWizard({ initialService, onClose }) {
               <p className="bw-sec-sub">Technician will arrive at your doorstep during the selected slot</p>
             </div>
 
-            {/* Horizontal Date Chips */}
+            {/* Horizontal Date Chips (Aaj + 4 days) */}
             <div className="bw-date-chips-scroll">
               <div className="bw-date-chips-row">
                 {availableDays.map((d, idx) => (
@@ -590,7 +710,7 @@ export default function BookingWizard({ initialService, onClose }) {
               </div>
             </div>
 
-            {/* Slots Grid Grouped by Morning / Afternoon / Evening */}
+            {/* Slots Grid Grouped by Subah 8–12 / Dopahar 12–4 / Shaam 4–8 */}
             {availableDays[selectedDayIdx].hasSlots ? (
               <div className="bw-slots-container">
                 {SLOT_GROUPS.map((grp) => (
@@ -630,7 +750,7 @@ export default function BookingWizard({ initialService, onClose }) {
                   className="bw-next-day-btn"
                   onClick={() => setSelectedDayIdx(0)}
                 >
-                  Switch to Today (Available)
+                  Switch to Aaj (Available)
                 </button>
               </div>
             )}
@@ -639,7 +759,7 @@ export default function BookingWizard({ initialService, onClose }) {
           </div>
         )}
 
-        {/* ═══════════════════════ STEP 2: ADDRESS & LOCATION ═══════════════════════ */}
+        {/* ═══════════════════════ STEP 2: ADDRESS & LOCATION (S2) ═══════════════════════ */}
         {step === 2 && (
           <div className="bw-view-scroll" ref={scrollContainerRef} onScroll={handleScroll}>
             <div className="bw-section-head">
@@ -672,7 +792,7 @@ export default function BookingWizard({ initialService, onClose }) {
                 onClick={() => setShowAddAddressSheet(true)}
               >
                 <Icon name="plus" size={14} />
-                <span>+ New Address</span>
+                <span>+ Naya Address</span>
               </button>
             </div>
 
@@ -688,7 +808,7 @@ export default function BookingWizard({ initialService, onClose }) {
                   <Icon name="pin" size={16} />
                 </span>
                 <span className="bw-geo-text">
-                  {isLocating ? 'Fetching GPS location…' : 'Use Current GPS Location'}
+                  {isLocating ? 'Fetching GPS location…' : 'Meri current location'}
                 </span>
               </button>
             </div>
@@ -733,7 +853,7 @@ export default function BookingWizard({ initialService, onClose }) {
           </div>
         )}
 
-        {/* ═══════════════════════ STEP 3: DETAILS & CONFIRM ═══════════════════════ */}
+        {/* ═══════════════════════ STEP 3: DETAILS & CONFIRM (S3) ═══════════════════════ */}
         {step === 3 && (
           <div className="bw-view-scroll" ref={scrollContainerRef} onScroll={handleScroll}>
             <div className="bw-section-head">
@@ -806,43 +926,34 @@ export default function BookingWizard({ initialService, onClose }) {
 
             {/* Price Breakdown Card */}
             <div className="bw-card-block bw-pricing-card">
-              <div className="bw-pc-head">
-                <h4 className="bw-block-title">Price Breakdown</h4>
-                <button
-                  type="button"
-                  className="bw-pc-link"
-                  onClick={() => setShowTransparencyModal(true)}
-                >
-                  How does pricing work?
-                </button>
-              </div>
+              <h4 className="bw-block-title">Price Breakdown</h4>
 
               <div className="bw-pc-rows">
                 <div className="bw-pc-row">
                   <span>Visiting &amp; Diagnostic Fee</span>
-                  <span>₹{pricingSummary.visitCharge}</span>
+                  <span>₹{cartPricingSummary.visitCharge}</span>
                 </div>
 
                 <div className="bw-pc-row">
                   <span>Services Labor Estimate ({cart.length} item{cart.length > 1 ? 's' : ''})</span>
-                  <span>₹{pricingSummary.serviceMinSum} – ₹{pricingSummary.serviceMaxSum}</span>
+                  <span>₹{cartPricingSummary.serviceMinSum} – ₹{cartPricingSummary.serviceMaxSum}</span>
                 </div>
 
-                {pricingSummary.savings > 0 && (
+                {cartPricingSummary.savings > 0 && (
                   <div className="bw-pc-row bw-pc-discount">
                     <span>Multi-Service Single Visit Savings</span>
-                    <span className="green">-₹{pricingSummary.savings}</span>
+                    <span className="green">-₹{cartPricingSummary.savings}</span>
                   </div>
                 )}
 
                 <div className="bw-pc-row">
                   <span>GST (5%)</span>
-                  <span>₹{pricingSummary.gstMin} – ₹{pricingSummary.gstMax}</span>
+                  <span>₹{cartPricingSummary.gstMin} – ₹{cartPricingSummary.gstMax}</span>
                 </div>
 
                 <div className="bw-pc-row bw-pc-total">
                   <strong>Estimated Total Range</strong>
-                  <strong className="teal">₹{pricingSummary.totalMin} – ₹{pricingSummary.totalMax}</strong>
+                  <strong className="teal">₹{cartPricingSummary.totalMin} – ₹{cartPricingSummary.totalMax}</strong>
                 </div>
               </div>
 
@@ -855,291 +966,127 @@ export default function BookingWizard({ initialService, onClose }) {
           </div>
         )}
 
-        {/* ═══════════════════════ STEP 4: MATCHING & LIVE TRACKING ═══════════════════════ */}
-        {step === 4 && (
-          <div className="bw-matching-stage">
-            {/* Searching Radar State */}
-            {(!activeTrip || activeTrip.status === 'searching') && (
-              <div className="bw-search-view">
-                <div className="bw-sv-head">
-                  <button type="button" className="bw-close-btn" onClick={handleCancelTrip}>
-                    <Icon name="close" size={20} />
-                  </button>
-                  <span>Connecting Technician</span>
-                </div>
-
-                <div className="bw-radar-box">
-                  <div className="bw-radar-ring r1" />
-                  <div className="bw-radar-ring r2" />
-                  <div className="bw-radar-ring r3" />
-                  <div className="bw-radar-icon">
-                    <Icon name="bolt" size={32} />
-                  </div>
-                </div>
-
-                <h3 className="bw-search-title">Finding verified {cart[0]?.name}…</h3>
-                <p className="bw-search-sub">Dispatching your request to available online technicians within 3 km</p>
-
-                <div className="bw-search-summary-card">
-                  <div className="bw-ssc-row">
-                    <Icon name="pin" size={15} />
-                    <span>{addressDetail}</span>
-                  </div>
-                  <div className="bw-ssc-row">
-                    <Icon name="calendar" size={15} />
-                    <span>{availableDays[selectedDayIdx].fullString} · {selectedSlot}</span>
-                  </div>
-                </div>
-
-                <button type="button" className="bw-cancel-request-btn" onClick={handleCancelTrip}>
-                  Cancel Request
-                </button>
-              </div>
-            )}
-
-            {/* Live Tracking & OTP */}
-            {activeTrip && activeTrip.status !== 'searching' && activeTrip.status !== 'completed' && activeTrip.status !== 'rated' && (
-              <div className="bw-tracking-view">
-                <div className="bw-tv-head">
-                  <button type="button" className="bw-close-btn" onClick={handleCancelTrip}>
-                    <Icon name="close" size={20} />
-                  </button>
-                  <span>Live Tracking · {activeTrip.service}</span>
-                </div>
-
-                {/* Start Job OTP Card */}
-                <div className="bw-otp-card">
-                  <div className="bw-oc-left">
-                    <span className="bw-oc-tag">START JOB OTP</span>
-                    <p className="bw-oc-desc">Share this 4-digit code when technician arrives</p>
-                  </div>
-                  <div className="bw-oc-code">{activeTrip.otp || '4829'}</div>
-                </div>
-
-                {/* Karigar Profile */}
-                <div className="bw-karigar-card">
-                  <div className="bw-kc-avatar">R</div>
-                  <div className="bw-kc-info">
-                    <div className="bw-kc-name-row">
-                      <h4>{activeTrip.karigar?.name || 'Ramesh Suthar'}</h4>
-                      <span className="bw-kc-verified">
-                        <Icon name="shield" size={13} /> Verified
-                      </span>
-                    </div>
-                    <p className="bw-kc-skill">{activeTrip.service} Specialist · Barmer</p>
-                    <div className="bw-kc-rating">
-                      <Icon name="star" size={13} />
-                      <strong>{activeTrip.karigar?.rating || 4.9}</strong>
-                      <span>({activeTrip.karigar?.jobsDone || 320}+ jobs)</span>
-                    </div>
-                  </div>
-                  <a href="tel:9414088214" className="bw-kc-call-btn" aria-label="Call Technician">
-                    <Icon name="phone" size={18} />
-                  </a>
-                </div>
-
-                {/* Step Progression Tracker */}
-                <div className="bw-progression-box">
-                  {[
-                    { title: 'Technician Assigned', desc: 'Accepted your booking request', done: true },
-                    { title: 'On the Way', desc: 'Reaching your address in ~8 mins', done: activeTrip.status === 'arrived' || activeTrip.status === 'working' },
-                    { title: 'Work in Progress', desc: 'Working after OTP verification', done: activeTrip.status === 'working' },
-                    { title: 'Job Completed & Bill', desc: 'Payment due upon completion', done: false },
-                  ].map((s, i) => (
-                    <div key={i} className={'bw-prog-step' + (s.done ? ' done' : '')}>
-                      <span className="bw-ps-dot" />
-                      <div className="bw-ps-text">
-                        <strong>{s.title}</strong>
-                        <small>{s.desc}</small>
-                      </div>
-                    </div>
-                  ))}
-                </div>
-              </div>
-            )}
-
-            {/* Payment & Bill */}
-            {activeTrip && activeTrip.status === 'completed' && (
-              <div className="bw-payment-view">
-                <div className="bw-pv-done-ic">
-                  <Icon name="check" size={28} />
-                </div>
-                <h3 className="bw-pv-title">Job Completed Successfully!</h3>
-                <p className="bw-pv-sub">{activeTrip.karigar?.name || 'Technician'} · {activeTrip.service}</p>
-
-                <div className="bw-bill-box">
-                  <div className="bw-bb-row">
-                    <span>Service &amp; Diagnostic Total</span>
-                    <span>₹{pricingSummary.totalMin}</span>
-                  </div>
-                </div>
-
-                <div className="bw-pm-options">
-                  <button
-                    type="button"
-                    className={'bw-pm-btn' + (payMethod === 'online' ? ' active' : '')}
-                    onClick={() => setPayMethod('online')}
-                  >
-                    <Icon name="card" size={20} />
-                    <div className="bw-pm-text">
-                      <strong>Online Payment (UPI / QR)</strong>
-                      <small>Google Pay, PhonePe, Paytm, Cards</small>
-                    </div>
-                  </button>
-
-                  <button
-                    type="button"
-                    className={'bw-pm-btn' + (payMethod === 'cash' ? ' active' : '')}
-                    onClick={() => setPayMethod('cash')}
-                  >
-                    <Icon name="cash" size={20} />
-                    <div className="bw-pm-text">
-                      <strong>Cash Payment</strong>
-                      <small>Pay cash directly to technician</small>
-                    </div>
-                  </button>
-                </div>
-
-                <button type="button" className="bw-primary-cta" onClick={handlePayment}>
-                  Pay ₹{pricingSummary.totalMin} &amp; Complete
-                </button>
-              </div>
-            )}
-
-            {/* Rating Sheet */}
-            {activeTrip && activeTrip.status === 'rated' && (
-              <div className="bw-rating-view">
-                <div className="bw-rv-avatar">R</div>
-                <h3 className="bw-rv-title">Rate Your Experience with {activeTrip.karigar?.name || 'Ramesh Suthar'}</h3>
-                <p className="bw-rv-sub">Your feedback helps us ensure trusted quality across Rajasthan</p>
-
-                <div className="bw-stars-row">
-                  {[1, 2, 3, 4, 5].map((n) => (
-                    <button
-                      key={n}
-                      type="button"
-                      className={'bw-star-btn' + (n <= stars ? ' on' : '')}
-                      onClick={() => setStars(n)}
-                      aria-label={n + ' stars'}
-                    >
-                      <Icon name="star" size={32} />
-                    </button>
-                  ))}
-                </div>
-
-                <div className="bw-praise-chips">
-                  {['On Time', 'Great Work', 'Polite Behavior', 'Clean & Tidy', 'Fair Pricing'].map((c) => (
-                    <button
-                      key={c}
-                      type="button"
-                      className={'bw-praise-chip' + (ratingChips.includes(c) ? ' on' : '')}
-                      onClick={() => toggleRatingChip(c)}
-                    >
-                      {c}
-                    </button>
-                  ))}
-                </div>
-
-                <button type="button" className="bw-primary-cta" onClick={handleRatingSubmit}>
-                  Submit {stars}-Star Rating
-                </button>
-              </div>
-            )}
-          </div>
-        )}
-
         {/* ═══════════════════════ PERSISTENT HELP FAB (12px above sticky bar) ═══════════════════════ */}
-        {step <= 3 && (
-          <div className="bw-help-fab-wrapper">
-            {helpExpanded && (
-              <div className="bw-help-popover">
-                <a href="tel:1800123456" className="bw-hp-link" onClick={() => toast('Connecting to 24×7 Customer Helpline…')}>
-                  <Icon name="phone" size={16} />
-                  <span>Call 24×7 Helpline</span>
-                </a>
-                <a
-                  href="https://wa.me/919414088214?text=Hello,%20I%20need%20assistance%20with%20my%20service%20booking"
-                  target="_blank"
-                  rel="noreferrer"
-                  className="bw-hp-link"
-                >
-                  <Icon name="whatsapp" size={16} />
-                  <span>WhatsApp Support</span>
-                </a>
-              </div>
-            )}
-
-            <button
-              type="button"
-              className={'bw-help-fab' + (helpExpanded ? ' active' : '')}
-              onClick={() => setHelpExpanded((prev) => !prev)}
-              aria-label="Need Help"
-            >
-              <Icon name={helpExpanded ? 'close' : 'headset'} size={18} />
-              <span>Need Help?</span>
-            </button>
-          </div>
-        )}
-
-        {/* ═══════════════════════ STICKY BOTTOM ACTION BAR (Steps 0–3) ═══════════════════════ */}
-        {step <= 3 && (
-          <div className="bw-sticky-bottom-bar">
-            <div className="bw-sbb-price-col">
-              <div className="bw-sbb-total">
-                <span className="bw-sbb-amount">₹{pricingSummary.totalMin} – ₹{pricingSummary.totalMax}</span>
-              </div>
-              <span className="bw-sbb-sub">Visit ₹{pricingSummary.visitCharge} + Est + 5% GST</span>
+        <div className="bw-help-fab-wrapper">
+          {helpExpanded && (
+            <div className="bw-help-popover">
+              <a href="tel:1800123456" className="bw-hp-link" onClick={() => toast('Connecting to 24×7 Customer Helpline…')}>
+                <Icon name="phone" size={16} />
+                <span>Call 24×7 Helpline</span>
+              </a>
+              <a
+                href="https://wa.me/919414088214?text=Hello,%20I%20need%20assistance%20with%20my%20service%20booking"
+                target="_blank"
+                rel="noreferrer"
+                className="bw-hp-link"
+              >
+                <Icon name="whatsapp" size={16} />
+                <span>WhatsApp Support</span>
+              </a>
             </div>
+          )}
 
-            <div className="bw-sbb-cta-col">
-              {step === 0 && (
+          <button
+            type="button"
+            className={'bw-help-fab' + (helpExpanded ? ' active' : '')}
+            onClick={() => setHelpExpanded((prev) => !prev)}
+            aria-label="Need Help"
+          >
+            <Icon name={helpExpanded ? 'close' : 'headset'} size={18} />
+            <span>Need Help?</span>
+          </button>
+        </div>
+
+        {/* ═══════════════════════ STICKY BOTTOM ACTION BAR ═══════════════════════ */}
+        <div className="bw-sticky-bottom-bar">
+          {/* S-ISSUE Sticky Bar */}
+          {step === 'issue' && (
+            <>
+              <div className="bw-sbb-price-col">
+                <div className="bw-sbb-total">
+                  <span className="bw-sbb-amount">
+                    {issueLivePrice ? (issueLivePrice.isRange ? ('₹' + issueLivePrice.totalMin + ' – ₹' + issueLivePrice.totalMax) : ('₹' + issueLivePrice.totalMin)) : 'Select issue'}
+                  </span>
+                </div>
+                <span className="bw-sbb-sub">
+                  {issueLivePrice ? ('Visit ₹' + PRICING_CONFIG.visitCharge + ' + ' + issueLivePrice.displayLabor + ' + GST') : 'Upfront transparent price'}
+                </span>
+              </div>
+
+              <div className="bw-sbb-cta-col">
                 <button
                   type="button"
                   className="bw-primary-cta"
-                  onClick={() => goToStep(1)}
+                  disabled={!selectedIssueId}
+                  onClick={handleProceedFromIssue}
                 >
-                  <Icon name="calendar" size={18} />
-                  <span>Choose Date &amp; Time</span>
-                </button>
-              )}
-
-              {step === 1 && (
-                <button
-                  type="button"
-                  className="bw-primary-cta"
-                  disabled={!availableDays[selectedDayIdx].hasSlots}
-                  onClick={() => goToStep(2)}
-                >
-                  <span>Proceed to Address</span>
+                  <span>{selectedIssueId ? 'Aage badhein' : 'Issue chunein'}</span>
                   <Icon name="arrow" size={16} />
                 </button>
-              )}
+              </div>
+            </>
+          )}
 
-              {step === 2 && (
-                <button
-                  type="button"
-                  className="bw-primary-cta"
-                  disabled={!isAddressValid}
-                  onClick={() => goToStep(3)}
-                >
-                  <span>Proceed to Details</span>
-                  <Icon name="arrow" size={16} />
-                </button>
-              )}
+          {/* S0–S3 Sticky Bar */}
+          {step !== 'issue' && (
+            <>
+              <div className="bw-sbb-price-col">
+                <div className="bw-sbb-total">
+                  <span className="bw-sbb-amount">₹{cartPricingSummary.totalMin} – ₹{cartPricingSummary.totalMax}</span>
+                </div>
+                <span className="bw-sbb-sub">Visit ₹{cartPricingSummary.visitCharge} + Est + 5% GST</span>
+              </div>
 
-              {step === 3 && (
-                <button
-                  type="button"
-                  className="bw-primary-cta danger-confirm"
-                  onClick={handleConfirmAndMatch}
-                >
-                  <Icon name="bolt" size={18} />
-                  <span>Confirm &amp; Find Technician</span>
-                </button>
-              )}
-            </div>
-          </div>
-        )}
+              <div className="bw-sbb-cta-col">
+                {step === 0 && (
+                  <button
+                    type="button"
+                    className="bw-primary-cta"
+                    onClick={() => goToStep(1)}
+                  >
+                    <Icon name="calendar" size={18} />
+                    <span>Choose Date &amp; Time</span>
+                  </button>
+                )}
+
+                {step === 1 && (
+                  <button
+                    type="button"
+                    className="bw-primary-cta"
+                    disabled={!availableDays[selectedDayIdx].hasSlots}
+                    onClick={() => goToStep(2)}
+                  >
+                    <span>Proceed to Address</span>
+                    <Icon name="arrow" size={16} />
+                  </button>
+                )}
+
+                {step === 2 && (
+                  <button
+                    type="button"
+                    className="bw-primary-cta"
+                    disabled={!isAddressValid}
+                    onClick={() => goToStep(3)}
+                  >
+                    <span>Proceed to Details</span>
+                    <Icon name="arrow" size={16} />
+                  </button>
+                )}
+
+                {step === 3 && (
+                  <button
+                    type="button"
+                    className="bw-primary-cta danger-confirm"
+                    onClick={handleFinalConfirm}
+                  >
+                    <Icon name="check" size={18} />
+                    <span>Confirm karein</span>
+                  </button>
+                )}
+              </div>
+            </>
+          )}
+        </div>
 
         {/* ═══════════════════════ MODAL: ADD ANOTHER SERVICE SHEET ═══════════════════════ */}
         {showAddServiceSheet && (
@@ -1162,55 +1109,20 @@ export default function BookingWizard({ initialService, onClose }) {
                         <img src={srv.photo} alt={srv.name} className="bw-ss-thumb" />
                         <div>
                           <strong>{srv.name}</strong>
-                          <span>Starts ₹{srv.minPrice}</span>
+                          <span>Starts {srv.issues[0]?.displayPrice}</span>
                         </div>
                       </div>
                       <button
                         type="button"
                         className={'bw-ss-add-btn' + (inCart ? ' added' : '')}
                         disabled={inCart}
-                        onClick={() => handleAddServiceToCart(srv.id)}
+                        onClick={() => handleAddServiceToCart(srv.id, srv.issues[0])}
                       >
                         {inCart ? 'Added' : '+ Add'}
                       </button>
                     </div>
                   );
                 })}
-              </div>
-            </div>
-          </div>
-        )}
-
-        {/* ═══════════════════════ MODAL: TRANSPARENCY EXPLANATION ═══════════════════════ */}
-        {showTransparencyModal && (
-          <div className="bw-sheet-overlay" onClick={() => setShowTransparencyModal(false)}>
-            <div className="bw-sub-sheet" onClick={(e) => e.stopPropagation()}>
-              <div className="bw-ss-header">
-                <div className="bw-tc-title-wrap">
-                  <Icon name="shield" size={18} />
-                  <h3>Pricing Transparency Guarantee</h3>
-                </div>
-                <button type="button" className="bw-close-btn" onClick={() => setShowTransparencyModal(false)}>
-                  <Icon name="close" size={18} />
-                </button>
-              </div>
-
-              <div className="bw-tc-steps-list in-modal">
-                {TRANSPARENCY_STEPS.map((st) => (
-                  <div key={st.step} className="bw-tc-step-item">
-                    <span className="bw-tc-num">{st.step}</span>
-                    <div className="bw-tc-step-info">
-                      <strong>{st.title}</strong>
-                      <p>{st.desc}</p>
-                    </div>
-                  </div>
-                ))}
-              </div>
-
-              <div className="bw-tc-modal-foot">
-                <button type="button" className="bw-primary-cta" onClick={() => setShowTransparencyModal(false)}>
-                  Understood
-                </button>
               </div>
             </div>
           </div>
@@ -1230,7 +1142,7 @@ export default function BookingWizard({ initialService, onClose }) {
               <div className="bw-na-form">
                 <label className="bw-form-label">Address Type</label>
                 <div className="bw-na-chips">
-                  {['Home', 'Office', 'Shop', 'Other'].map((t) => (
+                  {['Ghar', 'Office', 'Shop', 'Other'].map((t) => (
                     <button
                       key={t}
                       type="button"
