@@ -69,7 +69,7 @@
   font-weight: 450;
 }
 
-/* Location Selector Pill on Right */
+/* Locked Live Location Pill on Right */
 .fth-loc-wrapper {
   position: relative;
   display: flex;
@@ -77,21 +77,16 @@
   flex-shrink: 0;
 }
 
-.fth-loc-btn {
+.fth-loc-pill {
   display: flex;
   align-items: center;
   gap: 5px;
   background: transparent;
-  border: none;
   padding: 4px 6px 4px 10px;
   border-left: 1px solid #E2E8F0;
-  cursor: pointer;
+  cursor: default;
   font-family: inherit;
-  transition: opacity 0.2s;
-}
-
-.fth-loc-btn:hover {
-  opacity: 0.8;
+  user-select: none;
 }
 
 .fth-pin-ic {
@@ -102,72 +97,13 @@
 
 .fth-loc-text {
   font-size: 12px;
-  font-weight: 700;
+  font-weight: 750;
   color: #1E293B;
   white-space: nowrap;
   letter-spacing: -0.01em;
-  max-width: 110px;
+  max-width: 120px;
   overflow: hidden;
   text-overflow: ellipsis;
-}
-
-.fth-chevron-ic {
-  color: #64748B;
-  display: flex;
-  align-items: center;
-  margin-top: 1px;
-}
-
-/* Location Dropdown */
-.fth-loc-dropdown {
-  position: absolute;
-  top: calc(100% + 8px);
-  right: 0;
-  background: #FFFFFF;
-  border-radius: 16px;
-  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.15);
-  border: 1px solid #E2E8F0;
-  padding: 6px;
-  width: 180px;
-  z-index: 50;
-  animation: dropDownIn 0.2s cubic-bezier(0.16, 1, 0.3, 1);
-}
-
-@keyframes dropDownIn {
-  from {
-    opacity: 0;
-    transform: translateY(-6px) scale(0.96);
-  }
-  to {
-    opacity: 1;
-    transform: translateY(0) scale(1);
-  }
-}
-
-.fth-loc-option {
-  width: 100%;
-  display: flex;
-  align-items: center;
-  gap: 8px;
-  padding: 8px 10px;
-  border: none;
-  background: transparent;
-  border-radius: 10px;
-  font-size: 12px;
-  font-weight: 600;
-  color: #334155;
-  cursor: pointer;
-  text-align: left;
-}
-
-.fth-loc-option:hover {
-  background: #F1F5F9;
-}
-
-.fth-loc-option.active {
-  background: #EFF6FF;
-  color: #2563EB;
-  font-weight: 750;
 }
 
 /* ── 2. BOTTOM SHEET HEADER ROW (Inside Sheet) ── */

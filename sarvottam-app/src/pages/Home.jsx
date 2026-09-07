@@ -8,16 +8,6 @@ import { useToast } from '../components/Toast';
 import { EMERGENCY_SERVICES } from '../data/services';
 import './Home.css';
 
-const LOCATIONS = [
-  'Vaishali Nagar, Jaipur',
-  'Gandhi Nagar, Jaipur',
-  'Mansarovar, Jaipur',
-  'Malviya Nagar, Jaipur',
-  'Indra Colony, Barmer',
-  'Station Road, Barmer',
-  'Ratanada, Jodhpur',
-];
-
 // 3 Core Services matching the uploaded UI screenshot
 const HOME_SERVICES = [
   {
@@ -139,7 +129,6 @@ export default function Home() {
 
   const [searchQuery, setSearchQuery] = useState('');
   const [selectedLoc, setSelectedLoc] = useState('Vaishali Nagar');
-  const [locOpen, setLocOpen] = useState(false);
   const [activeBookingService, setActiveBookingService] = useState(null);
   const [activeCategory, setActiveCategory] = useState('All');
   const [sheetState, setSheetState] = useState('collapsed');
@@ -212,7 +201,7 @@ export default function Home() {
           onLocationFound={handleLocationFound}
         />
 
-        {/* Floating Top Search & Location Bar */}
+        {/* Floating Top Search & Locked Live Location Bar */}
         <div className="floating-top-header">
           <form className="fth-search-bar" onSubmit={handleSearchSubmit}>
             <span className="fth-search-ic">
@@ -227,40 +216,18 @@ export default function Home() {
             />
           </form>
 
+          {/* Locked Live Location Pill */}
           <div className="fth-loc-wrapper">
-            <button
-              type="button"
-              className="fth-loc-btn"
-              onClick={() => setLocOpen(!locOpen)}
+            <div
+              className="fth-loc-pill"
+              title={`Live GPS Location: ${selectedLoc}`}
+              onClick={() => toast(`📍 Live GPS Location locked: ${selectedLoc}`)}
             >
               <span className="fth-pin-ic">
-                <Icon name="pin" size={15} />
+                <Icon name="pin" size={14} />
               </span>
               <span className="fth-loc-text">{selectedLoc}</span>
-              <span className="fth-chevron-ic">
-                <Icon name="chevron" size={12} />
-              </span>
-            </button>
-
-            {locOpen && (
-              <div className="fth-loc-dropdown">
-                {LOCATIONS.map((loc) => (
-                  <button
-                    key={loc}
-                    type="button"
-                    className={'fth-loc-option' + (selectedLoc === loc ? ' active' : '')}
-                    onClick={() => {
-                      setSelectedLoc(loc.split(',')[0]);
-                      setLocOpen(false);
-                      toast(`Location set to ${loc}`);
-                    }}
-                  >
-                    <Icon name="pin" size={13} />
-                    <span>{loc}</span>
-                  </button>
-                ))}
-              </div>
-            )}
+            </div>
           </div>
         </div>
       </div>
