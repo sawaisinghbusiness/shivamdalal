@@ -63,65 +63,6 @@ const HOME_SERVICES = [
   },
 ];
 
-// Extended Services shown when the bottom sheet is dragged/expanded upward
-const ALL_EXPANDED_SERVICES = [
-  ...HOME_SERVICES,
-  {
-    id: 'carpenter',
-    name: 'Carpenter',
-    sub: 'Door lock, furniture, hinges',
-    img: '/electrician-card.jpg',
-    badgeIcon: 'hammer',
-    badgeColor: '#A05A0B',
-    btnColor: '#A05A0B',
-    eta: '12 mins',
-    price: '₹450',
-    serviceData: EMERGENCY_SERVICES.find((s) => s.id === 'carpenter') || {
-      name: 'Carpenter',
-      icon: 'hammer',
-      color: '#A05A0B',
-      service: 450,
-    },
-  },
-  {
-    id: 'painter',
-    name: 'Painter',
-    sub: 'Wall touch-up & waterproofing',
-    img: '/ac-repair-card.jpg',
-    badgeIcon: 'roller',
-    badgeColor: '#7C3AED',
-    btnColor: '#7C3AED',
-    eta: '15 mins',
-    price: '₹500',
-    serviceData: EMERGENCY_SERVICES.find((s) => s.id === 'painter') || {
-      name: 'Painter',
-      icon: 'roller',
-      color: '#7C3AED',
-      service: 500,
-    },
-  },
-  {
-    id: 'appliance',
-    name: 'Appliance Repair',
-    sub: 'Washing machine, fridge, microwave',
-    img: '/plumber-card.jpg',
-    badgeIcon: 'wrench',
-    badgeColor: '#0D9488',
-    btnColor: '#0D9488',
-    eta: '18 mins',
-    price: '₹450',
-    serviceData: {
-      id: 'appliance',
-      name: 'Appliance Repair',
-      icon: 'wrench',
-      color: '#0D9488',
-      service: 450,
-    },
-  },
-];
-
-const CATEGORY_CHIPS = ['All', '⚡ Emergency', '❄️ AC / Appliance', '🚰 Plumbing', '🔨 Woodwork', '🎨 Painting'];
-
 export default function Home() {
   const nav = useNavigate();
   const toast = useToast();
@@ -130,7 +71,6 @@ export default function Home() {
   const [searchQuery, setSearchQuery] = useState('');
   const [selectedLoc, setSelectedLoc] = useState('Vaishali Nagar');
   const [activeBookingService, setActiveBookingService] = useState(null);
-  const [activeCategory, setActiveCategory] = useState('All');
   const [sheetState, setSheetState] = useState('collapsed');
 
   // Dynamic Location found callback from MapView GPS
@@ -143,7 +83,7 @@ export default function Home() {
   // Trigger booking from map marker or card
   const handleSelectService = (serviceName) => {
     const s =
-      ALL_EXPANDED_SERVICES.find(
+      HOME_SERVICES.find(
         (item) => item.name.toLowerCase() === (serviceName || '').toLowerCase()
       ) || HOME_SERVICES[0];
     setActiveBookingService(s.serviceData);
@@ -155,7 +95,7 @@ export default function Home() {
       toast('Service name search karein (e.g. Electrician)');
       return;
     }
-    const found = ALL_EXPANDED_SERVICES.find((s) =>
+    const found = HOME_SERVICES.find((s) =>
       s.name.toLowerCase().includes(searchQuery.toLowerCase().trim())
     );
     if (found) {
@@ -176,20 +116,13 @@ export default function Home() {
     document.documentElement.style.setProperty('--sheet-progress', String(progress));
   };
 
-  // Filtered services in expanded view
-  const filteredServices = ALL_EXPANDED_SERVICES.filter((s) => {
-    if (searchQuery.trim()) {
-      return (
-        s.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
-        s.sub.toLowerCase().includes(searchQuery.toLowerCase())
-      );
-    }
-    if (activeCategory === '⚡ Emergency') return ['electrician', 'plumber', 'ac'].includes(s.id);
-    if (activeCategory === '❄️ AC / Appliance') return ['ac', 'appliance'].includes(s.id);
-    if (activeCategory === '🚰 Plumbing') return s.id === 'plumber';
-    if (activeCategory === '🔨 Woodwork') return s.id === 'carpenter';
-    if (activeCategory === '🎨 Painting') return s.id === 'painter';
-    return true;
+  // Filtered services based on search
+  const filteredServices = HOME_SERVICES.filter((s) => {
+    if (!searchQuery.trim()) return true;
+    return (
+      s.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
+      s.sub.toLowerCase().includes(searchQuery.toLowerCase())
+    );
   });
 
   return (
@@ -286,7 +219,7 @@ export default function Home() {
           </div>
         }
       >
-        {/* Featured Service Cards Horizontal Row */}
+        {/* Featured Service Cards Horizontal Row (Resting View) */}
         <div className="service-cards-row">
           {HOME_SERVICES.map((s) => (
             <div
@@ -328,23 +261,8 @@ export default function Home() {
           ))}
         </div>
 
-        {/* Expanded Services Content */}
+        {/* Expanded Services Content (Only Electrician, AC Repair, Plumber with Photos) */}
         <div className="expanded-services-content">
-          {/* Category Filter Chips */}
-          <div className="category-chips-row">
-            {CATEGORY_CHIPS.map((cat) => (
-              <button
-                key={cat}
-                type="button"
-                className={`cat-chip ${activeCategory === cat ? 'active' : ''}`}
-                onClick={() => setActiveCategory(cat)}
-              >
-                {cat}
-              </button>
-            ))}
-          </div>
-
-          {/* All Services Detailed List */}
           <div className="expanded-services-grid">
             {filteredServices.map((srv) => (
               <div
@@ -353,18 +271,15 @@ export default function Home() {
                 onClick={() => setActiveBookingService(srv.serviceData)}
               >
                 <div className="esc-left">
-                  <div
-                    className="esc-icon-badge"
-                    style={{ backgroundColor: `${srv.badgeColor}18`, color: srv.badgeColor }}
-                  >
-                    <Icon name={srv.badgeIcon} size={22} />
+                  {/* Real Image Thumbnail Instead of Generic Icon */}
+                  <div className="esc-img-wrap">
+                    <img src={srv.img} alt={srv.name} className="esc-thumb-img" />
                   </div>
                   <div className="esc-info">
                     <div className="esc-title-row">
                       <h4 className="esc-name">{srv.name}</h4>
                       <span className="esc-eta">⚡ {srv.eta}</span>
                     </div>
-                    <p className="esc-sub">{srv.sub}</p>
                     <span className="esc-price">Starts at {srv.price}</span>
                   </div>
                 </div>
@@ -381,24 +296,6 @@ export default function Home() {
                 </button>
               </div>
             ))}
-          </div>
-
-          {/* 24/7 Emergency Helpline Banner */}
-          <div className="emergency-help-card">
-            <div className="ehc-icon">
-              <Icon name="phone" size={20} />
-            </div>
-            <div className="ehc-text">
-              <strong>24×7 Emergency Dispatch</strong>
-              <small>Need urgent help? Direct Karigar connect</small>
-            </div>
-            <a
-              href="tel:1800123456"
-              className="ehc-call-btn"
-              onClick={() => toast('Calling 24×7 Karigar Helpline…')}
-            >
-              Call Now
-            </a>
           </div>
         </div>
       </BottomSheet>

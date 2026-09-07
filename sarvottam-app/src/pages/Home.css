@@ -271,40 +271,7 @@
   padding: 0 18px 18px;
   display: flex;
   flex-direction: column;
-  gap: 14px;
-}
-
-/* Category Filter Chips */
-.category-chips-row {
-  display: flex;
-  gap: 8px;
-  overflow-x: auto;
-  padding-bottom: 4px;
-  scrollbar-width: none;
-}
-
-.category-chips-row::-webkit-scrollbar {
-  display: none;
-}
-
-.cat-chip {
-  padding: 6px 12px;
-  border-radius: 20px;
-  border: 1px solid #E2E8F0;
-  background: #F8FAFC;
-  font-size: 12px;
-  font-weight: 650;
-  color: #475569;
-  cursor: pointer;
-  white-space: nowrap;
-  transition: all 0.2s;
-}
-
-.cat-chip.active {
-  background: #2563EB;
-  color: #FFFFFF;
-  border-color: #2563EB;
-  box-shadow: 0 2px 8px rgba(37, 99, 235, 0.25);
+  gap: 12px;
 }
 
 /* Expanded Service List */
@@ -318,12 +285,12 @@
   display: flex;
   align-items: center;
   justify-content: space-between;
-  padding: 12px 14px;
+  padding: 10px 14px;
   background: #FFFFFF;
   border: 1px solid #E2E8F0;
   border-radius: 18px;
   cursor: pointer;
-  transition: transform 0.18s, box-shadow 0.18s;
+  transition: transform 0.18s, box-shadow 0.18s, border-color 0.18s;
   box-shadow: 0 2px 6px rgba(0, 0, 0, 0.02);
 }
 
@@ -333,22 +300,37 @@
   border-color: #CBD5E1;
 }
 
+.expanded-service-card:active {
+  transform: scale(0.98);
+}
+
 .esc-left {
   display: flex;
   align-items: center;
-  gap: 12px;
+  gap: 14px;
   flex: 1;
   min-width: 0;
 }
 
-.esc-icon-badge {
-  width: 44px;
-  height: 44px;
+/* Real Image Thumbnail Container */
+.esc-img-wrap {
+  width: 52px;
+  height: 52px;
   border-radius: 14px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
+  overflow: hidden;
+  position: relative;
+  background-color: #F1F5F9;
   flex-shrink: 0;
+  box-shadow: 0 2px 6px rgba(15, 23, 42, 0.08);
+  border: 1px solid rgba(226, 232, 240, 0.9);
+}
+
+.esc-thumb-img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: center top;
+  display: block;
 }
 
 .esc-info {
@@ -368,6 +350,7 @@
   font-size: 14px;
   font-weight: 800;
   color: #0F172A;
+  letter-spacing: -0.01em;
 }
 
 .esc-eta {
@@ -375,16 +358,8 @@
   font-weight: 700;
   color: #059669;
   background: #ECFDF5;
-  padding: 1px 6px;
+  padding: 1px 7px;
   border-radius: 10px;
-}
-
-.esc-sub {
-  font-size: 11px;
-  color: #64748B;
-  white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
 }
 
 .esc-price {
@@ -412,65 +387,6 @@
   opacity: 0.9;
 }
 
-/* 24/7 Helpline Card */
-.emergency-help-card {
-  display: flex;
-  align-items: center;
-  gap: 12px;
-  padding: 12px 14px;
-  background: linear-gradient(135deg, #EFF6FF 0%, #DBEAFE 100%);
-  border: 1px solid #BFDBFE;
-  border-radius: 16px;
-  margin-top: 4px;
-}
-
-.ehc-icon {
-  width: 36px;
-  height: 36px;
-  border-radius: 12px;
-  background: #2563EB;
-  color: #FFFFFF;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  flex-shrink: 0;
-}
-
-.ehc-text {
-  flex: 1;
-  display: flex;
-  flex-direction: column;
-  min-width: 0;
-}
-
-.ehc-text strong {
-  font-size: 13px;
-  font-weight: 800;
-  color: #1E3A8A;
-}
-
-.ehc-text small {
-  font-size: 10.5px;
-  color: #3B82F6;
-  font-weight: 500;
-}
-
-.ehc-call-btn {
-  padding: 6px 14px;
-  background: #2563EB;
-  color: #FFFFFF;
-  border-radius: 10px;
-  font-size: 12px;
-  font-weight: 750;
-  text-decoration: none;
-  cursor: pointer;
-  flex-shrink: 0;
-  transition: opacity 0.2s;
-}
-
-.ehc-call-btn:hover {
-  opacity: 0.9;
-}
 
 /* ── 5. LOCKED / STICKY TRUST FOOTER (Never moves, pinned right above nav) ── */
 .home-trust-banner-wrapper {
