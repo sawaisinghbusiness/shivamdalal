@@ -1,12 +1,13 @@
 import { NavLink, useLocation } from 'react-router-dom';
 import Icon from './Icon';
 
-// 4 Main navigation tabs: Home, All Services (left), Emergency (middle), Profile (right)
+// 5 Main navigation tabs: Home, All Services, Emergency (center), Bookings, Profile
 const ITEMS = [
-  { to: '/',          icon: 'home',  label: 'Home' },
-  { to: '/services',  icon: 'grid',  label: 'All Services' },
-  { to: '/emergency', icon: 'bolt',  label: 'Emergency', isEmergency: true },
-  { to: '/profile',   icon: 'user',  label: 'Profile' },
+  { to: '/',          icon: 'home',     label: 'Home' },
+  { to: '/services',  icon: 'grid',     label: 'All Services' },
+  { to: '/emergency', icon: 'bolt',     label: 'Emergency', isEmergency: true },
+  { to: '/bookings',  icon: 'bookings', label: 'Bookings' },
+  { to: '/profile',   icon: 'user',     label: 'Profile' },
 ];
 
 export default function BottomNav() {
