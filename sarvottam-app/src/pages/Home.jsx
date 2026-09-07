@@ -305,12 +305,7 @@ export default function Home() {
 
         {/* Section Header: Book a Service / View all > */}
         <div className="sheet-header-row">
-          <div className="sheet-title-group">
-            <h2 className="sheet-title">Book a Service</h2>
-            <span className="sheet-live-badge">
-              <span className="pulse-dot-green" /> 5 Karigars Online
-            </span>
-          </div>
+          <h2 className="sheet-title">Book a Service</h2>
 
           <button
             type="button"
@@ -344,10 +339,9 @@ export default function Home() {
                   </div>
                 </div>
 
-                {/* Title & Subtitle */}
+                {/* Title (Only Service Name - No wiring/repair subtext) */}
                 <div className="card-content-wrap">
                   <h3 className="card-service-name">{s.name}</h3>
-                  <p className="card-service-sub">{s.sub}</p>
                 </div>
 
                 {/* Arrow Action Button */}
