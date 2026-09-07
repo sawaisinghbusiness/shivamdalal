@@ -268,10 +268,20 @@
 /* ── 4. EXPANDED VIEW SERVICES (Inside Scrollable Sheet) ── */
 .expanded-services-content {
   margin-top: 10px;
-  padding: 0 18px 18px;
+  padding: 0 18px 24px;
   display: flex;
   flex-direction: column;
   gap: 12px;
+  opacity: var(--sheet-progress, 0);
+  pointer-events: none;
+  transform: translateY(calc((1 - var(--sheet-progress, 0)) * 16px));
+  transition: opacity 0.22s ease, transform 0.22s ease;
+}
+
+.ola-bottom-sheet.is-expanded .expanded-services-content {
+  opacity: 1;
+  pointer-events: auto;
+  transform: translateY(0);
 }
 
 /* Expanded Service List */

@@ -62,32 +62,35 @@
   bottom: 0;
   left: 0;
   right: 0;
-  height: calc(58px + env(safe-area-inset-bottom, 0px));
+  height: calc(64px + env(safe-area-inset-bottom, 0px));
   background: rgba(255, 255, 255, 0.98);
   backdrop-filter: blur(20px);
   -webkit-backdrop-filter: blur(20px);
   border-top: 1px solid #E2E8F0;
-  box-shadow: 0 -2px 10px rgba(0, 0, 0, 0.03);
+  box-shadow: 0 -3px 14px rgba(0, 0, 0, 0.04);
   display: flex;
-  align-items: flex-start;
+  align-items: center;
   justify-content: space-around;
-  padding: 8px 16px 0;
+  padding: 4px 10px calc(4px + env(safe-area-inset-bottom, 0px));
   z-index: 60;
 }
 .nav-item {
   display: flex;
   flex-direction: column;
   align-items: center;
+  justify-content: center;
   gap: 3px;
-  font-size: 11px;
+  font-size: 10.5px;
   color: #64748B;
   font-weight: 600;
   flex: 1;
+  height: 100%;
   position: relative;
-  padding: 2px 0;
+  padding: 0;
   transition: color .2s var(--ease), transform .15s;
+  text-decoration: none;
 }
-.nav-item:active { transform: scale(0.94); }
+.nav-item:active { transform: scale(0.93); }
 .nav-item.active { color: #2563EB; font-weight: 750; }
 .nav-item.active::after { display: none; }
 .nav-item .nav-icon {
@@ -99,35 +102,25 @@
 .nav-item.active .nav-icon {
   color: #2563EB;
 }
-.nav-center-btn::after { display: none; }
-.nav-center-icon {
-  width: 50px; height: 50px;
-  border-radius: 17px;
-  background: var(--g-danger);
-  color: #fff;
-  display: flex; align-items: center; justify-content: center;
-  box-shadow: var(--sh-danger);
-  margin-bottom: 2px;
-  border: 3px solid #fff;
-}
 
-/* Center Emergency Button in Bottom Nav */
+/* Center Emergency Button in Bottom Nav — Apple HIG Pixel-Perfect */
 .nav-emergency-item {
   position: relative;
-  top: -8px;
+  top: 0;
 }
 
 .nav-emergency-circle {
-  width: 44px;
-  height: 44px;
+  width: 34px;
+  height: 34px;
   border-radius: 50%;
   background: linear-gradient(135deg, #EF4444 0%, #DC2626 100%);
   color: #FFFFFF;
   display: flex;
   align-items: center;
   justify-content: center;
-  box-shadow: 0 4px 14px rgba(220, 38, 38, 0.42), 0 0 0 3px #FFFFFF;
+  box-shadow: 0 3px 10px rgba(220, 38, 38, 0.38);
   transition: transform 0.2s cubic-bezier(0.34, 1.56, 0.64, 1), box-shadow 0.2s;
+  margin-bottom: 1px;
 }
 
 .nav-emergency-item:active .nav-emergency-circle {
@@ -135,14 +128,15 @@
 }
 
 .nav-emergency-item.active .nav-emergency-circle {
-  box-shadow: 0 6px 20px rgba(220, 38, 38, 0.55), 0 0 0 3px #DC2626;
+  box-shadow: 0 4px 14px rgba(220, 38, 38, 0.55);
 }
 
 .nav-emergency-label {
   color: #DC2626 !important;
   font-weight: 800 !important;
   font-size: 10px !important;
-  margin-top: 2px;
+  letter-spacing: -0.01em;
+  line-height: 1;
 }
 
 .nav-emergency-item.active .nav-emergency-label {
