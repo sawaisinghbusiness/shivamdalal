@@ -4,39 +4,22 @@
 .home-screen-wrapper {
   width: 100%;
   height: 100%;
-  display: flex;
-  flex-direction: column;
+  position: relative;
+  overflow: hidden;
   background-color: #F8FAFC;
-  position: relative;
-  overflow: hidden;
-  padding-bottom: calc(58px + env(safe-area-inset-bottom, 0px));
 }
 
-/* ── 1. UPPER HALF: INTERACTIVE MAP ── */
+/* ── 1. MAP SECTION (Continuous Background Layer, Zero Flash) ── */
 .home-map-section {
-  flex: 1;
-  min-height: 260px;
-  position: relative;
-  overflow: hidden;
-}
-
-/* Backdrop when sheet is expanded */
-.sheet-backdrop {
   position: absolute;
   inset: 0;
-  background: rgba(15, 23, 42, 0.35);
-  backdrop-filter: blur(2px);
-  -webkit-backdrop-filter: blur(2px);
-  z-index: 28;
-  animation: fadeIn 0.28s ease-out;
+  width: 100%;
+  height: 100%;
+  z-index: 1;
+  overflow: hidden;
 }
 
-@keyframes fadeIn {
-  from { opacity: 0; }
-  to   { opacity: 1; }
-}
-
-/* ── Floating Top Search & Location Pill ── */
+/* ── Floating Top Search & Location Pill (Apple Liquid Glass) ── */
 .floating-top-header {
   position: absolute;
   top: 14px;
@@ -187,81 +170,17 @@
   font-weight: 750;
 }
 
-/* ── 2. DRAGGABLE BOTTOM SERVICE SHEET (APPLE HIG PHYSICS) ── */
-.home-bottom-sheet {
-  background: #FFFFFF;
-  border-radius: 28px 28px 0 0;
-  box-shadow: 0 -8px 32px rgba(15, 23, 42, 0.12);
-  display: flex;
-  flex-direction: column;
-  z-index: 30;
-  border-top: 1px solid rgba(226, 232, 240, 0.8);
-  position: relative;
-  touch-action: pan-y;
-  transition: max-height 0.38s cubic-bezier(0.32, 0.72, 0, 1), height 0.38s cubic-bezier(0.32, 0.72, 0, 1);
-  overflow: hidden;
-}
-
-/* Sheet States */
-.home-bottom-sheet.peek {
-  height: auto;
-  max-height: 48vh;
-  flex-shrink: 0;
-}
-
-.home-bottom-sheet.expanded {
-  position: absolute;
-  bottom: calc(58px + env(safe-area-inset-bottom, 0px));
-  left: 0;
-  right: 0;
-  height: 84vh;
-  max-height: 84vh;
-  z-index: 35;
-  animation: slideSheetUp 0.38s cubic-bezier(0.32, 0.72, 0, 1);
-}
-
-@keyframes slideSheetUp {
-  from {
-    transform: translateY(40%);
-  }
-  to {
-    transform: translateY(0);
-  }
-}
-
-/* Touch Drag Handle Area */
-.sheet-drag-handle-area {
-  padding: 10px 0 4px;
-  cursor: grab;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  user-select: none;
-}
-
-.sheet-drag-handle {
-  width: 38px;
-  height: 4.5px;
-  border-radius: 3px;
-  background: #CBD5E1;
-  transition: background-color 0.2s;
-}
-
-.sheet-drag-handle-area:hover .sheet-drag-handle {
-  background: #94A3B8;
-}
-
-/* Header Row: Book a Service | View all / Show Map */
+/* ── 2. BOTTOM SHEET HEADER ROW (Inside Sheet) ── */
 .sheet-header-row {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  padding: 2px 18px 8px;
+  padding: 4px 18px 10px;
   flex-shrink: 0;
 }
 
 .sheet-title {
-  font-size: 17.5px;
+  font-size: 18px;
   font-weight: 800;
   color: #0F172A;
   letter-spacing: -0.02em;
@@ -285,22 +204,13 @@
   opacity: 0.8;
 }
 
-/* ── Scrollable Sheet Body ── */
-.sheet-scroll-body {
-  flex: 1;
-  overflow-y: auto;
-  overflow-x: hidden;
-  padding: 0 16px 8px;
-  -webkit-overflow-scrolling: touch;
-}
-
 /* ── 3. SERVICE CARDS HORIZONTAL ROW ── */
 .service-cards-row {
   display: flex;
   align-items: stretch;
   gap: 10px;
   overflow-x: auto;
-  padding: 2px 2px 8px;
+  padding: 2px 18px 12px;
   scrollbar-width: none;
   -webkit-overflow-scrolling: touch;
 }
@@ -421,11 +331,11 @@
 
 /* ── 4. EXPANDED VIEW SERVICES (Inside Scrollable Sheet) ── */
 .expanded-services-content {
-  margin-top: 14px;
+  margin-top: 10px;
+  padding: 0 18px 18px;
   display: flex;
   flex-direction: column;
   gap: 14px;
-  animation: fadeIn 0.3s ease-in-out;
 }
 
 /* Category Filter Chips */
@@ -632,7 +542,7 @@
   background: #FFFFFF;
   border-top: 1px solid rgba(226, 232, 240, 0.6);
   flex-shrink: 0;
-  z-index: 32;
+  z-index: 36;
 }
 
 .home-trust-banner {
@@ -743,4 +653,3 @@
   overflow: hidden;
   text-overflow: ellipsis;
 }
-

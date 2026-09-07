@@ -1,8 +1,9 @@
-import { useState, useRef, useEffect } from 'react';
+import { useState, useRef } from 'react';
 import { useNavigate } from 'react-router-dom';
 import Icon from '../components/Icon';
 import MapView from '../components/MapView';
 import EmergencyFlow from '../components/EmergencyFlow';
+import BottomSheet, { DEFAULT_SHEET_SNAPS } from '../components/BottomSheet';
 import { useToast } from '../components/Toast';
 import { EMERGENCY_SERVICES } from '../data/services';
 import './Home.css';
@@ -134,17 +135,14 @@ const CATEGORY_CHIPS = ['All', '⚡ Emergency', '❄️ AC / Appliance', '🚰 P
 export default function Home() {
   const nav = useNavigate();
   const toast = useToast();
+  const bottomSheetRef = useRef(null);
 
   const [searchQuery, setSearchQuery] = useState('');
   const [selectedLoc, setSelectedLoc] = useState('Vaishali Nagar');
   const [locOpen, setLocOpen] = useState(false);
   const [activeBookingService, setActiveBookingService] = useState(null);
   const [activeCategory, setActiveCategory] = useState('All');
-
-  // Bottom sheet state: 'peek' (~42vh) | 'expanded' (~88vh)
-  const [sheetState, setSheetState] = useState('peek');
-  const dragStartYRef = useRef(null);
-  const isDraggingRef = useRef(false);
+  const [sheetState, setSheetState] = useState('collapsed');
 
   // Dynamic Location found callback from MapView GPS
   const handleLocationFound = (areaName) => {
@@ -174,33 +172,19 @@ export default function Home() {
     if (found) {
       setActiveBookingService(found.serviceData);
     } else {
-      setSheetState('expanded');
+      bottomSheetRef.current?.expand();
       toast(`Showing services matching "${searchQuery}"`);
     }
   };
 
-  // Touch & Pointer Drag Handlers for Bottom Sheet
-  const handleTouchStart = (e) => {
-    const clientY = e.touches ? e.touches[0].clientY : e.clientY;
-    dragStartYRef.current = clientY;
-    isDraggingRef.current = true;
+  // Snap change callback
+  const handleSnapChange = (index, name) => {
+    setSheetState(name);
   };
 
-  const handleTouchEnd = (e) => {
-    if (!isDraggingRef.current || dragStartYRef.current === null) return;
-    const clientY = e.changedTouches ? e.changedTouches[0].clientY : e.clientY;
-    const deltaY = dragStartYRef.current - clientY; // Positive = drag UP, Negative = drag DOWN
-
-    if (deltaY > 35) {
-      // Swiped UP -> Expand sheet over map
-      setSheetState('expanded');
-    } else if (deltaY < -35) {
-      // Swiped DOWN -> Collapse sheet to peek
-      setSheetState('peek');
-    }
-
-    dragStartYRef.current = null;
-    isDraggingRef.current = false;
+  // Progress callback for live CSS variable update
+  const handleProgress = (progress) => {
+    document.documentElement.style.setProperty('--sheet-progress', String(progress));
   };
 
   // Filtered services in expanded view
@@ -220,15 +204,15 @@ export default function Home() {
   });
 
   return (
-    <div className={`home-screen-wrapper sheet-${sheetState}`}>
-      {/* ── 1. UPPER HALF: INTERACTIVE MAP VIEW ── */}
+    <div className="home-screen-wrapper">
+      {/* ── 1. MAP SECTION (Stays mounted continuously, zero reload/flicker) ── */}
       <div className="home-map-section">
         <MapView
           onSelectService={handleSelectService}
           onLocationFound={handleLocationFound}
         />
 
-        {/* Floating Search & Location Pill (Apple Liquid Glass) */}
+        {/* Floating Top Search & Location Bar */}
         <div className="floating-top-header">
           <form className="fth-search-bar" onSubmit={handleSearchSubmit}>
             <span className="fth-search-ic">
@@ -279,199 +263,180 @@ export default function Home() {
             )}
           </div>
         </div>
-
-        {/* Backdrop overlay when sheet is expanded */}
-        {sheetState === 'expanded' && (
-          <div
-            className="sheet-backdrop"
-            onClick={() => setSheetState('peek')}
-          />
-        )}
       </div>
 
-      {/* ── 2. DRAGGABLE BOTTOM SERVICE SHEET ── */}
-      <div
-        className={`home-bottom-sheet ${sheetState}`}
-        onTouchStart={handleTouchStart}
-        onTouchEnd={handleTouchEnd}
+      {/* ── 2. OLA/UBER-STYLE 60FPS DRAGGABLE BOTTOM SHEET WITH SNAP POINTS ── */}
+      <BottomSheet
+        ref={bottomSheetRef}
+        snapPoints={DEFAULT_SHEET_SNAPS}
+        defaultSnapIndex={1}
+        onSnapChange={handleSnapChange}
+        onProgress={handleProgress}
+        header={
+          <div className="sheet-header-row">
+            <h2 className="sheet-title">Book a Service</h2>
+            <button
+              type="button"
+              className="sheet-view-all-btn"
+              onClick={() =>
+                bottomSheetRef.current?.snapTo(sheetState === 'expanded' ? 1 : 0)
+              }
+            >
+              <span>{sheetState === 'expanded' ? 'Show Map' : 'View all'}</span>
+              <Icon name={sheetState === 'expanded' ? 'chevron' : 'arrow'} size={14} />
+            </button>
+          </div>
+        }
+        footer={
+          <div className="home-trust-banner-wrapper">
+            <div className="home-trust-banner">
+              <div className="htb-col htb-india">
+                {/* Round Indian Flag Badge */}
+                <span className="india-flag-badge">
+                  <span className="flag-circle">
+                    <span className="flag-stripe saffron" />
+                    <span className="flag-stripe white">
+                      <span className="chakra-dot" />
+                    </span>
+                    <span className="flag-stripe green" />
+                  </span>
+                </span>
+                <span className="htb-title">#MadeInIndia</span>
+              </div>
+
+              <div className="htb-divider" />
+
+              <div className="htb-col htb-rajasthan">
+                <span className="palace-icon-wrap">
+                  <Icon name="building" size={20} />
+                </span>
+                <div className="htb-raj-text">
+                  <strong className="htb-title">Crafted in Rajasthan</strong>
+                  <small className="htb-sub">Proudly local, proudly Indian</small>
+                </div>
+              </div>
+            </div>
+          </div>
+        }
       >
-        {/* Subtle Drag Handle with Tap Toggle */}
-        <div
-          className="sheet-drag-handle-area"
-          onClick={() => setSheetState(sheetState === 'peek' ? 'expanded' : 'peek')}
-        >
-          <div className="sheet-drag-handle" />
+        {/* Featured Service Cards Horizontal Row */}
+        <div className="service-cards-row">
+          {HOME_SERVICES.map((s) => (
+            <div
+              key={s.id}
+              className="service-card-item"
+              onClick={() => setActiveBookingService(s.serviceData)}
+            >
+              {/* Worker Image Container */}
+              <div className="card-img-wrap">
+                <img src={s.img} alt={s.name} className="card-worker-img" />
+                <div
+                  className="card-floating-badge"
+                  style={{ backgroundColor: s.badgeColor }}
+                >
+                  <Icon name={s.badgeIcon} size={15} />
+                </div>
+              </div>
+
+              {/* Service Title */}
+              <div className="card-content-wrap">
+                <h3 className="card-service-name">{s.name}</h3>
+              </div>
+
+              {/* Action Button */}
+              <div className="card-action-bottom">
+                <button
+                  type="button"
+                  className="card-arrow-btn"
+                  style={{ backgroundColor: s.btnColor }}
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    setActiveBookingService(s.serviceData);
+                  }}
+                >
+                  <Icon name="arrow" size={14} />
+                </button>
+              </div>
+            </div>
+          ))}
         </div>
 
-        {/* Section Header: Book a Service / View all > */}
-        <div className="sheet-header-row">
-          <h2 className="sheet-title">Book a Service</h2>
-
-          <button
-            type="button"
-            className="sheet-view-all-btn"
-            onClick={() => setSheetState(sheetState === 'peek' ? 'expanded' : 'peek')}
-          >
-            <span>{sheetState === 'expanded' ? 'Show Map' : 'View all'}</span>
-            <Icon name={sheetState === 'expanded' ? 'chevron' : 'arrow'} size={14} />
-          </button>
-        </div>
-
-        {/* ── SHEET BODY CONTENT ── */}
-        <div className="sheet-scroll-body">
-          {/* Service Cards Horizontal Grid (Resting Peek View) */}
-          <div className="service-cards-row">
-            {HOME_SERVICES.map((s) => (
-              <div
-                key={s.id}
-                className="service-card-item"
-                onClick={() => setActiveBookingService(s.serviceData)}
+        {/* Expanded Services Content */}
+        <div className="expanded-services-content">
+          {/* Category Filter Chips */}
+          <div className="category-chips-row">
+            {CATEGORY_CHIPS.map((cat) => (
+              <button
+                key={cat}
+                type="button"
+                className={`cat-chip ${activeCategory === cat ? 'active' : ''}`}
+                onClick={() => setActiveCategory(cat)}
               >
-                {/* Worker Image Container */}
-                <div className="card-img-wrap">
-                  <img src={s.img} alt={s.name} className="card-worker-img" />
-                  {/* Floating Service Badge */}
+                {cat}
+              </button>
+            ))}
+          </div>
+
+          {/* All Services Detailed List */}
+          <div className="expanded-services-grid">
+            {filteredServices.map((srv) => (
+              <div
+                key={srv.id}
+                className="expanded-service-card"
+                onClick={() => setActiveBookingService(srv.serviceData)}
+              >
+                <div className="esc-left">
                   <div
-                    className="card-floating-badge"
-                    style={{ backgroundColor: s.badgeColor }}
+                    className="esc-icon-badge"
+                    style={{ backgroundColor: `${srv.badgeColor}18`, color: srv.badgeColor }}
                   >
-                    <Icon name={s.badgeIcon} size={15} />
+                    <Icon name={srv.badgeIcon} size={22} />
+                  </div>
+                  <div className="esc-info">
+                    <div className="esc-title-row">
+                      <h4 className="esc-name">{srv.name}</h4>
+                      <span className="esc-eta">⚡ {srv.eta}</span>
+                    </div>
+                    <p className="esc-sub">{srv.sub}</p>
+                    <span className="esc-price">Starts at {srv.price}</span>
                   </div>
                 </div>
-
-                {/* Title (Only Service Name - No wiring/repair subtext) */}
-                <div className="card-content-wrap">
-                  <h3 className="card-service-name">{s.name}</h3>
-                </div>
-
-                {/* Arrow Action Button */}
-                <div className="card-action-bottom">
-                  <button
-                    type="button"
-                    className="card-arrow-btn"
-                    style={{ backgroundColor: s.btnColor }}
-                    onClick={(e) => {
-                      e.stopPropagation();
-                      setActiveBookingService(s.serviceData);
-                    }}
-                  >
-                    <Icon name="arrow" size={14} />
-                  </button>
-                </div>
+                <button
+                  type="button"
+                  className="esc-book-btn"
+                  style={{ backgroundColor: srv.btnColor }}
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    setActiveBookingService(srv.serviceData);
+                  }}
+                >
+                  Book
+                </button>
               </div>
             ))}
           </div>
 
-          {/* ── EXPANDED EXTRA CONTENT (Visible when sheet slides UP) ── */}
-          {sheetState === 'expanded' && (
-            <div className="expanded-services-content">
-              {/* Category Filter Chips */}
-              <div className="category-chips-row">
-                {CATEGORY_CHIPS.map((cat) => (
-                  <button
-                    key={cat}
-                    type="button"
-                    className={`cat-chip ${activeCategory === cat ? 'active' : ''}`}
-                    onClick={() => setActiveCategory(cat)}
-                  >
-                    {cat}
-                  </button>
-                ))}
-              </div>
-
-              {/* All Services Detailed List / Grid */}
-              <div className="expanded-services-grid">
-                {filteredServices.map((srv) => (
-                  <div
-                    key={srv.id}
-                    className="expanded-service-card"
-                    onClick={() => setActiveBookingService(srv.serviceData)}
-                  >
-                    <div className="esc-left">
-                      <div
-                        className="esc-icon-badge"
-                        style={{ backgroundColor: `${srv.badgeColor}18`, color: srv.badgeColor }}
-                      >
-                        <Icon name={srv.badgeIcon} size={22} />
-                      </div>
-                      <div className="esc-info">
-                        <div className="esc-title-row">
-                          <h4 className="esc-name">{srv.name}</h4>
-                          <span className="esc-eta">⚡ {srv.eta}</span>
-                        </div>
-                        <p className="esc-sub">{srv.sub}</p>
-                        <span className="esc-price">Starts at {srv.price}</span>
-                      </div>
-                    </div>
-                    <button
-                      type="button"
-                      className="esc-book-btn"
-                      style={{ backgroundColor: srv.btnColor }}
-                      onClick={(e) => {
-                        e.stopPropagation();
-                        setActiveBookingService(srv.serviceData);
-                      }}
-                    >
-                      Book
-                    </button>
-                  </div>
-                ))}
-              </div>
-
-              {/* 24/7 Emergency Helpline Banner */}
-              <div className="emergency-help-card">
-                <div className="ehc-icon">
-                  <Icon name="phone" size={20} />
-                </div>
-                <div className="ehc-text">
-                  <strong>24×7 Emergency Dispatch</strong>
-                  <small>Need urgent help? Direct Karigar connect</small>
-                </div>
-                <a
-                  href="tel:1800123456"
-                  className="ehc-call-btn"
-                  onClick={() => toast('Calling 24×7 Karigar Helpline…')}
-                >
-                  Call Now
-                </a>
-              </div>
+          {/* 24/7 Emergency Helpline Banner */}
+          <div className="emergency-help-card">
+            <div className="ehc-icon">
+              <Icon name="phone" size={20} />
             </div>
-          )}
-        </div>
-
-        {/* ── 3. LOCKED / STICKY TRUST FOOTER (Never shifts, always above tab bar) ── */}
-        <div className="home-trust-banner-wrapper">
-          <div className="home-trust-banner">
-            <div className="htb-col htb-india">
-              {/* Round Indian Flag Badge */}
-              <span className="india-flag-badge">
-                <span className="flag-circle">
-                  <span className="flag-stripe saffron" />
-                  <span className="flag-stripe white">
-                    <span className="chakra-dot" />
-                  </span>
-                  <span className="flag-stripe green" />
-                </span>
-              </span>
-              <span className="htb-title">#MadeInIndia</span>
+            <div className="ehc-text">
+              <strong>24×7 Emergency Dispatch</strong>
+              <small>Need urgent help? Direct Karigar connect</small>
             </div>
-
-            <div className="htb-divider" />
-
-            <div className="htb-col htb-rajasthan">
-              <span className="palace-icon-wrap">
-                <Icon name="building" size={20} />
-              </span>
-              <div className="htb-raj-text">
-                <strong className="htb-title">Crafted in Rajasthan</strong>
-                <small className="htb-sub">Proudly local, proudly Indian</small>
-              </div>
-            </div>
+            <a
+              href="tel:1800123456"
+              className="ehc-call-btn"
+              onClick={() => toast('Calling 24×7 Karigar Helpline…')}
+            >
+              Call Now
+            </a>
           </div>
         </div>
-      </div>
+      </BottomSheet>
 
-      {/* ── 4. EMERGENCY BOOKING MODAL (Connected) ── */}
+      {/* ── 3. EMERGENCY BOOKING MODAL (Connected) ── */}
       {activeBookingService && (
         <EmergencyFlow
           service={activeBookingService}
