@@ -15,16 +15,16 @@ export default function Wallet() {
 
   function doAdd(value) {
     const v = value || parseInt(amt, 10);
-    if (!v || v < 1) { toast('Amount daalein'); return; }
+    if (!v || v < 1) { toast('Please enter a valid amount'); return; }
     addMoney(v);
-    toast(`✓ ₹${v} wallet mein add ho gaye`);
+    toast(`₹${v} added to wallet successfully`);
     setShowAdd(false);
     setAmt('');
   }
 
   return (
     <div className="sub-page">
-      <SubHeader title="Payments & Wallet" sub="Balance, methods & history" />
+      <SubHeader title="Payments & Wallet" sub="Balance, payment methods & history" />
 
       {/* Balance card */}
       <div className="wl-balance">
@@ -49,7 +49,7 @@ export default function Wallet() {
             <Icon name="check" size={16} />
           </div>
         ))}
-        <button className="wl-add-method" onClick={() => toast('Naya method — jald aa raha hai')}>
+        <button className="wl-add-method" onClick={() => toast('New payment method coming soon')}>
           <Icon name="plus" size={16} /> Add payment method
         </button>
       </div>
@@ -77,7 +77,7 @@ export default function Wallet() {
         <div className="addr-overlay" onClick={() => setShowAdd(false)}>
           <div className="addr-sheet" onClick={(e) => e.stopPropagation()}>
             <div className="addr-drag" />
-            <h2 className="addr-sheet-title">Add Money</h2>
+            <h2 className="addr-sheet-title">Add Money to Wallet</h2>
             <div className="wl-quick">
               {QUICK.map((q) => (
                 <button key={q} className="wl-quick-btn" onClick={() => doAdd(q)}>₹{q}</button>
@@ -85,7 +85,7 @@ export default function Wallet() {
             </div>
             <div className="wl-amt-input">
               <span>₹</span>
-              <input value={amt} onChange={(e) => setAmt(e.target.value.replace(/\D/g, ''))} placeholder="Koi aur amount" inputMode="numeric" />
+              <input value={amt} onChange={(e) => setAmt(e.target.value.replace(/\D/g, ''))} placeholder="Enter custom amount" inputMode="numeric" />
             </div>
             <button className="btn-primary" onClick={() => doAdd()}>Add to Wallet</button>
             <button className="btn-ghost" onClick={() => setShowAdd(false)}>Cancel</button>

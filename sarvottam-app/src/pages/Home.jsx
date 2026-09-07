@@ -115,7 +115,7 @@ export default function Home() {
   const handleSearchSubmit = (e) => {
     e.preventDefault();
     if (!searchQuery.trim()) {
-      toast('Service name search karein (e.g. Electrician, Carpenter)');
+      toast('Please search for a service (e.g. Electrician, Carpenter)');
       return;
     }
     const found = ALL_SERVICES.find((s) =>

@@ -14,7 +14,7 @@ export default function Emergency() {
       <div className="inner-header">
         <button className="ih-back" onClick={() => nav('/')}><Icon name="back" size={18} /></button>
         <h1 className="ih-title">Emergency<br />Services</h1>
-        <p className="ih-sub">24x7 verified Karigar aapke ghar</p>
+        <p className="ih-sub">24x7 verified technicians at your doorstep</p>
       </div>
 
       <div className="em-list">
@@ -36,7 +36,7 @@ export default function Emergency() {
         <Icon name="bolt" size={20} />
         <div>
           <strong>Book Urgent Service</strong>
-          <small>Sabse najdeek Karigar turant bheje</small>
+          <small>Nearest technician dispatched immediately</small>
         </div>
       </div>
 

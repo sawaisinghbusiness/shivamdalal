@@ -52,8 +52,8 @@ export default function Login() {
 
       {/* Login card */}
       <div className={'cl-card' + (shaking ? ' shake' : '')} onAnimationEnd={() => setShaking(false)}>
-        <h2 className="cl-title">Welcome Back <span className="cl-wave">👋</span></h2>
-        <p className="cl-sub">Login karein aur service booking continue karein</p>
+        <h2 className="cl-title">Welcome Back</h2>
+        <p className="cl-sub">Sign in to manage and continue your service bookings</p>
         {formErr && <div className="form-error"><Icon name="close" size={15} /> {formErr}</div>}
 
         <label className="auth-field">

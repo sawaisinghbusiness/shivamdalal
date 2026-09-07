@@ -17,38 +17,38 @@ export default function EditProfile() {
   const initial = (name.trim()[0] || 'U').toUpperCase();
 
   function save() {
-    if (name.trim().length < 2) { toast('Naam sahi se daalein'); return; }
-    if (phone.replace(/\D/g, '').length < 10) { toast('Phone number sahi se daalein'); return; }
-    if (!/^[^@]+@[^@]+\.[^@]+$/.test(email.trim())) { toast('Email sahi se daalein'); return; }
+    if (name.trim().length < 2) { toast('Please enter a valid full name'); return; }
+    if (phone.replace(/\D/g, '').length < 10) { toast('Please enter a valid 10-digit phone number'); return; }
+    if (!/^[^@]+@[^@]+\.[^@]+$/.test(email.trim())) { toast('Please enter a valid email address'); return; }
     updateUser({ name: name.trim(), phone: phone.trim(), email: email.trim() });
-    toast('✓ Profile save ho gaya');
+    toast('Profile updated successfully');
     nav(-1);
   }
 
   return (
     <div className="sub-page">
-      <SubHeader title="Edit Profile" sub="Apni details update karein" />
+      <SubHeader title="Edit Profile" sub="Update your contact information" />
 
       <div className="form-avatar-wrap">
         <div className="form-avatar">{initial}</div>
-        <button className="form-avatar-edit" onClick={() => toast('Photo upload — jald aa raha hai')}>
-          Photo badlein
+        <button className="form-avatar-edit" onClick={() => toast('Profile photo upload coming soon')}>
+          Change Photo
         </button>
       </div>
 
       <div className="form-fields">
         <label className="field">
-          <span>Poora naam</span>
-          <input value={name} onChange={(e) => setName(e.target.value)} placeholder="Aapka naam" />
+          <span>Full Name</span>
+          <input value={name} onChange={(e) => setName(e.target.value)} placeholder="Your full name" />
         </label>
         <label className="field">
-          <span>Phone number</span>
+          <span>Phone Number</span>
           <input value={phone} onChange={(e) => setPhone(e.target.value)} placeholder="+91 …" inputMode="tel" />
         </label>
         <label className="field">
-          <span>Email</span>
-          <input value={email} onChange={(e) => setEmail(e.target.value)} placeholder="aap@email.com" inputMode="email" />
-          <small className="field-note">Email badalne pe verification ho sakta hai</small>
+          <span>Email Address</span>
+          <input value={email} onChange={(e) => setEmail(e.target.value)} placeholder="you@email.com" inputMode="email" />
+          <small className="field-note">Changing email may require verification</small>
         </label>
       </div>
 

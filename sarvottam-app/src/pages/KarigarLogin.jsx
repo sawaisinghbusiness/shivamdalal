@@ -79,7 +79,7 @@ export default function KarigarLogin() {
       {/* ── Login card ── */}
       <div className={'kl-card' + (shaking ? ' shake' : '')} onAnimationEnd={() => setShaking(false)}>
         <h2 className="kl-title">Karigar <span className="accent">Login</span></h2>
-        <p className="kl-cardsub">Login karein aur jobs &amp; earnings track karein</p>
+        <p className="kl-cardsub">Sign in to manage incoming jobs and track earnings</p>
         {formErr && <div className="form-error"><Icon name="close" size={15} /> {formErr}</div>}
 
         <label className="auth-field">

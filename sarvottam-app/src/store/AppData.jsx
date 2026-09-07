@@ -18,7 +18,7 @@ const DEFAULTS = {
   // product reviews written by this user: { [productId]: [{name, stars, text, date}] }
   myReviews: {},
   addresses: [
-    { id: 'a1', label: 'Ghar',   icon: 'home',     full: '12, Indra Colony, Barmer, Rajasthan 344001' },
+    { id: 'a1', label: 'Home',   icon: 'home',     full: '12, Indra Colony, Barmer, Rajasthan 344001' },
     { id: 'a2', label: 'Office', icon: 'building', full: 'Shop 4, Station Road, Barmer, Rajasthan 344001' },
   ],
   bookings: [
@@ -41,10 +41,10 @@ const DEFAULTS = {
     ],
   },
   notifications: [
-    { id: 'n1', icon: 'bolt',     title: 'Booking confirmed',   msg: 'Ramesh Kumar aapke Electrician booking pe aa raha hai.', time: '2 min ago', unread: true },
-    { id: 'n2', icon: 'card',     title: '₹100 cashback mila!', msg: 'Aapke wallet mein ₹100 referral bonus add hua.',         time: '1 hr ago',  unread: true },
-    { id: 'n3', icon: 'star',     title: 'Rate your service',   msg: 'AC Repair kaisa raha? Karigar ko rating dein.',          time: 'Yesterday', unread: false },
-    { id: 'n4', icon: 'bell',     title: 'Monsoon offer',       msg: 'Painting pe 20% off — is hafte tak.',                    time: '2 days ago',unread: false },
+    { id: 'n1', icon: 'bolt',     title: 'Booking confirmed',   msg: 'Ramesh Kumar is assigned to your Electrician booking.',  time: '2 min ago', unread: true },
+    { id: 'n2', icon: 'card',     title: '₹100 Cashback Received', msg: '₹100 referral bonus credited to your wallet balance.', time: '1 hr ago',  unread: true },
+    { id: 'n3', icon: 'star',     title: 'Rate your service',   msg: 'How was your AC Repair? Share your rating with us.',     time: 'Yesterday', unread: false },
+    { id: 'n4', icon: 'bell',     title: 'Monsoon Offer',       msg: '20% off on all Painting services this week.',            time: '2 days ago',unread: false },
   ],
 };
 

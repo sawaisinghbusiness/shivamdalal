@@ -12,13 +12,13 @@ export default function Notifications() {
 
   return (
     <div className="sub-page">
-      <SubHeader title="Notifications" sub="Updates aur offers" />
+      <SubHeader title="Notifications" sub="Updates and promotional alerts" />
 
       <div className="nt-list">
         {notifications.length === 0 && (
           <div className="bk-empty">
             <div className="bk-empty-ic"><Icon name="bell" size={32} /></div>
-            <h3>Koi notification nahi</h3>
+            <h3>No notifications yet</h3>
           </div>
         )}
         {notifications.map((n) => (

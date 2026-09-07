@@ -18,7 +18,7 @@ export default function MyBookings() {
 
   return (
     <div className="sub-page">
-      <SubHeader title="My Bookings" sub="Saari service history" />
+      <SubHeader title="My Bookings" sub="Complete service history" />
 
       <div className="bk-tabs">
         {TABS.map((t) => (
@@ -32,8 +32,8 @@ export default function MyBookings() {
         {list.length === 0 && (
           <div className="bk-empty">
             <div className="bk-empty-ic"><Icon name="bookings" size={32} /></div>
-            <h3>Koi {LABEL[tab]} booking nahi</h3>
-            <p>Yahan aapki {LABEL[tab].toLowerCase()} bookings dikhengi</p>
+            <h3>No {LABEL[tab].toLowerCase()} bookings</h3>
+            <p>Your {LABEL[tab].toLowerCase()} bookings will appear here</p>
           </div>
         )}
 
@@ -45,15 +45,15 @@ export default function MyBookings() {
                 <h3>{b.service}</h3>
                 <span className={'bk-badge ' + BADGE[b.status]}>{LABEL[b.status]}</span>
               </div>
-              <p className="bk-karigar">Karigar: {b.karigar}</p>
+              <p className="bk-karigar">Technician: {b.karigar}</p>
               <p className="bk-date">{b.date}</p>
               <div className="bk-foot">
                 {b.amount > 0 && <span className="bk-amt">₹{b.amount}</span>}
                 {b.status === 'upcoming' && (
-                  <button className="bk-action" onClick={() => toast('Booking track — demo')}>Track</button>
+                  <button className="bk-action" onClick={() => toast('Live tracking active')}>Track</button>
                 )}
                 {b.status === 'completed' && (
-                  <button className="bk-action ghost" onClick={() => toast('Dobara book — demo')}>Rebook</button>
+                  <button className="bk-action ghost" onClick={() => toast('Rebooking service')}>Rebook</button>
                 )}
               </div>
             </div>

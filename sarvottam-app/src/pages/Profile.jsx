@@ -19,18 +19,18 @@ export default function Profile() {
   ];
 
   const OPTIONS = [
-    { icon: 'bookings', title: 'My Bookings',       sub: 'Saari service history',   to: '/bookings' },
-    { icon: 'pin',      title: 'Saved Addresses',   sub: 'Ghar, Office aur baaki',  to: '/addresses' },
-    { icon: 'card',     title: 'Payments & Wallet', sub: 'Wallet, payment methods', to: '/wallet' },
-    { icon: 'bell',     title: 'Notifications',     sub: unread ? `${unread} naye` : 'Offers aur updates', to: '/notifications' },
-    { icon: 'shield',   title: 'Help & Support',    sub: 'Sawaal ya shikayat',      to: '/help' },
+    { icon: 'bookings', title: 'My Bookings',       sub: 'Complete service history',       to: '/bookings' },
+    { icon: 'pin',      title: 'Saved Addresses',   sub: 'Home, Office & custom locations',to: '/addresses' },
+    { icon: 'card',     title: 'Payments & Wallet', sub: 'Wallet balance & payment modes', to: '/wallet' },
+    { icon: 'bell',     title: 'Notifications',     sub: unread ? `${unread} new alerts` : 'Offers and order updates', to: '/notifications' },
+    { icon: 'shield',   title: 'Help & Support',    sub: '24×7 customer assistance',       to: '/help' },
   ];
 
   return (
     <div className="page">
       <div className="inner-header profile-head">
         <h1 className="ih-title">My Profile</h1>
-        <p className="ih-sub">Aapka account & settings</p>
+        <p className="ih-sub">Your account and preferences</p>
       </div>
 
       <div className="pf-user-card">

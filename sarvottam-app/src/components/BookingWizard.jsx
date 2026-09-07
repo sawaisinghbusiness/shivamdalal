@@ -13,7 +13,7 @@ import './BookingWizard.css';
 
 const DRAFT_STORAGE_KEY = 'sarvottam_booking_draft';
 
-// Generate 5 days: "Aaj" + next 4 days
+// Generate 5 days: "Today" + next 4 days
 const generateBookingDays = () => {
   const days = [];
   const now = new Date();
@@ -23,7 +23,7 @@ const generateBookingDays = () => {
   for (let i = 0; i < 5; i++) {
     const d = new Date(now);
     d.setDate(now.getDate() + i);
-    const dayName = i === 0 ? 'Aaj' : i === 1 ? 'Kal' : weekNames[d.getDay()];
+    const dayName = i === 0 ? 'Today' : i === 1 ? 'Tomorrow' : weekNames[d.getDay()];
     const fullDateStr = weekNames[d.getDay()] + ', ' + d.getDate() + ' ' + monthNames[d.getMonth()];
     days.push({
       index: i,
@@ -66,13 +66,13 @@ export default function BookingWizard({ initialService, onClose }) {
 
   // Address state
   const [savedAddresses, setSavedAddresses] = useState(DEFAULT_SAVED_ADDRESSES);
-  const [selectedAddressId, setSelectedAddressId] = useState('ghar');
+  const [selectedAddressId, setSelectedAddressId] = useState('home');
   const [addressArea, setAddressArea] = useState('Indra Colony');
   const [addressDetail, setAddressDetail] = useState('12, Indra Colony, Near Water Tank, Barmer');
   const [customPin, setCustomPin] = useState({ lat: 25.7532, lng: 71.3965 });
   const [isLocating, setIsLocating] = useState(false);
   const [showAddAddressSheet, setShowAddAddressSheet] = useState(false);
-  const [newAddrLabel, setNewAddrLabel] = useState('Ghar');
+  const [newAddrLabel, setNewAddrLabel] = useState('Home');
   const [newAddrText, setNewAddrText] = useState('');
 
   // Customer Contact & Notes state
@@ -88,11 +88,12 @@ export default function BookingWizard({ initialService, onClose }) {
   const [activeTrip, setActiveTrip] = useState(null);
   const [payMethod, setPayMethod] = useState('online');
   const [stars, setStars] = useState(5);
-  const [ratingChips, setRatingChips] = useState(['Time pe aaya', 'Achha kaam']);
+  const [ratingChips, setRatingChips] = useState(['On Time', 'Great Service']);
 
   const simTimerRef = useRef(null);
   const scrollContainerRef = useRef(null);
   const lastScrollTopRef = useRef(0);
+  const transparencyRef = useRef(null);
 
   // ── 2. DRAFT RESTORATION & PERSISTENCE ──
   useEffect(() => {
@@ -146,13 +147,13 @@ export default function BookingWizard({ initialService, onClose }) {
         if (trip && activeTrip && trip.id === activeTrip.id) {
           setActiveTrip(trip);
           if (trip.status === 'accepted') {
-            toast('✓ ' + trip.karigar.name + ' ne request accept ki!');
+            toast('Technician ' + trip.karigar.name + ' accepted your booking!');
           } else if (trip.status === 'arrived') {
-            toast('📍 ' + trip.karigar.name + ' aapke ghar pahunch gaye hain!');
+            toast('Technician ' + trip.karigar.name + ' has arrived at your address!');
           } else if (trip.status === 'working') {
-            toast('🔧 OTP Verify hua — Kaam shuru ho gaya');
+            toast('OTP Verified — Work in progress');
           } else if (trip.status === 'completed') {
-            toast('✓ Kaam poora ho gaya — Payment bill generate hua');
+            toast('Job completed — Final bill generated');
           }
         }
       }
@@ -171,6 +172,20 @@ export default function BookingWizard({ initialService, onClose }) {
       setHelpExpanded(false);
     }
     lastScrollTopRef.current = st;
+  };
+
+  const toggleTransparency = () => {
+    setTransparencyOpen((prev) => {
+      const next = !prev;
+      if (next) {
+        setTimeout(() => {
+          if (transparencyRef.current) {
+            transparencyRef.current.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+          }
+        }, 100);
+      }
+      return next;
+    });
   };
 
   // ── 3. PRICING CALCULATIONS ──
@@ -207,18 +222,18 @@ export default function BookingWizard({ initialService, onClose }) {
   // ── 5. CART ACTIONS ──
   const handleRemoveService = (serviceId) => {
     if (cart.length <= 1) {
-      toast('Cart mein kam se kam 1 service hona zaroori hai');
+      toast('At least 1 service is required in the cart');
       return;
     }
     setCart((prev) => prev.filter((it) => it.id !== serviceId));
-    toast('Service remove kar di gayi');
+    toast('Service removed from cart');
   };
 
   const handleAddServiceToCart = (serviceKey) => {
     const s = PRICING_CONFIG.serviceEstimates[serviceKey];
     if (!s) return;
     if (cart.some((it) => it.id === s.id)) {
-      toast(s.name + ' pehle se cart mein shamil hai');
+      toast(s.name + ' is already in your cart');
       return;
     }
     setCart((prev) => [
@@ -230,19 +245,19 @@ export default function BookingWizard({ initialService, onClose }) {
       },
     ]);
     setShowAddServiceSheet(false);
-    toast('✓ ' + s.name + ' cart mein add ho gaya (Visit charge sirf 1 baar)');
+    toast(s.name + ' added to cart (Single visiting fee applied)');
   };
 
   const handleClearDraft = () => {
     localStorage.removeItem(DRAFT_STORAGE_KEY);
-    toast('Draft clear kar diya gaya');
+    toast('Booking draft cleared');
     onClose();
   };
 
   // ── 6. GEOLOCATION ──
   const handleUseCurrentLocation = () => {
     if (!navigator.geolocation) {
-      toast('Aapke browser mein GPS location available nahi hai');
+      toast('GPS geolocation is not supported in your browser');
       return;
     }
     setIsLocating(true);
@@ -252,12 +267,12 @@ export default function BookingWizard({ initialService, onClose }) {
         const { latitude, longitude } = pos.coords;
         setCustomPin({ lat: latitude, lng: longitude });
         setAddressArea('Live GPS Location');
-        setAddressDetail('GPS Pin (' + latitude.toFixed(4) + ', ' + longitude.toFixed(4) + '), Barmer');
-        toast('📍 Current GPS location set ho gayi!');
+        setAddressDetail('GPS Pin (' + latitude.toFixed(4) + ', ' + longitude.toFixed(4) + '), Barmer, Rajasthan');
+        toast('GPS location set successfully');
       },
       (err) => {
         setIsLocating(false);
-        toast('GPS permission allow karein ya address manually likhein');
+        toast('Please enable GPS location permission or enter address manually');
       },
       { timeout: 10000, enableHighAccuracy: true }
     );
@@ -266,7 +281,7 @@ export default function BookingWizard({ initialService, onClose }) {
   // Save new custom address
   const handleSaveNewAddress = () => {
     if (newAddrText.trim().length < 10) {
-      toast('Kripya kam se kam 10 characters ka pura address likhein');
+      toast('Please enter a full address with at least 10 characters');
       return;
     }
     const newId = 'addr_' + Date.now();
@@ -284,45 +299,20 @@ export default function BookingWizard({ initialService, onClose }) {
     setAddressDetail(newObj.fullText);
     setShowAddAddressSheet(false);
     setNewAddrText('');
-    toast('✓ Naya address save ho gaya');
+    toast('New address saved successfully');
   };
 
   // ── 7. FINAL CONFIRMATION & HANDOFF ──
   const handleConfirmAndMatch = () => {
     if (!custPhone || custPhone.replace(/\D/g, '').length < 10) {
-      toast('Kripya valid 10-digit mobile number daalein');
+      toast('Please enter a valid 10-digit mobile number');
       return;
     }
 
-    // Construct unified payload
-    const bookingPayload = {
-      services: cart.map((it) => ({
-        id: it.id,
-        name: it.name,
-        problem: it.selectedAttribute || it.problem,
-        minPrice: it.minPrice,
-        maxPrice: it.maxPrice,
-      })),
-      date: availableDays[selectedDayIdx].fullString,
-      slot: selectedSlot,
-      address: {
-        area: addressArea,
-        fullText: addressDetail,
-        lat: customPin.lat,
-        lng: customPin.lng,
-      },
-      customer: {
-        name: custName.trim() || 'Customer',
-        phone: '+91 ' + custPhone.replace(/\D/g, ''),
-        notes: custNotes.trim(),
-      },
-      estimate: pricingSummary,
-    };
-
-    // 1. Clear draft from localStorage
+    // Clear draft from localStorage
     localStorage.removeItem(DRAFT_STORAGE_KEY);
 
-    // 2. Call existing real-time dispatch service
+    // Call existing real-time dispatch service
     const trip = dispatchService.createBooking({
       service: cart.map((s) => s.name).join(' + '),
       area: addressArea,
@@ -334,7 +324,7 @@ export default function BookingWizard({ initialService, onClose }) {
 
     setActiveTrip(trip);
     setStep(4); // Switch to matching & live tracking stage
-    toast('Connecting with verified Rajasthan Karigars…');
+    toast('Connecting with verified local technicians…');
 
     // Auto-match fallback simulator after 10s if standalone
     simTimerRef.current = setTimeout(() => {
@@ -360,12 +350,12 @@ export default function BookingWizard({ initialService, onClose }) {
   };
 
   const handlePayment = () => {
-    toast(payMethod === 'online' ? ('✓ ₹' + pricingSummary.totalMin + ' Online Paid via UPI!') : ('✓ ₹' + pricingSummary.totalMin + ' Cash collected by Karigar'));
+    toast(payMethod === 'online' ? ('Paid ₹' + pricingSummary.totalMin + ' via UPI successfully') : ('₹' + pricingSummary.totalMin + ' Cash payment collected by technician'));
     setActiveTrip((t) => (t ? { ...t, status: 'rated' } : null));
   };
 
   const handleRatingSubmit = () => {
-    toast('🙏 ' + stars + ' Star Rating submit hui — Dhanyavaad!');
+    toast(stars + '-Star rating submitted. Thank you!');
     handleCancelTrip();
   };
 
@@ -433,13 +423,13 @@ export default function BookingWizard({ initialService, onClose }) {
           </div>
         )}
 
-        {/* ═══════════════════════ STEP 0: BOOKING SUMMARY (Aapka Booking Summary) ═══════════════════════ */}
+        {/* ═══════════════════════ STEP 0: BOOKING SUMMARY (Your Booking Summary) ═══════════════════════ */}
         {step === 0 && (
           <div className="bw-view-scroll" ref={scrollContainerRef} onScroll={handleScroll}>
             <div className="bw-summary-header">
               <div className="bw-sh-left">
-                <h2 className="bw-title">Aapka Booking Summary</h2>
-                <p className="bw-subtitle">Verified Rajasthan Karigars directly at your doorstep</p>
+                <h2 className="bw-title">Your Booking Summary</h2>
+                <p className="bw-subtitle">Verified local technicians directly at your doorstep</p>
               </div>
               <button type="button" className="bw-close-btn" onClick={onClose} aria-label="Close">
                 <Icon name="close" size={18} />
@@ -489,7 +479,7 @@ export default function BookingWizard({ initialService, onClose }) {
                     )}
 
                     <div className="bw-sc-price-row">
-                      <span className="bw-sc-estimate-label">Estimated Service:</span>
+                      <span className="bw-sc-estimate-label">Estimated Labor:</span>
                       <span className="bw-sc-estimate-val">₹{item.minPrice} – ₹{item.maxPrice}</span>
                     </div>
                   </div>
@@ -505,7 +495,7 @@ export default function BookingWizard({ initialService, onClose }) {
                 onClick={() => setShowAddServiceSheet(true)}
               >
                 <Icon name="plus" size={16} />
-                <span>Add Another Service to Cart</span>
+                <span>Add Another Service</span>
               </button>
             </div>
 
@@ -514,25 +504,25 @@ export default function BookingWizard({ initialService, onClose }) {
               <div className="bw-savings-banner">
                 <Icon name="check" size={16} />
                 <div className="bw-savings-text">
-                  <strong>Ek hi visit – visit charge sirf ek baar</strong>
-                  <p>Aapne ₹{pricingSummary.savings} visit charge save kiya</p>
+                  <strong>Single Visit Guarantee – Pay Visiting Fee Only Once</strong>
+                  <p>You saved ₹{pricingSummary.savings} in multiple visitation charges</p>
                 </div>
               </div>
             )}
 
-            {/* ONE Shared Collapsible Transparency Card ("Kaam kaise hoga") */}
-            <div className="bw-transparency-card">
+            {/* ONE Shared Collapsible Transparency Card ("How It Works") */}
+            <div className="bw-transparency-card" ref={transparencyRef}>
               <button
                 type="button"
                 className="bw-tc-toggle"
-                onClick={() => setTransparencyOpen((prev) => !prev)}
+                onClick={toggleTransparency}
               >
                 <div className="bw-tc-left">
                   <span className="bw-tc-shield-ic">
                     <Icon name="shield" size={18} />
                   </span>
                   <div className="bw-tc-title-wrap">
-                    <strong className="bw-tc-title">Kaam kaise hoga</strong>
+                    <strong className="bw-tc-title">How It Works</strong>
                     <span className="bw-tc-sub">SARVOTTAM Transparency Guarantee</span>
                   </div>
                 </div>
@@ -573,8 +563,8 @@ export default function BookingWizard({ initialService, onClose }) {
         {step === 1 && (
           <div className="bw-view-scroll" ref={scrollContainerRef} onScroll={handleScroll}>
             <div className="bw-section-head">
-              <h3 className="bw-sec-title">Service Date Chunein</h3>
-              <p className="bw-sec-sub">Karigar aapke chune huye samay par doorstep par aayega</p>
+              <h3 className="bw-sec-title">Select Service Date &amp; Time</h3>
+              <p className="bw-sec-sub">Technician will arrive at your doorstep during the selected slot</p>
             </div>
 
             {/* Horizontal Date Chips */}
@@ -588,7 +578,7 @@ export default function BookingWizard({ initialService, onClose }) {
                     onClick={() => {
                       setSelectedDayIdx(idx);
                       if (!d.hasSlots) {
-                        toast('Is din sabhi slots full hain. Kripya doosra din chunein.');
+                        toast('All slots are booked for this day. Please select another date.');
                       }
                     }}
                   >
@@ -600,7 +590,7 @@ export default function BookingWizard({ initialService, onClose }) {
               </div>
             </div>
 
-            {/* Slots Grid Grouped by Subah / Dopahar / Shaam */}
+            {/* Slots Grid Grouped by Morning / Afternoon / Evening */}
             {availableDays[selectedDayIdx].hasSlots ? (
               <div className="bw-slots-container">
                 {SLOT_GROUPS.map((grp) => (
@@ -633,14 +623,14 @@ export default function BookingWizard({ initialService, onClose }) {
             ) : (
               <div className="bw-no-slots-box">
                 <Icon name="info" size={24} />
-                <strong>Is din koi slot available nahi hai</strong>
-                <p>Sabhi Karigars pehle se booked hain.</p>
+                <strong>No slots available on this date</strong>
+                <p>All technicians are currently booked for this day.</p>
                 <button
                   type="button"
                   className="bw-next-day-btn"
                   onClick={() => setSelectedDayIdx(0)}
                 >
-                  Switch to Aaj (Available)
+                  Switch to Today (Available)
                 </button>
               </div>
             )}
@@ -654,7 +644,7 @@ export default function BookingWizard({ initialService, onClose }) {
           <div className="bw-view-scroll" ref={scrollContainerRef} onScroll={handleScroll}>
             <div className="bw-section-head">
               <h3 className="bw-sec-title">Service Address &amp; Location</h3>
-              <p className="bw-sec-sub">Karigar ko exact navigation mil sake</p>
+              <p className="bw-sec-sub">Accurate location pin for seamless technician navigation</p>
             </div>
 
             {/* Saved Address Chips */}
@@ -682,7 +672,7 @@ export default function BookingWizard({ initialService, onClose }) {
                 onClick={() => setShowAddAddressSheet(true)}
               >
                 <Icon name="plus" size={14} />
-                <span>Naya Address</span>
+                <span>+ New Address</span>
               </button>
             </div>
 
@@ -698,7 +688,7 @@ export default function BookingWizard({ initialService, onClose }) {
                   <Icon name="pin" size={16} />
                 </span>
                 <span className="bw-geo-text">
-                  {isLocating ? 'Location fetch ho rahi hai…' : 'Meri current location use karein'}
+                  {isLocating ? 'Fetching GPS location…' : 'Use Current GPS Location'}
                 </span>
               </button>
             </div>
@@ -707,7 +697,7 @@ export default function BookingWizard({ initialService, onClose }) {
             <div className="bw-map-preview-card">
               <div className="bw-mp-header">
                 <Icon name="map" size={16} />
-                <span>Pin on Map: {customPin.lat.toFixed(4)}, {customPin.lng.toFixed(4)}</span>
+                <span>Map Coordinates: {customPin.lat.toFixed(4)}, {customPin.lng.toFixed(4)}</span>
               </div>
               <div className="bw-mp-viewport">
                 <div className="bw-mp-grid-bg" />
@@ -716,13 +706,13 @@ export default function BookingWizard({ initialService, onClose }) {
                   <Icon name="pin" size={24} />
                 </div>
               </div>
-              <p className="bw-mp-helper">Karigar ki navigation ke liye pin exact rakhein</p>
+              <p className="bw-mp-helper">Keep pin exact for quick and easy technician arrival</p>
             </div>
 
             {/* Address Textarea Form Input */}
             <div className="bw-addr-form-block">
               <label className="bw-form-label">
-                Pura Address (House/Flat No., Gali, Landmark) <span className="req">*</span>
+                Complete Address (House/Flat No., Street, Landmark) <span className="req">*</span>
               </label>
               <textarea
                 className="bw-form-textarea"
@@ -732,10 +722,10 @@ export default function BookingWizard({ initialService, onClose }) {
                   setAddressDetail(e.target.value);
                   setSelectedAddressId('custom');
                 }}
-                placeholder="Ghar ka number, building ka naam, landmark, Barmer…"
+                placeholder="House/flat number, building name, street, landmark, area, Barmer…"
               />
               {!isAddressValid && (
-                <p className="bw-form-err">Kripya kam se kam 10 characters ka pura address daalein.</p>
+                <p className="bw-form-err">Please enter a complete address with at least 10 characters.</p>
               )}
             </div>
 
@@ -748,15 +738,15 @@ export default function BookingWizard({ initialService, onClose }) {
           <div className="bw-view-scroll" ref={scrollContainerRef} onScroll={handleScroll}>
             <div className="bw-section-head">
               <h3 className="bw-sec-title">Booking Details &amp; Confirmation</h3>
-              <p className="bw-sec-sub">Karigar aapke doorstep par visit karega</p>
+              <p className="bw-sec-sub">Technician will visit your selected doorstep address</p>
             </div>
 
             {/* Customer Details Form */}
             <div className="bw-card-block">
-              <h4 className="bw-block-title">Aapki Contact Info</h4>
+              <h4 className="bw-block-title">Contact Information</h4>
               <div className="bw-input-row">
                 <div className="bw-input-field">
-                  <label className="bw-form-label">Aapka Naam</label>
+                  <label className="bw-form-label">Your Name</label>
                   <input
                     type="text"
                     className="bw-form-input"
@@ -783,13 +773,13 @@ export default function BookingWizard({ initialService, onClose }) {
 
               {/* Optional Notes */}
               <div className="bw-notes-field">
-                <label className="bw-form-label">Karigar ke liye nirdesh (Optional)</label>
+                <label className="bw-form-label">Special Instructions for Technician (Optional)</label>
                 <textarea
                   className="bw-form-textarea"
                   rows={2}
                   value={custNotes}
                   onChange={(e) => setCustNotes(e.target.value)}
-                  placeholder="Jaise: Doorbell nahi chal rahi, gate par phone karein…"
+                  placeholder="e.g., Doorbell not working, please call at gate, landmark notes…"
                 />
               </div>
             </div>
@@ -823,13 +813,13 @@ export default function BookingWizard({ initialService, onClose }) {
                   className="bw-pc-link"
                   onClick={() => setShowTransparencyModal(true)}
                 >
-                  Pricing kaise kaam karti hai?
+                  How does pricing work?
                 </button>
               </div>
 
               <div className="bw-pc-rows">
                 <div className="bw-pc-row">
-                  <span>Visiting &amp; Inspection Fee</span>
+                  <span>Visiting &amp; Diagnostic Fee</span>
                   <span>₹{pricingSummary.visitCharge}</span>
                 </div>
 
@@ -840,7 +830,7 @@ export default function BookingWizard({ initialService, onClose }) {
 
                 {pricingSummary.savings > 0 && (
                   <div className="bw-pc-row bw-pc-discount">
-                    <span>Multi-Service Single Visit Saving</span>
+                    <span>Multi-Service Single Visit Savings</span>
                     <span className="green">-₹{pricingSummary.savings}</span>
                   </div>
                 )}
@@ -857,7 +847,7 @@ export default function BookingWizard({ initialService, onClose }) {
               </div>
 
               <p className="bw-pc-guarantee-note">
-                Payment kaam poora hone par hi deni hai · No advance required
+                Payment due only after satisfactory job completion · Zero advance required
               </p>
             </div>
 
@@ -875,7 +865,7 @@ export default function BookingWizard({ initialService, onClose }) {
                   <button type="button" className="bw-close-btn" onClick={handleCancelTrip}>
                     <Icon name="close" size={20} />
                   </button>
-                  <span>Connecting Karigar</span>
+                  <span>Connecting Technician</span>
                 </div>
 
                 <div className="bw-radar-box">
@@ -888,7 +878,7 @@ export default function BookingWizard({ initialService, onClose }) {
                 </div>
 
                 <h3 className="bw-search-title">Finding verified {cart[0]?.name}…</h3>
-                <p className="bw-search-sub">Aapke 3 km area ke online Karigars ko request bheji ja rahi hai</p>
+                <p className="bw-search-sub">Dispatching your request to available online technicians within 3 km</p>
 
                 <div className="bw-search-summary-card">
                   <div className="bw-ssc-row">
@@ -921,7 +911,7 @@ export default function BookingWizard({ initialService, onClose }) {
                 <div className="bw-otp-card">
                   <div className="bw-oc-left">
                     <span className="bw-oc-tag">START JOB OTP</span>
-                    <p className="bw-oc-desc">Karigar aane par ye 4-digit code dein</p>
+                    <p className="bw-oc-desc">Share this 4-digit code when technician arrives</p>
                   </div>
                   <div className="bw-oc-code">{activeTrip.otp || '4829'}</div>
                 </div>
@@ -936,14 +926,14 @@ export default function BookingWizard({ initialService, onClose }) {
                         <Icon name="shield" size={13} /> Verified
                       </span>
                     </div>
-                    <p className="bw-kc-skill">{activeTrip.service} Expert · Barmer</p>
+                    <p className="bw-kc-skill">{activeTrip.service} Specialist · Barmer</p>
                     <div className="bw-kc-rating">
                       <Icon name="star" size={13} />
                       <strong>{activeTrip.karigar?.rating || 4.9}</strong>
                       <span>({activeTrip.karigar?.jobsDone || 320}+ jobs)</span>
                     </div>
                   </div>
-                  <a href="tel:9414088214" className="bw-kc-call-btn">
+                  <a href="tel:9414088214" className="bw-kc-call-btn" aria-label="Call Technician">
                     <Icon name="phone" size={18} />
                   </a>
                 </div>
@@ -951,10 +941,10 @@ export default function BookingWizard({ initialService, onClose }) {
                 {/* Step Progression Tracker */}
                 <div className="bw-progression-box">
                   {[
-                    { title: 'Karigar Assigned', desc: 'Accepted your request', done: true },
+                    { title: 'Technician Assigned', desc: 'Accepted your booking request', done: true },
                     { title: 'On the Way', desc: 'Reaching your address in ~8 mins', done: activeTrip.status === 'arrived' || activeTrip.status === 'working' },
                     { title: 'Work in Progress', desc: 'Working after OTP verification', done: activeTrip.status === 'working' },
-                    { title: 'Job Done & Bill', desc: 'Payment after completion', done: false },
+                    { title: 'Job Completed & Bill', desc: 'Payment due upon completion', done: false },
                   ].map((s, i) => (
                     <div key={i} className={'bw-prog-step' + (s.done ? ' done' : '')}>
                       <span className="bw-ps-dot" />
@@ -974,12 +964,12 @@ export default function BookingWizard({ initialService, onClose }) {
                 <div className="bw-pv-done-ic">
                   <Icon name="check" size={28} />
                 </div>
-                <h3 className="bw-pv-title">Kaam Poora Ho Gaya!</h3>
-                <p className="bw-pv-sub">{activeTrip.karigar?.name || 'Karigar'} · {activeTrip.service}</p>
+                <h3 className="bw-pv-title">Job Completed Successfully!</h3>
+                <p className="bw-pv-sub">{activeTrip.karigar?.name || 'Technician'} · {activeTrip.service}</p>
 
                 <div className="bw-bill-box">
                   <div className="bw-bb-row">
-                    <span>Service &amp; Diagnostic Bill</span>
+                    <span>Service &amp; Diagnostic Total</span>
                     <span>₹{pricingSummary.totalMin}</span>
                   </div>
                 </div>
@@ -993,7 +983,7 @@ export default function BookingWizard({ initialService, onClose }) {
                     <Icon name="card" size={20} />
                     <div className="bw-pm-text">
                       <strong>Online Payment (UPI / QR)</strong>
-                      <small>Google Pay, PhonePe, Paytm</small>
+                      <small>Google Pay, PhonePe, Paytm, Cards</small>
                     </div>
                   </button>
 
@@ -1005,7 +995,7 @@ export default function BookingWizard({ initialService, onClose }) {
                     <Icon name="cash" size={20} />
                     <div className="bw-pm-text">
                       <strong>Cash Payment</strong>
-                      <small>Karigar ko haath mein dein</small>
+                      <small>Pay cash directly to technician</small>
                     </div>
                   </button>
                 </div>
@@ -1020,8 +1010,8 @@ export default function BookingWizard({ initialService, onClose }) {
             {activeTrip && activeTrip.status === 'rated' && (
               <div className="bw-rating-view">
                 <div className="bw-rv-avatar">R</div>
-                <h3 className="bw-rv-title">{activeTrip.karigar?.name || 'Ramesh Suthar'} ko Rate Karein</h3>
-                <p className="bw-rv-sub">Aapka feedback hume best service dene mein help karta hai</p>
+                <h3 className="bw-rv-title">Rate Your Experience with {activeTrip.karigar?.name || 'Ramesh Suthar'}</h3>
+                <p className="bw-rv-sub">Your feedback helps us ensure trusted quality across Rajasthan</p>
 
                 <div className="bw-stars-row">
                   {[1, 2, 3, 4, 5].map((n) => (
@@ -1030,6 +1020,7 @@ export default function BookingWizard({ initialService, onClose }) {
                       type="button"
                       className={'bw-star-btn' + (n <= stars ? ' on' : '')}
                       onClick={() => setStars(n)}
+                      aria-label={n + ' stars'}
                     >
                       <Icon name="star" size={32} />
                     </button>
@@ -1037,7 +1028,7 @@ export default function BookingWizard({ initialService, onClose }) {
                 </div>
 
                 <div className="bw-praise-chips">
-                  {['Time pe aaya', 'Achha kaam', 'Vyavhaar achha', 'Saaf-suthra', 'Uchit daam'].map((c) => (
+                  {['On Time', 'Great Work', 'Polite Behavior', 'Clean & Tidy', 'Fair Pricing'].map((c) => (
                     <button
                       key={c}
                       type="button"
@@ -1050,7 +1041,7 @@ export default function BookingWizard({ initialService, onClose }) {
                 </div>
 
                 <button type="button" className="bw-primary-cta" onClick={handleRatingSubmit}>
-                  Submit {stars} Star Rating
+                  Submit {stars}-Star Rating
                 </button>
               </div>
             )}
@@ -1062,12 +1053,12 @@ export default function BookingWizard({ initialService, onClose }) {
           <div className="bw-help-fab-wrapper">
             {helpExpanded && (
               <div className="bw-help-popover">
-                <a href="tel:1800123456" className="bw-hp-link" onClick={() => toast('Calling Customer Helpline…')}>
+                <a href="tel:1800123456" className="bw-hp-link" onClick={() => toast('Connecting to 24×7 Customer Helpline…')}>
                   <Icon name="phone" size={16} />
                   <span>Call 24×7 Helpline</span>
                 </a>
                 <a
-                  href="https://wa.me/919414088214?text=Namaste,%20mujhe%20booking%20ke%20liye%20help%20chahiye"
+                  href="https://wa.me/919414088214?text=Hello,%20I%20need%20assistance%20with%20my%20service%20booking"
                   target="_blank"
                   rel="noreferrer"
                   className="bw-hp-link"
@@ -1143,7 +1134,7 @@ export default function BookingWizard({ initialService, onClose }) {
                   onClick={handleConfirmAndMatch}
                 >
                   <Icon name="bolt" size={18} />
-                  <span>Confirm &amp; Find Karigar</span>
+                  <span>Confirm &amp; Find Technician</span>
                 </button>
               )}
             </div>
@@ -1160,7 +1151,7 @@ export default function BookingWizard({ initialService, onClose }) {
                   <Icon name="close" size={18} />
                 </button>
               </div>
-              <p className="bw-ss-desc">Ek hi visit mein multiple services karwayein aur extra visit charge bachayein.</p>
+              <p className="bw-ss-desc">Book multiple services in a single visit and save on multiple visitation charges.</p>
 
               <div className="bw-ss-list">
                 {Object.values(PRICING_CONFIG.serviceEstimates).map((srv) => {
@@ -1218,19 +1209,19 @@ export default function BookingWizard({ initialService, onClose }) {
 
               <div className="bw-tc-modal-foot">
                 <button type="button" className="bw-primary-cta" onClick={() => setShowTransparencyModal(false)}>
-                  Samajh Aa Gaya
+                  Understood
                 </button>
               </div>
             </div>
           </div>
         )}
 
-        {/* ═══════════════════════ MODAL: NAYA ADDRESS SHEET ═══════════════════════ */}
+        {/* ═══════════════════════ MODAL: NEW ADDRESS SHEET ═══════════════════════ */}
         {showAddAddressSheet && (
           <div className="bw-sheet-overlay" onClick={() => setShowAddAddressSheet(false)}>
             <div className="bw-sub-sheet" onClick={(e) => e.stopPropagation()}>
               <div className="bw-ss-header">
-                <h3>Naya Address Save Karein</h3>
+                <h3>Save New Address</h3>
                 <button type="button" className="bw-close-btn" onClick={() => setShowAddAddressSheet(false)}>
                   <Icon name="close" size={18} />
                 </button>
@@ -1239,7 +1230,7 @@ export default function BookingWizard({ initialService, onClose }) {
               <div className="bw-na-form">
                 <label className="bw-form-label">Address Type</label>
                 <div className="bw-na-chips">
-                  {['Ghar', 'Office', 'Shop', 'Dukaan'].map((t) => (
+                  {['Home', 'Office', 'Shop', 'Other'].map((t) => (
                     <button
                       key={t}
                       type="button"
@@ -1257,7 +1248,7 @@ export default function BookingWizard({ initialService, onClose }) {
                   rows={3}
                   value={newAddrText}
                   onChange={(e) => setNewAddrText(e.target.value)}
-                  placeholder="House/Plot No., Street/Gali, Landmark, Area, Barmer…"
+                  placeholder="House/Plot No., Street/Road, Landmark, Area, Barmer…"
                 />
 
                 <button type="button" className="bw-primary-cta" onClick={handleSaveNewAddress}>

@@ -60,13 +60,13 @@ export default function EmergencyFlow({ service, onClose }) {
           setActiveTrip(trip);
           if (trip.status === 'accepted') {
             setStage('tracking');
-            toast(`✓ ${trip.karigar.name} ne request accept ki!`);
+            toast(`✓ ${trip.karigar.name} accepted your request!`);
           } else if (trip.status === 'arrived') {
-            toast(`📍 ${trip.karigar.name} aapke ghar pahunch gaye hain!`);
+            toast(`📍 ${trip.karigar.name} has arrived at your address!`);
           } else if (trip.status === 'working') {
-            toast(`🔧 OTP Verify hua — Kaam shuru ho gaya`);
+            toast(`🔧 OTP Verified — Work in progress`);
           } else if (trip.status === 'completed') {
-            toast(`✓ Kaam poora ho gaya — Payment bill generate hua`);
+            toast(`✓ Job completed — Final bill generated`);
             setStage('payment');
           }
         }
@@ -88,7 +88,7 @@ export default function EmergencyFlow({ service, onClose }) {
   // Submit Emergency Booking
   const handleConfirmBooking = () => {
     if (!phone || phone.replace(/\D/g, '').length < 10) {
-      toast('Kripya valid 10-digit mobile number daalein');
+      toast('Please enter a valid 10-digit mobile number');
       return;
     }
 
@@ -104,7 +104,7 @@ export default function EmergencyFlow({ service, onClose }) {
 
     setActiveTrip(trip);
     setStage('searching');
-    toast('Searching nearby verified Karigars in Barmer…');
+    toast('Searching nearby verified technicians in Barmer…');
 
     // Auto-match fallback simulator after 12s if no real Captain accepts across tabs
     simTimerRef.current = setTimeout(() => {
@@ -132,13 +132,13 @@ export default function EmergencyFlow({ service, onClose }) {
 
   // Submit Payment
   const handlePayment = () => {
-    toast(payMethod === 'online' ? `✓ ₹${totalApprox} Online Paid via UPI!` : `✓ ₹${totalApprox} Cash collected by Karigar`);
+    toast(payMethod === 'online' ? `✓ Paid ₹${totalApprox} Online via UPI!` : `✓ ₹${totalApprox} Cash collected by technician`);
     setStage('rating');
   };
 
   // Submit Rating
   const handleRatingSubmit = () => {
-    toast(`🙏 ${stars}★ Rating submit hui — Dhanyavaad!`);
+    toast(`🙏 ${stars}★ Rating submitted. Thank you!`);
     handleCancelBooking();
   };
 
@@ -167,7 +167,7 @@ export default function EmergencyFlow({ service, onClose }) {
                   <Icon name="bolt" size={12} /> 24×7 Instant Dispatch
                 </div>
                 <h2 className="ef-title">{service.name} Service</h2>
-                <p className="ef-sub">Verified Rajasthan Karigar at your doorstep</p>
+                <p className="ef-sub">Verified technician at your doorstep</p>
               </div>
             </div>
 
@@ -189,13 +189,13 @@ export default function EmergencyFlow({ service, onClose }) {
                 type="text"
                 value={addressDetail}
                 onChange={(e) => setAddressDetail(e.target.value)}
-                placeholder="House / Flat No., Landmark, Gali No."
+                placeholder="House / Flat No., Landmark, Street"
               />
             </div>
 
             {/* Customer Phone */}
             <div className="ef-sec">
-              <label className="ef-label"><Icon name="phone" size={15} /> Mobile Number for Karigar Call <span className="req">*</span></label>
+              <label className="ef-label"><Icon name="phone" size={15} /> Mobile Number for Technician Call <span className="req">*</span></label>
               <div className="ef-phone-wrap">
                 <span className="ef-phone-code">+91</span>
                 <input
@@ -211,7 +211,7 @@ export default function EmergencyFlow({ service, onClose }) {
 
             {/* Problem Selection */}
             <div className="ef-sec">
-              <label className="ef-label"><Icon name="wrench" size={15} /> Kya problem hai? (Problem Details)</label>
+              <label className="ef-label"><Icon name="wrench" size={15} /> Problem Details</label>
               <div className="ef-chips">
                 {quickList.map((chip) => (
                   <button
@@ -229,11 +229,11 @@ export default function EmergencyFlow({ service, onClose }) {
                 rows={2}
                 value={problem}
                 onChange={(e) => { setProblem(e.target.value); setSelectedChip(''); }}
-                placeholder="Problem describe karein (e.g. switchboard short ho gaya hai)…"
+                placeholder="Describe your issue in detail…"
               />
             </div>
 
-            {/* Transparent Fare Estimate (Rapido style) */}
+            {/* Transparent Fare Estimate */}
             <div className="ef-charges">
               <div className="ef-charges-title">Estimated Pricing (Transparent)</div>
               <div className="ef-crow">
@@ -253,13 +253,13 @@ export default function EmergencyFlow({ service, onClose }) {
                 <span className="num">₹{totalApprox}</span>
               </div>
               <div className="ef-cnote">
-                ✓ Karigar aane ke baad hi payment karni hai · No advance needed
+                ✓ Pay only after job completion · Zero advance required
               </div>
             </div>
 
             {/* Action Buttons */}
             <button className="ef-cta danger" onClick={handleConfirmBooking}>
-              <Icon name="bolt" size={18} /> Request Karigar Now (Rapido Flow)
+              <Icon name="bolt" size={18} /> Request Technician Now
             </button>
             <button className="ef-skip" onClick={onClose}>
               Cancel
@@ -272,7 +272,7 @@ export default function EmergencyFlow({ service, onClose }) {
           <div className="ef-full">
             <div className="ef-fhead">
               <button className="ef-close" onClick={handleCancelBooking}><Icon name="close" size={20} /></button>
-              <span>{service.name} · Finding Karigar</span>
+              <span>{service.name} · Finding Technician</span>
             </div>
 
             <div className="ef-search">
@@ -284,7 +284,7 @@ export default function EmergencyFlow({ service, onClose }) {
               </div>
 
               <h2 className="ef-big">Connecting nearby {service.name}…</h2>
-              <p className="ef-muted">Aapke 3 km area ke online Karigars ko request bheji ja rahi hai</p>
+              <p className="ef-muted">Dispatching your request to available online technicians within 3 km</p>
 
               <div className="ef-search-card">
                 <div className="ef-sc-row">
@@ -298,7 +298,7 @@ export default function EmergencyFlow({ service, onClose }) {
               </div>
 
               <div className="ef-search-note">
-                <span className="pulse-dot" /> Captain App par alert gaya hai. Wait karein…
+                <span className="pulse-dot" /> Dispatch alert active. Please wait…
               </div>
 
               <button className="ef-cancel-btn" onClick={handleCancelBooking}>
@@ -317,11 +317,11 @@ export default function EmergencyFlow({ service, onClose }) {
             </div>
 
             <div className="ef-track">
-              {/* Security OTP Card (Key Rapido Feature) */}
+              {/* Security OTP Card */}
               <div className="ef-otp-banner">
                 <div className="ef-otp-left">
                   <span className="ef-otp-tag">START JOB OTP</span>
-                  <p className="ef-otp-note">Karigar ko aane par ye 4-digit code dein</p>
+                  <p className="ef-otp-note">Share this 4-digit code when the technician arrives</p>
                 </div>
                 <div className="ef-otp-code">{activeTrip.otp || '4829'}</div>
               </div>
@@ -334,16 +334,16 @@ export default function EmergencyFlow({ service, onClose }) {
                 <div className="ef-tsc-info">
                   <h3>
                     {activeTrip.status === 'arrived'
-                      ? 'Karigar Arrived at Doorstep!'
+                      ? 'Technician Arrived at Doorstep!'
                       : activeTrip.status === 'working'
-                      ? 'Work in Progress 🔧'
-                      : 'Karigar is on the way'}
+                      ? 'Work in Progress'
+                      : 'Technician is on the way'}
                   </h3>
                   <p>
                     {activeTrip.status === 'arrived'
-                      ? 'Karigar aapke address par pahunch chuka hai'
+                      ? 'Technician has reached your address'
                       : activeTrip.status === 'working'
-                      ? 'Kaam complete hone par bill aayega'
+                      ? 'Final bill will be generated upon completion'
                       : 'Reaching in approx 8 - 12 mins'}
                   </p>
                 </div>
@@ -357,7 +357,7 @@ export default function EmergencyFlow({ service, onClose }) {
                     <h3>{activeTrip.karigar?.name || 'Ramesh Suthar'}</h3>
                     <span className="kverified"><Icon name="shield" size={13} /> Verified</span>
                   </div>
-                  <p className="kskill">{service.name} Expert · Barmer</p>
+                  <p className="kskill">{service.name} Specialist · Barmer</p>
                   <div className="krating">
                     <Icon name="star" size={14} /> <strong>{activeTrip.karigar?.rating || 4.9}</strong>
                     <span>({activeTrip.karigar?.jobs || 180}+ jobs done)</span>
@@ -375,7 +375,7 @@ export default function EmergencyFlow({ service, onClose }) {
               {/* Step Progression */}
               <div className="steps">
                 {[
-                  { t: 'Karigar Assigned', s: `${activeTrip.karigar?.name} accepted request`, done: true },
+                  { t: 'Technician Assigned', s: `${activeTrip.karigar?.name} accepted request`, done: true },
                   { t: 'On the Way', s: 'Reaching your location', done: activeTrip.status === 'arrived' || activeTrip.status === 'working' },
                   { t: 'Work in Progress', s: 'Working after OTP verification', done: activeTrip.status === 'working' },
                   { t: 'Job Complete & Bill', s: 'Pay online or cash', done: false },
@@ -391,7 +391,7 @@ export default function EmergencyFlow({ service, onClose }) {
               </div>
 
               <div className="livenote">
-                <span className="live-dot" /> Live sync active · Both apps connected in real-time
+                <span className="live-dot" /> Live sync active · Connected in real-time
               </div>
             </div>
           </div>
@@ -402,8 +402,8 @@ export default function EmergencyFlow({ service, onClose }) {
           <div className="ef-sheet">
             <div className="ef-drag" />
             <div className="pay-done"><Icon name="check" size={32} /></div>
-            <h2 className="ef-title center">Kaam Poora Ho Gaya!</h2>
-            <p className="ef-sub center">{activeTrip?.karigar?.name || 'Karigar'} · {service.name}</p>
+            <h2 className="ef-title center">Job Completed Successfully!</h2>
+            <p className="ef-sub center">{activeTrip?.karigar?.name || 'Technician'} · {service.name}</p>
 
             <div className="ef-charges">
               <div className="ef-crow"><span>Labor &amp; Service Charge</span><span className="num">₹{svcCharge}</span></div>
@@ -412,10 +412,10 @@ export default function EmergencyFlow({ service, onClose }) {
               <div className="ef-crow ef-ctotal"><span>Final Amount</span><span className="num">₹{totalApprox}</span></div>
             </div>
 
-            <p className="ef-label">Payment Method Chunein:</p>
+            <p className="ef-label">Select Payment Method:</p>
             {[
               { id: 'online', icon: 'card', t: 'Online Payment (UPI / QR / Card)', s: 'GPay, PhonePe, Paytm, Card' },
-              { id: 'cash', icon: 'cash', t: 'Cash to Karigar', s: 'Karigar ko haath mein dein' },
+              { id: 'cash', icon: 'cash', t: 'Cash Payment', s: 'Pay cash directly to technician' },
             ].map((m) => (
               <button
                 key={m.id}
@@ -430,7 +430,7 @@ export default function EmergencyFlow({ service, onClose }) {
             ))}
 
             <button className="ef-cta" onClick={handlePayment}>
-              ₹{totalApprox} {payMethod === 'online' ? 'Online Pay Karein' : 'Cash Diya'}
+              Pay ₹{totalApprox} {payMethod === 'online' ? 'Online' : 'Cash'}
             </button>
           </div>
         )}
@@ -440,8 +440,8 @@ export default function EmergencyFlow({ service, onClose }) {
           <div className="ef-sheet center-sheet">
             <div className="ef-drag" />
             <div className="rate-avatar">{activeTrip?.karigar?.avatar || 'R'}</div>
-            <h2 className="ef-title center">{activeTrip?.karigar?.name || 'Karigar'} ko Rate Karein</h2>
-            <p className="ef-sub center">Aapka feedback services improve karta hai</p>
+            <h2 className="ef-title center">Rate {activeTrip?.karigar?.name || 'Technician'}</h2>
+            <p className="ef-sub center">Your feedback helps maintain quality service</p>
 
             <div className="rate-stars">
               {[1, 2, 3, 4, 5].map((n) => (
@@ -452,7 +452,7 @@ export default function EmergencyFlow({ service, onClose }) {
             </div>
 
             <div className="rate-chips">
-              {['Time pe aaya', 'Achha kaam', 'Vyavhaar achha', 'Saaf-suthra', 'Uchit daam', 'Expert knowledge'].map((c) => (
+              {['On Time', 'Great Work', 'Polite Behavior', 'Clean & Tidy', 'Fair Pricing', 'Expert Knowledge'].map((c) => (
                 <button
                   key={c}
                   type="button"

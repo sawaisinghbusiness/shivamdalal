@@ -1,6 +1,6 @@
 // ══════════════════════════════════════════════════════════════
 // SARVOTTAM — BOOKING WIZARD CONFIG & PRICING
-// Edit prices, time slots, and transparency guarantees here.
+// Central configuration for prices, time slots, and transparency guarantees.
 // ══════════════════════════════════════════════════════════════
 
 export const PRICING_CONFIG = {
@@ -19,11 +19,11 @@ export const PRICING_CONFIG = {
       maxPrice: 550,
       photo: '/electrician-card.jpg',
       badgeIcon: 'bolt',
-      defaultProblem: 'Wiring, switchboard, MCB trip or appliance issue',
+      defaultProblem: 'Wiring, switchboard, MCB trip or appliance repair',
       attributeOptions: [
         'Switchboard Spark',
-        'Ceiling Fan',
-        'MCB Trip',
+        'Ceiling Fan Fix',
+        'MCB Tripping',
         'Inverter Wiring',
         'Socket Fitting',
       ],
@@ -35,7 +35,7 @@ export const PRICING_CONFIG = {
       maxPrice: 850,
       photo: '/ac-repair-card.jpg',
       badgeIcon: 'fan',
-      defaultProblem: 'Servicing, cooling check, water leak or gas inspection',
+      defaultProblem: 'Servicing, cooling check, water leak or gas refill',
       attributeOptions: [
         'Not Cooling',
         'Water Leakage',
@@ -55,8 +55,8 @@ export const PRICING_CONFIG = {
       attributeOptions: [
         'Continuous Tap Leak',
         'Pipe Blockage',
-        'Water Motor',
-        'Flush Repair',
+        'Water Motor Issue',
+        'Flush Tank Repair',
         'Basin Fitting',
       ],
     },
@@ -67,7 +67,7 @@ export const PRICING_CONFIG = {
       maxPrice: 650,
       photo: '/carpainter.png',
       badgeIcon: 'hammer',
-      defaultProblem: 'Door lock, hinge fix, bed or furniture repair',
+      defaultProblem: 'Door lock, hinge repair, bed or furniture assembly',
       attributeOptions: [
         'Door Lock Jammed',
         'Broken Hinge',
@@ -98,31 +98,31 @@ export const PRICING_CONFIG = {
 export const TRANSPARENCY_STEPS = [
   {
     step: 1,
-    title: 'Verified Karigar Doorstep Inspection',
-    desc: 'Verified aur background-checked Karigar aapke doorstep par aakar pehle poora inspection aur diagnosis karega.',
+    title: 'Verified Technician Doorstep Inspection',
+    desc: 'A verified, background-checked professional visits your doorstep to conduct a full diagnostic inspection.',
   },
   {
     step: 2,
-    title: 'Spare Part Pehle Estimate',
-    desc: 'Agar kisi spare part ki zaroorat hui, toh kaam shuru hone se pehle part price aur warranty ka transparent estimate diya jayega.',
+    title: 'Upfront Spare Parts Estimate',
+    desc: 'If any spare parts are required, you receive a transparent estimate with warranty details before work begins.',
   },
   {
     step: 3,
-    title: 'Aapki Approval ke Baad Kaam',
-    desc: 'Aapke rate approve karne ke baad hi repair kaam shuru hoga. Payment kaam santoshjanak poora hone par hi li jayegi.',
+    title: 'Work Commences After Your Approval',
+    desc: 'Repairs only start after you approve the final price. Payment is due only after satisfactory job completion.',
   },
   {
     step: 4,
-    title: 'Fair Pricing Guarantee',
-    desc: 'Minor fix ka standard flat rate hota hai. Visit charge (₹' + PRICING_CONFIG.visitCharge + ') sirf tab lagta hai agar aap inspection ke baad repair estimate approve nahi karte.',
+    title: 'Fair & Flat-Rate Pricing Guarantee',
+    desc: 'Minor repairs follow standard flat rates. The standard visiting fee (₹' + PRICING_CONFIG.visitCharge + ') applies only if you decline the repair estimate.',
   },
 ];
 
-// Structured Slot Groups (Subah / Dopahar / Shaam)
+// Structured Slot Groups (Morning / Afternoon / Evening)
 export const SLOT_GROUPS = [
   {
     id: 'morning',
-    label: 'Subah',
+    label: 'Morning',
     timeRange: '8:00 AM – 12:00 PM',
     slots: [
       { id: '08_10', time: '08:00 AM – 10:00 AM', available: true },
@@ -131,7 +131,7 @@ export const SLOT_GROUPS = [
   },
   {
     id: 'afternoon',
-    label: 'Dopahar',
+    label: 'Afternoon',
     timeRange: '12:00 PM – 04:00 PM',
     slots: [
       { id: '12_02', time: '12:00 PM – 02:00 PM', available: true },
@@ -140,7 +140,7 @@ export const SLOT_GROUPS = [
   },
   {
     id: 'evening',
-    label: 'Shaam',
+    label: 'Evening',
     timeRange: '04:00 PM – 08:00 PM',
     slots: [
       { id: '04_06', time: '04:00 PM – 06:00 PM', available: true },
@@ -149,11 +149,11 @@ export const SLOT_GROUPS = [
   },
 ];
 
-// Default Rajasthan Saved Addresses for Fast 1-Tap Selection
+// Default Saved Addresses for Fast 1-Tap Selection
 export const DEFAULT_SAVED_ADDRESSES = [
   {
-    id: 'ghar',
-    label: 'Ghar',
+    id: 'home',
+    label: 'Home',
     icon: 'home',
     area: 'Indra Colony',
     fullText: '12, Indra Colony, Near Water Tank, Barmer, Rajasthan',
