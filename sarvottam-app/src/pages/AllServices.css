@@ -21,9 +21,10 @@
 
 .as-grid-container {
   display: grid;
-  grid-template-columns: repeat(2, 1fr);
-  gap: 16px;
-  padding: 0 20px 24px;
+  grid-template-columns: repeat(3, 1fr);   /* CHANGED: 2 -> 3 columns (reference jaisi ek row) */
+  gap: 12px;                                /* CHANGED: 16px -> 12px (chhote tiles ke liye tighter) */
+  padding: 0 16px 24px;                     /* CHANGED: 0 20px -> 0 16px (3 columns fit) */
+  align-items: start;                       /* ADDED: tiles vertically stretch na hon */
 }
 
 .as-tile-btn {
@@ -55,9 +56,9 @@
 .as-tile-panel {
   position: relative;
   width: 100%;
-  aspect-ratio: 1 / 1;
+  aspect-ratio: 1 / 0.78;                   /* CHANGED: 1/1 (bada square) -> 1/0.78 (chhota rectangle) */
   background-color: #F2F4F6;
-  border-radius: 18px;
+  border-radius: 16px;                      /* CHANGED: 18px -> 16px (chhote panel ke hisaab se) */
   display: flex;
   align-items: center;
   justify-content: center;
@@ -73,9 +74,10 @@
 }
 
 .as-tile-img {
-  width: 72%;
-  height: 72%;
+  width: 62%;                               /* CHANGED: 72% -> 62% (chhote panel me proportion) */
+  height: 62%;                              /* CHANGED: 72% -> 62% */
   object-fit: contain;
+  mix-blend-mode: multiply;                 /* ADDED: PNG ka white backdrop grey panel me blend (white box gayab) */
   opacity: 1 !important;
   filter: none !important;
   user-select: none;
@@ -90,11 +92,11 @@
 
 .as-pill-coming-soon {
   position: absolute;
-  top: 10px;
-  right: 10px;
+  top: 6px;                                 /* CHANGED: 10px -> 6px (chhote tile ke hisaab se) */
+  right: 6px;                               /* CHANGED: 10px -> 6px */
   background-color: #E6F4F1;
   color: #0F766E;
-  font-size: 11px;
+  font-size: 10px;                          /* CHANGED: 11px -> 10px */
   font-weight: 700;
   padding: 3px 8px;
   border-radius: 9999px;
@@ -106,8 +108,8 @@
 }
 
 .as-tile-label {
-  margin-top: 10px;
-  font-size: 15px;
+  margin-top: 8px;                          /* CHANGED: 10px -> 8px */
+  font-size: 14px;                          /* CHANGED: 15px -> 14px */
   font-weight: 600;
   color: #1F2937;
   line-height: 1.3;
