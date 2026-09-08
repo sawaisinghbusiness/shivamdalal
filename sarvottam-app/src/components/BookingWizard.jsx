@@ -23,7 +23,7 @@ const generateBookingDays = () => {
   for (let i = 0; i < 5; i++) {
     const d = new Date(now);
     d.setDate(now.getDate() + i);
-    const dayLabel = i === 0 ? 'Aaj' : i === 1 ? 'Kal' : weekNames[d.getDay()];
+    const dayLabel = i === 0 ? 'Today' : i === 1 ? 'Tomorrow' : weekNames[d.getDay()];
     const fullDateStr = (i === 0 ? 'Today, ' : i === 1 ? 'Tomorrow, ' : weekNames[d.getDay()] + ', ') +
       d.getDate() + ' ' + monthNames[d.getMonth()];
 
@@ -79,7 +79,7 @@ export default function BookingWizard({ initialService, onClose }) {
   const [customPin, setCustomPin] = useState({ lat: 25.7532, lng: 71.3965 });
   const [isLocating, setIsLocating] = useState(false);
   const [showAddAddressSheet, setShowAddAddressSheet] = useState(false);
-  const [newAddrLabel, setNewAddrLabel] = useState('Ghar');
+  const [newAddrLabel, setNewAddrLabel] = useState('Home');
   const [newAddrText, setNewAddrText] = useState('');
 
   // Customer Contact & Notes state
@@ -642,7 +642,7 @@ export default function BookingWizard({ initialService, onClose }) {
                     <Icon name="shield" size={18} />
                   </span>
                   <div className="bw-tc-title-wrap">
-                    <strong className="bw-tc-title">Kaam kaise hoga?</strong>
+                    <strong className="bw-tc-title">How it works</strong>
                     <span className="bw-tc-sub">SARVOTTAM Transparency Guarantee</span>
                   </div>
                 </div>
@@ -750,7 +750,7 @@ export default function BookingWizard({ initialService, onClose }) {
                   className="bw-next-day-btn"
                   onClick={() => setSelectedDayIdx(0)}
                 >
-                  Switch to Aaj (Available)
+                  Switch to Today (Available)
                 </button>
               </div>
             )}
@@ -792,7 +792,7 @@ export default function BookingWizard({ initialService, onClose }) {
                 onClick={() => setShowAddAddressSheet(true)}
               >
                 <Icon name="plus" size={14} />
-                <span>+ Naya Address</span>
+                <span>+ New Address</span>
               </button>
             </div>
 
@@ -808,7 +808,7 @@ export default function BookingWizard({ initialService, onClose }) {
                   <Icon name="pin" size={16} />
                 </span>
                 <span className="bw-geo-text">
-                  {isLocating ? 'Fetching GPS location…' : 'Meri current location'}
+                  {isLocating ? 'Fetching GPS location…' : 'Use Current Location'}
                 </span>
               </button>
             </div>

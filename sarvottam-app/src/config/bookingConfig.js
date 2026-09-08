@@ -21,7 +21,7 @@ export const PRICING_CONFIG = {
       issues: [
         {
           id: 'diag',
-          label: 'Problem pata nahi? Complete Diagnosis',
+          label: 'Diagnostic Inspection & Quote',
           desc: 'Doorstep inspection, voltage check & upfront quote before work starts',
           priceType: 'fixed',
           price: 149,
@@ -75,7 +75,7 @@ export const PRICING_CONFIG = {
       issues: [
         {
           id: 'diag',
-          label: 'Problem pata nahi? Complete Diagnosis',
+          label: 'Diagnostic Inspection & Quote',
           desc: 'Comprehensive cooling test, gas pressure & electrical diagnostic',
           priceType: 'fixed',
           price: 199,
@@ -128,7 +128,7 @@ export const PRICING_CONFIG = {
       issues: [
         {
           id: 'diag',
-          label: 'Problem pata nahi? Complete Diagnosis',
+          label: 'Diagnostic Inspection & Quote',
           desc: 'Inspection of hidden leakages, water lines & sanitary fittings',
           priceType: 'fixed',
           price: 149,
@@ -182,7 +182,7 @@ export const PRICING_CONFIG = {
       issues: [
         {
           id: 'diag',
-          label: 'Problem pata nahi? Complete Diagnosis',
+          label: 'Diagnostic Inspection & Quote',
           desc: 'Door, lock, hinge, drawer or wooden furniture inspection',
           priceType: 'fixed',
           price: 149,
@@ -227,7 +227,7 @@ export const PRICING_CONFIG = {
       issues: [
         {
           id: 'diag',
-          label: 'Problem pata nahi? Complete Diagnosis',
+          label: 'Diagnostic Inspection & Quote',
           desc: 'Wall dampness/seepage inspection, surface check & estimate',
           priceType: 'fixed',
           price: 149,
@@ -294,7 +294,7 @@ export const TRANSPARENCY_STEPS = [
 export const SLOT_GROUPS = [
   {
     id: 'morning',
-    label: 'Subah 8–12',
+    label: 'Morning (8:00 AM – 12:00 PM)',
     timeRange: '8:00 AM – 12:00 PM',
     slots: [
       { id: '08_10', time: '08:00 AM – 10:00 AM', available: true },
@@ -303,7 +303,7 @@ export const SLOT_GROUPS = [
   },
   {
     id: 'afternoon',
-    label: 'Dopahar 12–4',
+    label: 'Afternoon (12:00 PM – 04:00 PM)',
     timeRange: '12:00 PM – 04:00 PM',
     slots: [
       { id: '12_02', time: '12:00 PM – 02:00 PM', available: true },
@@ -312,7 +312,7 @@ export const SLOT_GROUPS = [
   },
   {
     id: 'evening',
-    label: 'Shaam 4–8',
+    label: 'Evening (04:00 PM – 08:00 PM)',
     timeRange: '04:00 PM – 08:00 PM',
     slots: [
       { id: '04_06', time: '04:00 PM – 06:00 PM', available: true },
@@ -325,7 +325,7 @@ export const SLOT_GROUPS = [
 export const DEFAULT_SAVED_ADDRESSES = [
   {
     id: 'home',
-    label: 'Ghar',
+    label: 'Home',
     icon: 'home',
     area: 'Indra Colony',
     fullText: '12, Indra Colony, Near Water Tank, Barmer, Rajasthan',
