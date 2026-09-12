@@ -488,367 +488,85 @@
 }
 
 /* ════════════════════════════════════════════════════════
-   Fintech-Grade Bank Audit Screen (CRED / Razorpay style)
+   Simple, Clean & Professional Bank Verification Screen
    ════════════════════════════════════════════════════════ */
-.kw-fintech-audit {
-  display: flex;
-  flex-direction: column;
-  gap: 14px;
-  padding-bottom: 24px;
+.kw-simple-verify-screen {
+  text-align: center;
+  padding: 28px 8px 16px;
 }
 
-/* 1. Audit Header Banner */
-.kw-audit-banner {
-  background: linear-gradient(135deg, #0F172A 0%, #1E293B 100%);
-  border-radius: 16px;
-  padding: 16px 18px;
-  color: #fff;
-  box-shadow: 0 4px 16px rgba(15, 23, 42, 0.12);
-}
-.kw-audit-banner-top {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  margin-bottom: 14px;
-  padding-bottom: 10px;
-  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
-  font-size: 11px;
-}
-.kw-audit-node-badge {
-  display: inline-flex;
-  align-items: center;
-  gap: 6px;
-  background: rgba(16, 185, 129, 0.16);
-  border: 1px solid rgba(16, 185, 129, 0.3);
-  color: #34D399;
-  font-weight: 750;
-  letter-spacing: 0.5px;
-  padding: 3px 8px;
-  border-radius: 6px;
-  font-size: 10px;
-}
-.kw-pulse-dot {
-  width: 6px;
-  height: 6px;
+.kw-verify-status-icon {
+  width: 56px;
+  height: 56px;
   border-radius: 50%;
-  background: #34D399;
-  box-shadow: 0 0 6px #34D399;
-  animation: kwPulse 1.8s infinite;
-}
-@keyframes kwPulse {
-  0% { transform: scale(0.9); opacity: 0.7; }
-  50% { transform: scale(1.3); opacity: 1; }
-  100% { transform: scale(0.9); opacity: 0.7; }
-}
-.kw-audit-ref {
-  color: #94A3B8;
-  font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
-  font-size: 11px;
-  font-weight: 600;
-}
-.kw-audit-ref span {
-  color: #F8FAFC;
-  font-weight: 700;
-}
-.kw-audit-headline {
-  display: flex;
-  align-items: flex-start;
-  gap: 14px;
-}
-.kw-audit-bank-icon {
-  width: 44px;
-  height: 44px;
-  border-radius: 12px;
-  background: rgba(255, 255, 255, 0.1);
-  border: 1px solid rgba(255, 255, 255, 0.15);
-  color: #38BDF8;
+  background: #F0FDFA;
+  border: 1.5px solid #CCFBF1;
+  color: #0F766E;
   display: flex;
   align-items: center;
   justify-content: center;
-  flex-shrink: 0;
+  margin: 0 auto 16px;
 }
-.kw-audit-head-text {
-  flex: 1;
-}
-.kw-audit-title {
-  font-size: 16px;
-  font-weight: 800;
-  color: #F8FAFC;
-  margin: 0 0 4px;
+
+.kw-verify-heading {
+  font-size: 18px;
+  font-weight: 750;
+  color: #0F172A;
+  margin: 0 0 6px;
   letter-spacing: -0.2px;
 }
-.kw-audit-sub {
-  font-size: 12.5px;
-  color: #CBD5E1;
-  line-height: 1.45;
-  margin: 0;
-}
-.kw-audit-sub strong {
-  color: #fff;
+
+.kw-verify-subtext {
+  font-size: 13px;
+  color: #64748B;
+  line-height: 1.5;
+  margin: 0 auto 20px;
+  max-width: 320px;
 }
 
-/* 2. Fintech Cards General */
-.kw-fintech-card {
+.kw-verify-subtext strong {
+  color: #0F172A;
+}
+
+.kw-simple-bank-card {
   background: #fff;
   border: 1px solid #E2E8F0;
-  border-radius: 16px;
-  padding: 16px;
-  box-shadow: 0 1px 3px rgba(15, 23, 42, 0.03);
+  border-radius: 14px;
+  padding: 4px 16px;
+  text-align: left;
+  margin-bottom: 24px;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.03);
 }
-.kw-card-hdr {
+
+.kw-sbc-row {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  margin-bottom: 14px;
-  padding-bottom: 10px;
+  padding: 12px 0;
+  font-size: 13px;
   border-bottom: 1px solid #F1F5F9;
 }
-.kw-card-title {
-  display: inline-flex;
-  align-items: center;
-  gap: 8px;
-  font-size: 13px;
-  font-weight: 750;
-  color: #0F172A;
-}
-.kw-card-title .ic {
-  color: #0F766E;
-}
-.kw-eta-pill {
-  background: #F8FAFC;
-  border: 1px solid #E2E8F0;
-  color: #475569;
-  font-size: 11px;
-  font-weight: 700;
-  padding: 3px 9px;
-  border-radius: 20px;
-}
-.kw-secure-badge {
-  display: inline-flex;
-  align-items: center;
-  gap: 4px;
-  background: #ECFDF5;
-  border: 1px solid #A7F3D0;
-  color: #065F46;
-  font-size: 10.5px;
-  font-weight: 750;
-  padding: 3px 8px;
-  border-radius: 6px;
+.kw-sbc-row:last-child {
+  border-bottom: none;
 }
 
-/* 3. Precision Timeline Ledger */
-.kw-timeline {
-  display: flex;
-  flex-direction: column;
-}
-.kw-tl-step {
-  display: flex;
-  gap: 12px;
-  position: relative;
-}
-.kw-tl-track {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  width: 24px;
-  flex-shrink: 0;
-}
-.kw-tl-node {
-  width: 24px;
-  height: 24px;
-  border-radius: 50%;
-  background: #F1F5F9;
-  border: 2px solid #CBD5E1;
+.kw-sbc-row span {
   color: #64748B;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  z-index: 1;
-}
-.kw-tl-step.done .kw-tl-node {
-  background: #0F766E;
-  border-color: #0F766E;
-  color: #fff;
-}
-.kw-tl-step.active .kw-tl-node {
-  background: #EFF6FF;
-  border-color: #2563EB;
-}
-.kw-node-pulse {
-  width: 8px;
-  height: 8px;
-  border-radius: 50%;
-  background: #2563EB;
-  animation: kwNodePulse 1.4s infinite;
-}
-@keyframes kwNodePulse {
-  0% { transform: scale(0.8); opacity: 0.6; }
-  50% { transform: scale(1.3); opacity: 1; }
-  100% { transform: scale(0.8); opacity: 0.6; }
-}
-.kw-tl-line {
-  width: 2px;
-  flex: 1;
-  background: #E2E8F0;
-  margin: 4px 0;
-}
-.kw-tl-step.done .kw-tl-line {
-  background: #0F766E;
-}
-.kw-tl-body {
-  flex: 1;
-  padding-bottom: 18px;
-}
-.kw-tl-row {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  margin-bottom: 3px;
-}
-.kw-tl-name {
-  font-size: 13px;
-  font-weight: 750;
-  color: #0F172A;
-}
-.kw-tl-desc {
-  font-size: 12px;
-  color: #64748B;
-  line-height: 1.4;
-  margin: 0 0 4px;
-}
-.kw-tl-time {
-  display: block;
-  font-size: 11px;
-  color: #94A3B8;
   font-weight: 500;
 }
-.kw-tl-tag {
-  font-size: 10px;
-  font-weight: 750;
-  padding: 2px 7px;
-  border-radius: 6px;
-  text-transform: uppercase;
-  letter-spacing: 0.3px;
-}
-.kw-tl-tag.done {
-  background: #ECFDF5;
-  color: #059669;
-}
-.kw-tl-tag.active {
-  background: #EFF6FF;
-  color: #2563EB;
-}
-.kw-tl-tag.pending {
-  background: #F1F5F9;
-  color: #64748B;
-}
 
-/* 4. Dossier Grid */
-.kw-dossier-grid {
-  display: grid;
-  grid-template-columns: repeat(2, 1fr);
-  gap: 12px;
-  background: #F8FAFC;
-  border: 1px solid #E2E8F0;
-  border-radius: 12px;
-  padding: 12px 14px;
-  margin-bottom: 12px;
-}
-@media (max-width: 480px) {
-  .kw-dossier-grid {
-    grid-template-columns: 1fr;
-    gap: 10px;
-  }
-}
-.kw-dossier-item {
-  display: flex;
-  flex-direction: column;
-  gap: 3px;
-}
-.kw-dossier-label {
-  font-size: 10px;
-  font-weight: 750;
-  letter-spacing: 0.5px;
-  color: #64748B;
-}
-.kw-dossier-val {
-  font-size: 12.5px;
-  font-weight: 700;
+.kw-sbc-row strong {
   color: #0F172A;
-}
-.kw-dossier-val.mono {
-  font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
-  font-size: 12px;
-  letter-spacing: 0.4px;
-}
-.kw-micro-note {
-  display: flex;
-  align-items: flex-start;
-  gap: 8px;
-  font-size: 11px;
-  color: #64748B;
-  line-height: 1.45;
-}
-.kw-micro-note .ic {
-  color: #0F766E;
-  flex-shrink: 0;
-  margin-top: 1px;
+  font-weight: 700;
 }
 
-/* 5. Fast-Track Instant UPI Bypass Card */
-.kw-instant-bypass-card {
-  display: flex;
-  align-items: flex-start;
-  gap: 12px;
-  background: linear-gradient(135deg, #F0FDF4 0%, #ECFDF5 100%);
-  border: 1.5px solid #A7F3D0;
-  border-radius: 16px;
-  padding: 14px 16px;
-}
-.kw-bypass-icon {
-  width: 36px;
-  height: 36px;
-  border-radius: 10px;
-  background: #059669;
-  color: #fff;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  flex-shrink: 0;
-  box-shadow: 0 4px 12px rgba(5, 150, 105, 0.25);
-}
-.kw-bypass-info {
-  flex: 1;
-}
-.kw-bypass-info strong {
-  display: block;
-  font-size: 13.5px;
-  color: #064E3B;
-  margin-bottom: 3px;
-}
-.kw-bypass-info p {
-  font-size: 12px;
-  color: #047857;
-  line-height: 1.4;
-  margin: 0 0 10px;
-}
-.kw-bypass-btn {
-  display: inline-flex;
-  align-items: center;
-  gap: 6px;
-  background: #059669;
-  color: #fff;
-  border: none;
-  border-radius: 10px;
-  padding: 8px 14px;
-  font-size: 12px;
-  font-weight: 750;
-  cursor: pointer;
-  transition: all 0.15s ease;
-}
-.kw-bypass-btn:hover {
-  background: #047857;
-  transform: translateY(-1px);
+.kw-status-pill.in-review {
+  background: #FEF3C7;
+  color: #92400E;
+  font-size: 11.5px;
+  font-weight: 700;
+  padding: 3px 10px;
+  border-radius: 20px;
 }
 
 /* Processing */

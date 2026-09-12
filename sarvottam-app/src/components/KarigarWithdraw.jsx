@@ -183,7 +183,7 @@ export default function KarigarWithdraw({ onBack }) {
             {view === 'main' && 'Withdraw Funds'}
             {view === 'add_upi' && 'Add UPI ID'}
             {view === 'add_bank' && 'Add Bank Account'}
-            {view === 'bank_in_review' && 'Bank Verification Ledger'}
+            {view === 'bank_in_review' && 'Bank Account Verification'}
             {view === 'processing' && 'Processing Withdrawal'}
             {view === 'success' && 'Withdrawal Receipt'}
           </h2>
@@ -191,7 +191,7 @@ export default function KarigarWithdraw({ onBack }) {
             {view === 'main' && 'Transfer wallet balance to UPI or Bank'}
             {view === 'add_upi' && 'Instant payout via GPay, PhonePe, Paytm'}
             {view === 'add_bank' && 'Direct IMPS/NEFT bank transfer'}
-            {view === 'bank_in_review' && 'Penny-drop ₹1 verification & NPCI clearing status'}
+            {view === 'bank_in_review' && 'Under review by bank (1–2 working days)'}
             {view === 'processing' && 'Connecting to banking switch...'}
             {view === 'success' && 'Transfer initiated successfully'}
           </p>
@@ -568,203 +568,54 @@ export default function KarigarWithdraw({ onBack }) {
            ════════════════════════════════════════════════════════ */}
         {view === 'bank_in_review' && (() => {
           const activeBank = submittedBank || (payoutMethods.banks && payoutMethods.banks.length > 0 ? payoutMethods.banks[0] : null) || {
-            bankName: 'State Bank of India — Barmer Branch',
+            bankName: 'State Bank of India',
             accLast4: '4821',
             ifsc: 'SBIN0001234',
             accName: k.name || 'Karigar Captain',
             status: 'IN_REVIEW',
           };
-          const refId = `SARV-${activeBank.accLast4 ? `IMPS${activeBank.accLast4}` : 'MND8492'}`;
 
           return (
-            <div className="kw-fintech-audit">
-              {/* Bank Clearance Status Banner */}
-              <div className="kw-audit-banner">
-                <div className="kw-audit-banner-top">
-                  <div className="kw-audit-node-badge">
-                    <span className="kw-pulse-dot" />
-                    <span>NPCI · IMPS CLEARING SWITCH</span>
-                  </div>
-                  <div className="kw-audit-ref">
-                    REF: <span>{refId}</span>
-                  </div>
-                </div>
+            <div className="kw-simple-verify-screen">
+              <div className="kw-verify-status-icon">
+                <Icon name="clock" size={28} />
+              </div>
 
-                <div className="kw-audit-headline">
-                  <div className="kw-audit-bank-icon">
-                    <Icon name="building" size={22} />
-                  </div>
-                  <div className="kw-audit-head-text">
-                    <h3 className="kw-audit-title">Bank Verification in Progress</h3>
-                    <p className="kw-audit-sub">
-                      Automated Penny-Drop micro-deposit initiated with <strong>{activeBank.bankName}</strong>
-                    </p>
-                  </div>
+              <h3 className="kw-verify-heading">Bank Account Under Verification</h3>
+              <p className="kw-verify-subtext">
+                Your bank details have been submitted. It usually takes <strong>1–2 working days</strong> for verification.
+              </p>
+
+              <div className="kw-simple-bank-card">
+                <div className="kw-sbc-row">
+                  <span>Bank Name</span>
+                  <strong>{activeBank.bankName}</strong>
+                </div>
+                <div className="kw-sbc-row">
+                  <span>Account Number</span>
+                  <strong>•••• •••• {activeBank.accLast4 || '0000'}</strong>
+                </div>
+                <div className="kw-sbc-row">
+                  <span>IFSC Code</span>
+                  <strong>{activeBank.ifsc || 'SBIN0000000'}</strong>
+                </div>
+                <div className="kw-sbc-row">
+                  <span>Account Holder</span>
+                  <strong>{activeBank.accName}</strong>
+                </div>
+                <div className="kw-sbc-row">
+                  <span>Status</span>
+                  <span className="kw-status-pill in-review">In Review (1–2 Days)</span>
                 </div>
               </div>
 
-              {/* Stepper Timeline */}
-              <div className="kw-fintech-card">
-                <div className="kw-card-hdr">
-                  <div className="kw-card-title">
-                    <Icon name="history" size={15} />
-                    <span>Verification Progress Ledger</span>
-                  </div>
-                  <span className="kw-eta-pill">Est. 1–2 Business Days</span>
-                </div>
-
-                <div className="kw-timeline">
-                  {/* Step 1 */}
-                  <div className="kw-tl-step done">
-                    <div className="kw-tl-track">
-                      <div className="kw-tl-node">
-                        <Icon name="check" size={12} />
-                      </div>
-                      <div className="kw-tl-line" />
-                    </div>
-                    <div className="kw-tl-body">
-                      <div className="kw-tl-row">
-                        <span className="kw-tl-name">Bank Account Submitted</span>
-                        <span className="kw-tl-tag done">Verified</span>
-                      </div>
-                      <p className="kw-tl-desc">
-                        Account encrypted via 256-bit SSL and registered on the NPCI clearing network.
-                      </p>
-                      <span className="kw-tl-time">Logged · Clearance Initiated</span>
-                    </div>
-                  </div>
-
-                  {/* Step 2 */}
-                  <div className="kw-tl-step active">
-                    <div className="kw-tl-track">
-                      <div className="kw-tl-node active">
-                        <span className="kw-node-pulse" />
-                      </div>
-                      <div className="kw-tl-line" />
-                    </div>
-                    <div className="kw-tl-body">
-                      <div className="kw-tl-row">
-                        <span className="kw-tl-name">₹1.00 Penny-Drop Micro-Deposit</span>
-                        <span className="kw-tl-tag active">In Progress</span>
-                      </div>
-                      <p className="kw-tl-desc">
-                        ₹1.00 test credit sent to match beneficiary legal name <strong>"{activeBank.accName}"</strong> with bank core system.
-                      </p>
-                      <span className="kw-tl-time">UTR: IMPS/2026/{activeBank.accLast4 || '8921'} · In Transit</span>
-                    </div>
-                  </div>
-
-                  {/* Step 3 */}
-                  <div className="kw-tl-step pending">
-                    <div className="kw-tl-track">
-                      <div className="kw-tl-node pending">
-                        <Icon name="clock" size={12} />
-                      </div>
-                    </div>
-                    <div className="kw-tl-body">
-                      <div className="kw-tl-row">
-                        <span className="kw-tl-name">Receiving Bank Clearance</span>
-                        <span className="kw-tl-tag pending">Upcoming</span>
-                      </div>
-                      <p className="kw-tl-desc">
-                        Beneficiary bank acknowledges account active status. Instant withdrawals unlock automatically upon confirmation.
-                      </p>
-                      <span className="kw-tl-time">Standard turnaround: 1–2 business days</span>
-                    </div>
-                  </div>
-                </div>
-              </div>
-
-              {/* Bank Mandate Details Dossier */}
-              <div className="kw-fintech-card">
-                <div className="kw-card-hdr">
-                  <div className="kw-card-title">
-                    <Icon name="card" size={15} />
-                    <span>Submitted Account Dossier</span>
-                  </div>
-                  <div className="kw-secure-badge">
-                    <Icon name="lock" size={11} />
-                    <span>RBI Compliant</span>
-                  </div>
-                </div>
-
-                <div className="kw-dossier-grid">
-                  <div className="kw-dossier-item">
-                    <span className="kw-dossier-label">BENEFICIARY NAME</span>
-                    <span className="kw-dossier-val">{activeBank.accName}</span>
-                  </div>
-                  <div className="kw-dossier-item">
-                    <span className="kw-dossier-label">BANK NAME</span>
-                    <span className="kw-dossier-val">{activeBank.bankName}</span>
-                  </div>
-                  <div className="kw-dossier-item">
-                    <span className="kw-dossier-label">ACCOUNT NUMBER</span>
-                    <span className="kw-dossier-val mono">•••• •••• •••• {activeBank.accLast4 || '0000'}</span>
-                  </div>
-                  <div className="kw-dossier-item">
-                    <span className="kw-dossier-label">IFSC CODE</span>
-                    <span className="kw-dossier-val mono">{activeBank.ifsc || 'SBIN0000000'}</span>
-                  </div>
-                  <div className="kw-dossier-item">
-                    <span className="kw-dossier-label">ROUTING NETWORK</span>
-                    <span className="kw-dossier-val">NPCI Automated IMPS / NEFT</span>
-                  </div>
-                  <div className="kw-dossier-item">
-                    <span className="kw-dossier-label">VERIFICATION PROTOCOL</span>
-                    <span className="kw-dossier-val">Automated Penny-Drop v2</span>
-                  </div>
-                </div>
-
-                <div className="kw-micro-note">
-                  <Icon name="shield" size={13} />
-                  <span>
-                    A ₹1.00 credit will appear in your passbook or SMS statement under <strong>SARVOTTAM PAYOUTS</strong>. No debit will ever be charged to your account.
-                  </span>
-                </div>
-              </div>
-
-              {/* Fast Track UPI Bypass Callout */}
-              <div className="kw-instant-bypass-card">
-                <div className="kw-bypass-icon">
-                  <Icon name="bolt" size={20} />
-                </div>
-                <div className="kw-bypass-info">
-                  <strong>Need instant cash right now?</strong>
-                  <p>
-                    Don’t wait 1–2 days for bank clearance. Link your <strong>UPI ID</strong> for 100% verified, 60-second real-time withdrawals anytime 24×7.
-                  </p>
-                  <button
-                    type="button"
-                    className="kw-bypass-btn"
-                    onClick={() => {
-                      setUpiId('');
-                      setVerifiedUpiName(null);
-                      setView('add_upi');
-                    }}
-                  >
-                    <span>Link UPI for Instant Payout</span>
-                    <Icon name="arrow" size={14} />
-                  </button>
-                </div>
-              </div>
-
-              {/* Footer Action Buttons */}
               <div className="kw-footer-cta">
                 <button
                   type="button"
                   className="kw-primary-btn"
                   onClick={() => setView('main')}
                 >
-                  Return to Wallet
-                </button>
-                <button
-                  type="button"
-                  className="kw-ghost-btn"
-                  onClick={() => {
-                    toast('Status refreshed: Penny-drop ₹1 verification active');
-                  }}
-                >
-                  Refresh Verification Status
+                  Back to Wallet
                 </button>
               </div>
             </div>
