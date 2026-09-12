@@ -6,6 +6,7 @@ import Home from './pages/Home';
 import AllServices from './pages/AllServices';
 import Emergency from './pages/Emergency';
 import Furniture from './pages/Furniture';
+import FurnitureCategory from './pages/FurnitureCategory';
 import Painting from './pages/Painting';
 import Profile from './pages/Profile';
 import EditProfile from './pages/EditProfile';
@@ -87,7 +88,7 @@ export default function App() {
   }
 
   // Logged in as Customer → full customer app
-  const showNav = MAIN_TABS.includes(pathname);
+  const showNav = MAIN_TABS.includes(pathname) || pathname.startsWith('/furniture');
   return (
     <ToastProvider>
       <div className="app-wrapper">
@@ -97,6 +98,7 @@ export default function App() {
             <Route path="/services" element={<AllServices />} />
             <Route path="/emergency" element={<Emergency />} />
             <Route path="/furniture" element={<Furniture />} />
+            <Route path="/furniture/:categorySlug" element={<FurnitureCategory />} />
             <Route path="/painting" element={<Painting />} />
             <Route path="/product/:type/:id" element={<ProductDetail />} />
             <Route path="/profile" element={<Profile />} />

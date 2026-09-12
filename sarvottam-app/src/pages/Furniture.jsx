@@ -1,628 +1,679 @@
-import { useState, useMemo, useEffect } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useState, useMemo } from 'react';
+import { useNavigate, Link } from 'react-router-dom';
 import Icon from '../components/Icon';
 import { useToast } from '../components/Toast';
 import { useAppData } from '../store/AppData';
 import { SPACES, FURNITURE_CATALOG } from '../data/furnitureData';
 import './Furniture.css';
 
-const LIKED_STORAGE_KEY = 'sarvottam_furniture_wishlist';
+// Pre-configured curated collections for Section C carousels
+const STYLE_COLLECTION = [
+  {
+    id: 'bd-03',
+    slug: 'bedroom',
+    title: 'Royal Rajasthani Sheesham Four-Poster Bed',
+    tag: 'Heritage Luxe',
+    price: '₹55,000 – ₹89,000',
+    img: 'https://images.unsplash.com/photo-1540518614846-7ede433c4b69?auto=format&fit=crop&w=800&q=80',
+  },
+  {
+    id: 'kt-05',
+    slug: 'kitchen',
+    title: 'Royal Emerald Green & Gold Trim U-Shaped Kitchen',
+    tag: 'Modern Royal',
+    price: '₹2,10,000 – ₹3,20,000',
+    img: 'https://images.unsplash.com/photo-1507089947368-19c1da9775ae?auto=format&fit=crop&w=800&q=80',
+  },
+  {
+    id: 'lv-02',
+    slug: 'living',
+    title: 'Heritage Sheesham 3+1+1 Sofa Suite with Brass Studs',
+    tag: 'Artisan Woodwork',
+    price: '₹45,000 – ₹72,000',
+    img: 'https://images.unsplash.com/photo-1583847268964-b28dc8f51f92?auto=format&fit=crop&w=800&q=80',
+  },
+  {
+    id: 'wd-02',
+    slug: 'wardrobe',
+    title: 'Tinted Black Glass Walk-in Wardrobe with LED Profiles',
+    tag: 'Contemporary Chic',
+    price: '₹1,10,000 – ₹1,80,000',
+    img: 'https://images.unsplash.com/photo-1616486338812-3dadae4b4ace?auto=format&fit=crop&w=800&q=80',
+  },
+];
+
+const RECENTLY_ADDED = [
+  {
+    id: 'lv-04',
+    slug: 'living',
+    title: 'Fluted Wood Nesting Coffee Table Pair',
+    tag: 'Natural Ash & Slate',
+    price: '₹12,000 – ₹19,500',
+    img: 'https://images.unsplash.com/photo-1532372320572-cda25653a26d?auto=format&fit=crop&w=800&q=80',
+  },
+  {
+    id: 'kt-04',
+    slug: 'kitchen',
+    title: 'Compact Straight Kitchen for Urban Apartments',
+    tag: 'Light Ash Wood',
+    price: '₹85,000 – ₹1,30,000',
+    img: 'https://images.unsplash.com/photo-1565538810643-b5bdb714032a?auto=format&fit=crop&w=800&q=80',
+  },
+  {
+    id: 'bd-04',
+    slug: 'bedroom',
+    title: 'Scandi Light Birch Bed with Floating Nightstands',
+    tag: 'Birch Veneer',
+    price: '₹32,000 – ₹48,000',
+    img: 'https://images.unsplash.com/photo-1595526114035-0d45ed16cfbf?auto=format&fit=crop&w=800&q=80',
+  },
+  {
+    id: 'tv-02',
+    slug: 'tv_unit',
+    title: 'Minimalist Teak Floating Media Console',
+    tag: 'Solid CP Teak',
+    price: '₹16,500 – ₹26,000',
+    img: 'https://images.unsplash.com/photo-1594026112284-02bb6f3352fe?auto=format&fit=crop&w=800&q=80',
+  },
+  {
+    id: 'wd-03',
+    slug: 'wardrobe',
+    title: 'Classic 4-Door Hinged Wardrobe with Loft Storage',
+    tag: 'Warm Ivory PU',
+    price: '₹48,000 – ₹78,000',
+    img: 'https://images.unsplash.com/photo-1595428774223-ef52624120d2?auto=format&fit=crop&w=800&q=80',
+  },
+];
+
+// Curated design counts per category tile
+const DESIGN_COUNTS = {
+  kitchen: '450+ Designs',
+  bedroom: '380+ Designs',
+  living: '520+ Designs',
+  wardrobe: '260+ Designs',
+  tv_unit: '220+ Designs',
+  dining: '190+ Designs',
+  pooja: '140+ Designs',
+  study: '120+ Designs',
+  kids: '160+ Designs',
+  balcony: '110+ Designs',
+};
+
+// FAQ data
+const FAQS = [
+  {
+    q: 'How does SARVOTTAM ensure woodwork quality and transparent pricing?',
+    a: 'All our furniture and modular cabinetry are crafted directly by verified Rajasthan master karigars using IS-710 Boiling Water Proof (BWP) plywood, seasoned solid Sheesham, and genuine Teak wood. Because we operate workshops locally without middlemen, our prices are up to 35% lower than retail interior design studios.',
+  },
+  {
+    q: 'Can I customize the dimensions, internal layout, and laminate finishes?',
+    a: 'Yes, absolutely. Every piece is 100% made to order according to your exact room measurements. You can select from high-gloss acrylic, matte suede laminate, PU lacquer, natural veneers, and fluted acoustic glass with custom internal drawers and organizers.',
+  },
+  {
+    q: 'Is the doorstep measurement visit and 3D CAD design really free?',
+    a: 'Yes. When you request a consultation, a senior master karigar visits your home with material finish catalogs, laminate swatches, and measuring equipment. We deliver accurate 3D floorplan blueprints and transparent quotation breakdowns with zero obligation.',
+  },
+  {
+    q: 'What warranty is provided on custom furniture and hardware?',
+    a: 'We provide a 10-Year Karigar Warranty on structural carcass plywood and solid wood framing, along with official manufacturer warranties on international hardware fittings including Blum, Hettich, and Hafele soft-close systems.',
+  },
+  {
+    q: 'What is the typical fabrication and installation timeline across Rajasthan?',
+    a: 'Standard modular kitchens, wardrobes, and TV media walls are fabricated and delivered within 12 to 18 working days. Solid Sheesham and carved wooden furniture pieces typically require 14 to 21 working days for seasoning, assembly, and multi-coat lacquer polish.',
+  },
+];
 
 export default function Furniture() {
   const nav = useNavigate();
   const toast = useToast();
   const { user, addBookingDemo } = useAppData();
 
-  // Active space & subcategory
-  const [activeSpaceId, setActiveSpaceId] = useState('kitchen');
-  const [activeSubcat, setActiveSubcat] = useState('All');
-  const [search, setSearch] = useState('');
-  const [showSearch, setShowSearch] = useState(false);
-  const [wishlistOnly, setWishlistOnly] = useState(false);
+  // Section A: Expandable intro state
   const [readMore, setReadMore] = useState(false);
 
-  // Wishlist state (persisted)
-  const [liked, setLiked] = useState(() => {
-    try {
-      const saved = localStorage.getItem(LIKED_STORAGE_KEY);
-      return saved ? JSON.parse(saved) : {};
-    } catch {
-      return {};
-    }
+  // Section B: Category grid expansion state (show 6 by default, expand to all 10)
+  const [showAllCategories, setShowAllCategories] = useState(false);
+
+  // Section D: FAQ accordion active indices
+  const [openFaq, setOpenFaq] = useState(0);
+
+  // Section D: Lead capture form state
+  const [leadForm, setLeadForm] = useState({
+    name: user?.name || '',
+    phone: user?.phone?.replace('+91 ', '') || '',
+    city: 'Barmer',
+    spaceType: 'Modular Kitchen',
+    notes: '',
   });
+  const [formSubmitted, setFormSubmitted] = useState(false);
 
-  // Modals state
-  const [selectedProject, setSelectedProject] = useState(null);
-  const [consultModal, setConsultModal] = useState(null); // project or promo data
-
-  // Consultation Form State
-  const [cName, setCName] = useState(user?.name || 'Shivam Singh');
-  const [cPhone, setCPhone] = useState(user?.phone?.replace('+91 ', '') || '9876543210');
-  const [cAddress, setCAddress] = useState('Indra Colony, Barmer, Rajasthan');
-  const [cDate, setCDate] = useState('Tomorrow (Morning)');
-  const [cNotes, setCNotes] = useState('');
-
-  // Persist wishlist
-  useEffect(() => {
-    try {
-      localStorage.setItem(LIKED_STORAGE_KEY, JSON.stringify(liked));
-    } catch (e) {
-      console.warn('Could not save wishlist', e);
-    }
-  }, [liked]);
-
-  const toggleLike = (id, title, e) => {
-    e.stopPropagation();
-    setLiked((prev) => {
-      const next = { ...prev, [id]: !prev[id] };
-      toast(next[id] ? `Added to wishlist: ${title}` : 'Removed from wishlist');
-      return next;
-    });
-  };
-
-  const currentSpace = useMemo(() => {
-    return FURNITURE_CATALOG[activeSpaceId] || FURNITURE_CATALOG.kitchen;
-  }, [activeSpaceId]);
-
-  // Reset subcategory when space changes
-  const handleSpaceChange = (spaceId) => {
-    setActiveSpaceId(spaceId);
-    setActiveSubcat('All');
-    setReadMore(false);
-  };
-
-  // Filtered designs
-  const filteredDesigns = useMemo(() => {
-    return currentSpace.designs.filter((item) => {
-      const matchesSubcat = activeSubcat === 'All' || item.subcat === activeSubcat;
-      const matchesSearch =
-        !search.trim() ||
-        item.name.toLowerCase().includes(search.toLowerCase()) ||
-        item.finish.toLowerCase().includes(search.toLowerCase()) ||
-        item.size.toLowerCase().includes(search.toLowerCase());
-      const matchesWishlist = !wishlistOnly || liked[item.id];
-      return matchesSubcat && matchesSearch && matchesWishlist;
-    });
-  }, [currentSpace, activeSubcat, search, wishlistOnly, liked]);
-
-  // Trending designs for carousel
+  // Derive top trending designs across all categories for Section C
   const trendingDesigns = useMemo(() => {
-    return currentSpace.designs.filter((d) => d.isTrending);
-  }, [currentSpace]);
+    const list = [];
+    Object.keys(FURNITURE_CATALOG).forEach((spaceId) => {
+      const space = FURNITURE_CATALOG[spaceId];
+      if (space?.designs) {
+        space.designs.forEach((d) => {
+          if (d.isTrending) {
+            list.push({
+              id: d.id,
+              slug: spaceId,
+              title: d.name,
+              tag: d.finish,
+              price: d.price,
+              img: d.img,
+            });
+          }
+        });
+      }
+    });
+    return list.slice(0, 6);
+  }, []);
 
-  // Previous & Next navigation in Project Detail Sheet
-  const projectNav = useMemo(() => {
-    if (!selectedProject) return { prev: null, next: null };
-    const list = currentSpace.designs;
-    const idx = list.findIndex((p) => p.id === selectedProject.id);
-    return {
-      prev: idx > 0 ? list[idx - 1] : list[list.length - 1],
-      next: idx < list.length - 1 ? list[idx + 1] : list[0],
-    };
-  }, [selectedProject, currentSpace]);
+  // Category grid items (6 or 10)
+  const visibleSpaces = useMemo(() => {
+    return showAllCategories ? SPACES : SPACES.slice(0, 6);
+  }, [showAllCategories]);
 
-  // Consultation booking submission
-  const handleConsultSubmit = (e) => {
+  // Handle lead capture form submission
+  const handleLeadSubmit = (e) => {
     e.preventDefault();
-    if (!cPhone || cPhone.length < 10) {
+    if (!leadForm.name.trim()) {
+      toast('Please enter your full name');
+      return;
+    }
+    if (!leadForm.phone || leadForm.phone.replace(/\D/g, '').length < 10) {
       toast('Please enter a valid 10-digit mobile number');
       return;
     }
 
-    const title = consultModal?.name || `${currentSpace.title} Consultation`;
-
     addBookingDemo({
-      service: `Consultation: ${title}`,
+      service: `Consultation: ${leadForm.spaceType}`,
       icon: 'hammer',
       karigar: 'Master Karigar assigned on schedule',
       amount: 0,
       status: 'upcoming',
-      notes: `Preferred slot: ${cDate}. Address: ${cAddress}. Details: ${cNotes || 'Standard measurement'}`,
+      notes: `Doorstep Visit in ${leadForm.city}. Contact: ${leadForm.phone}. Notes: ${leadForm.notes || 'Standard 3D Measurement'}`,
     });
 
-    toast('Free Consultation booked! Our master karigar will visit you.');
-    setConsultModal(null);
-    setSelectedProject(null);
-    nav('/bookings');
+    setFormSubmitted(true);
+    toast('Consultation booked! Our master karigar will contact you shortly.');
   };
 
-  const wishlistCount = Object.values(liked).filter(Boolean).length;
-
   return (
-    <div className="page fn-design-page">
-      {/* ── TOP NAV HEADER ── */}
-      <header className="fn-top-bar">
-        <div className="fn-tb-left">
-          <button type="button" className="fn-back-btn" onClick={() => nav('/')} aria-label="Back to Home">
+    <div className="fn-page">
+      {/* ── TOP APP BAR ── */}
+      <header className="fn-header">
+        <div className="fn-header-inner">
+          <button
+            type="button"
+            className="fn-header-back-btn"
+            onClick={() => nav('/')}
+            aria-label="Back to Home"
+          >
             <Icon name="back" size={20} />
           </button>
-          <div className="fn-tb-titles">
-            <h1 className="fn-main-title">Design Ideas &amp; Furniture</h1>
-            <p className="fn-main-sub">Verified Rajasthan Karigars &amp; Custom Woodwork</p>
+          <div className="fn-header-title-block">
+            <span className="fn-header-eyebrow">SARVOTTAM WOODWORK &amp; INTERIORS</span>
+            <span className="fn-header-title">Furniture &amp; Design Ideas</span>
           </div>
-        </div>
-
-        <div className="fn-tb-actions">
           <button
             type="button"
-            className={'fn-icon-btn' + (showSearch ? ' active' : '')}
-            onClick={() => setShowSearch((v) => !v)}
-            aria-label="Toggle Search"
+            className="fn-header-action-btn"
+            onClick={() => {
+              const el = document.getElementById('consultation-form');
+              if (el) el.scrollIntoView({ behavior: 'smooth' });
+            }}
           >
-            <Icon name="search" size={19} />
-          </button>
-          <button
-            type="button"
-            className={'fn-icon-btn' + (wishlistOnly ? ' active' : '')}
-            onClick={() => setWishlistOnly((v) => !v)}
-            aria-label="Wishlist"
-          >
-            <Icon name="heart" size={19} />
-            {wishlistCount > 0 && <span className="fn-badge-counter">{wishlistCount}</span>}
+            Book Free Visit
           </button>
         </div>
       </header>
 
-      {/* Optional Search Bar */}
-      {showSearch && (
-        <div className="fn-search-banner">
-          <div className="fn-search-input-wrap">
-            <Icon name="search" size={16} />
-            <input
-              type="text"
-              className="fn-search-input"
-              placeholder="Search kitchen, bed, wardrobe, teak finish, size..."
-              value={search}
-              onChange={(e) => setSearch(e.target.value)}
-              autoFocus
-            />
-            {search && (
-              <button type="button" className="fn-clear-search" onClick={() => setSearch('')}>
-                <Icon name="close" size={14} />
-              </button>
-            )}
-          </div>
-        </div>
-      )}
+      <main className="fn-main-content">
+        {/* ══════════════════════════════════════════════════════════════
+            SECTION A — HERO / PAGE HEADER
+            Breadcrumb, H1 Title, Expandable Intro Paragraph
+            ══════════════════════════════════════════════════════════════ */}
+        <section className="fn-hero-section">
+          <nav className="fn-breadcrumb" aria-label="Breadcrumb">
+            <Link to="/" className="fn-bc-link">Home</Link>
+            <span className="fn-bc-sep">/</span>
+            <span className="fn-bc-current">Furniture</span>
+          </nav>
 
-      {/* ── 1. SPACES TABS (Horizontal Scroll) ── */}
-      <nav className="fn-spaces-nav" aria-label="Home Spaces">
-        <div className="fn-spaces-scroll">
-          {SPACES.map((sp) => {
-            const isActive = activeSpaceId === sp.id;
-            return (
-              <button
-                key={sp.id}
-                type="button"
-                className={'fn-space-tab' + (isActive ? ' active' : '')}
-                onClick={() => handleSpaceChange(sp.id)}
-              >
-                <span className="fn-space-name">{sp.name}</span>
-                {isActive && <span className="fn-active-indicator" />}
-              </button>
-            );
-          })}
-        </div>
-      </nav>
-
-      {/* ── 2. EDITORIAL CATEGORY HEADER ── */}
-      <section className="fn-editorial-box">
-        <div className="fn-editorial-meta">
-          <span className="fn-results-pill">
-            Showing {filteredDesigns.length} {filteredDesigns.length === 1 ? 'Design' : 'Designs'}
-          </span>
-          {wishlistOnly && <span className="fn-wishlist-filter-tag">Wishlist Filter Active</span>}
-        </div>
-        <h2 className="fn-cat-headline">{currentSpace.title}</h2>
-        <p className="fn-cat-desc">
-          {readMore ? currentSpace.longDesc : currentSpace.shortDesc}
-        </p>
-        <button
-          type="button"
-          className="fn-read-more-btn"
-          onClick={() => setReadMore((prev) => !prev)}
-        >
-          {readMore ? 'Read Less' : 'Read More'}
-          <Icon name="chevron" size={12} />
-        </button>
-      </section>
-
-      {/* ── 3. TOP TRENDING DESIGNS CAROUSEL ── */}
-      {trendingDesigns.length > 0 && !wishlistOnly && (
-        <section className="fn-trending-section">
-          <div className="fn-trending-head">
-            <div className="fn-th-left">
-              <span className="fn-trend-badge">
-                <Icon name="trend" size={13} />
-                Trending
-              </span>
-              <h3 className="fn-trending-title">Top Trending {currentSpace.title}</h3>
+          <div className="fn-hero-body">
+            <div className="fn-hero-badge">
+              <Icon name="shield" size={13} />
+              <span>Rajasthan Karigar Verified · Workshop Direct</span>
             </div>
-            <span className="fn-trending-date">Curated September 2026</span>
-          </div>
 
-          <div className="fn-trending-carousel">
-            {trendingDesigns.map((tr) => (
-              <div
-                key={tr.id}
-                className="fn-trend-card"
-                onClick={() => setSelectedProject(tr)}
-              >
-                <div className="fn-tc-img-wrap">
-                  <img src={tr.img} alt={tr.name} loading="lazy" />
-                  <span className="fn-tc-size">{tr.size}</span>
-                  <button
-                    type="button"
-                    className={'fn-card-heart' + (liked[tr.id] ? ' on' : '')}
-                    onClick={(e) => toggleLike(tr.id, tr.name, e)}
-                    aria-label="Save to Wishlist"
-                  >
-                    <Icon name="heart" size={15} />
-                  </button>
-                </div>
+            <h1 className="fn-hero-title">Furniture Design Ideas</h1>
 
-                <div className="fn-tc-info">
-                  <h4 className="fn-tc-title">{tr.name}</h4>
-                  <p className="fn-tc-finish">{tr.finish}</p>
-                  <div className="fn-tc-foot">
-                    <span className="fn-tc-price">{tr.price}</span>
-                    <button
-                      type="button"
-                      className="fn-tc-consult-btn"
-                      onClick={(e) => {
-                        e.stopPropagation();
-                        setConsultModal(tr);
-                      }}
-                    >
-                      Book Consultation
-                    </button>
-                  </div>
-                </div>
+            <p className="fn-hero-intro">
+              Discover bespoke modular kitchens, custom wardrobes, and solid wood furniture engineered for Indian lifestyles. Crafted by verified master artisans across Rajasthan with transparent workshop-direct pricing and 10-year structural warranty.
+            </p>
+
+            {readMore && (
+              <div className="fn-hero-more-text">
+                <p>
+                  Every piece is precision-built using boiling-water-proof (BWP) IS-710 marine plywood, seasoned solid Sheesham, and genuine Teak wood. We incorporate premium German soft-close hydraulic fittings from Blum and Hettich to guarantee decades of seamless operation.
+                </p>
+                <p>
+                  Whether you are planning a full-home modular setup or handcrafted accent pieces, SARVOTTAM connects you directly to experienced karigars with complimentary doorstep laser measurements and 3D CAD design renderings.
+                </p>
               </div>
-            ))}
+            )}
+
+            <button
+              type="button"
+              className="fn-hero-toggle-btn"
+              onClick={() => setReadMore((prev) => !prev)}
+            >
+              <span>{readMore ? 'Read Less' : 'Read More About Our Woodwork'}</span>
+              <span className={'fn-toggle-icon' + (readMore ? ' open' : '')}>
+                <Icon name="chevron" size={13} />
+              </span>
+            </button>
           </div>
         </section>
-      )}
 
-      {/* ── 4. SUBCATEGORY FILTER CHIPS ── */}
-      <div className="fn-subcats-bar">
-        <div className="fn-subcats-scroll">
-          {currentSpace.subcategories.map((sub) => (
+        {/* ══════════════════════════════════════════════════════════════
+            SECTION B — CATEGORY GRID WITH COUNTS
+            Image tiles showing Category Name + Design Count
+            "View More Spaces" button to expand hidden categories
+            Clicking a tile navigates to separate page: /furniture/:categorySlug
+            ══════════════════════════════════════════════════════════════ */}
+        <section className="fn-category-grid-section">
+          <div className="fn-section-header">
+            <div>
+              <span className="fn-section-tag">SPACES &amp; ROOMS</span>
+              <h2 className="fn-section-title">Explore Furniture by Space</h2>
+              <p className="fn-section-sub">
+                Select a category to view curated designs, layout options, and custom finishes
+              </p>
+            </div>
+          </div>
+
+          <div className="fn-category-grid">
+            {visibleSpaces.map((sp) => {
+              const catalogData = FURNITURE_CATALOG[sp.id];
+              const heroImg = catalogData?.designs?.[0]?.img || 'https://images.unsplash.com/photo-1556909212-d5b604d0c90d?auto=format&fit=crop&w=800&q=80';
+              const designCount = DESIGN_COUNTS[sp.id] || `${catalogData?.designs?.length || 100}+ Designs`;
+
+              return (
+                <Link
+                  key={sp.id}
+                  to={`/furniture/${sp.id}`}
+                  className="fn-category-tile"
+                  aria-label={`View ${sp.name} designs`}
+                >
+                  <div className="fn-tile-media">
+                    <img
+                      src={heroImg}
+                      alt={sp.name}
+                      loading="lazy"
+                      className="fn-tile-img"
+                    />
+                    <div className="fn-tile-overlay" />
+                  </div>
+
+                  <div className="fn-tile-content">
+                    <div className="fn-tile-count-pill">{designCount}</div>
+                    <div className="fn-tile-bottom-row">
+                      <h3 className="fn-tile-name">{sp.name}</h3>
+                      <div className="fn-tile-arrow">
+                        <Icon name="arrow" size={14} />
+                      </div>
+                    </div>
+                  </div>
+                </Link>
+              );
+            })}
+          </div>
+
+          {/* View More Spaces Button */}
+          <div className="fn-expand-btn-wrap">
             <button
-              key={sub}
               type="button"
-              className={'fn-subcat-chip' + (activeSubcat === sub ? ' active' : '')}
-              onClick={() => setActiveSubcat(sub)}
+              className="fn-expand-btn"
+              onClick={() => setShowAllCategories((v) => !v)}
             >
-              {sub}
+              <span>{showAllCategories ? 'Show Fewer Spaces' : 'View More Spaces (4 More)'}</span>
+              <span className={'fn-expand-arrow' + (showAllCategories ? ' rotated' : '')}>
+                <Icon name="chevron" size={14} />
+              </span>
             </button>
-          ))}
+          </div>
+        </section>
+
+        {/* ══════════════════════════════════════════════════════════════
+            SECTION C — CURATED COLLECTION CAROUSELS
+            Reused Component: CollectionCarousel (3 instances)
+            1. Style-based collection ("Modern Luxe Rajasthani Interiors")
+            2. Top Trending Designs ("Chosen by homeowners in September 2026")
+            3. Recently Added Designs ("Curated on 10 September 2026")
+            ══════════════════════════════════════════════════════════════ */}
+        <section className="fn-collections-container">
+          {/* Carousel 1: Style-Based Collection */}
+          <CollectionCarousel
+            title="Modern Luxe Rajasthani Interiors"
+            subtitle="Handcrafted solid Sheesham & Teak spaces with contemporary gold and brass inlays"
+            badge="Style Collection"
+            items={STYLE_COLLECTION}
+            onSelect={(item) => nav(`/furniture/${item.slug}`)}
+          />
+
+          {/* Carousel 2: Top Trending Designs */}
+          <CollectionCarousel
+            title="Top Trending Designs"
+            subtitle="Chosen by Rajasthan homeowners in September 2026"
+            badge="Trending Now"
+            items={trendingDesigns}
+            onSelect={(item) => nav(`/furniture/${item.slug}`)}
+          />
+
+          {/* Carousel 3: Recently Added Designs */}
+          <CollectionCarousel
+            title="Recently Added Designs"
+            subtitle="Curated on 10 September 2026"
+            badge="New Release"
+            items={RECENTLY_ADDED}
+            onSelect={(item) => nav(`/furniture/${item.slug}`)}
+          />
+        </section>
+
+        {/* ══════════════════════════════════════════════════════════════
+            SECTION D — LEAD CAPTURE
+            Part 1: FAQ Accordion
+            Part 2: Contact / Quotation Form
+            ══════════════════════════════════════════════════════════════ */}
+        <section className="fn-lead-capture-section">
+          {/* FAQ Accordion */}
+          <div className="fn-faq-container">
+            <div className="fn-section-header">
+              <span className="fn-section-tag">FREQUENTLY ASKED QUESTIONS</span>
+              <h2 className="fn-section-title">Got Questions About Woodwork?</h2>
+              <p className="fn-section-sub">
+                Clear answers on materials, warranty, pricing, and doorstep measurement visits.
+              </p>
+            </div>
+
+            <div className="fn-faq-list">
+              {FAQS.map((faq, index) => {
+                const isOpen = openFaq === index;
+                return (
+                  <div key={index} className={'fn-faq-card' + (isOpen ? ' active' : '')}>
+                    <button
+                      type="button"
+                      className="fn-faq-question-btn"
+                      onClick={() => setOpenFaq(isOpen ? -1 : index)}
+                      aria-expanded={isOpen}
+                    >
+                      <span className="fn-faq-q-text">{faq.q}</span>
+                      <span className={'fn-faq-chevron' + (isOpen ? ' open' : '')}>
+                        <Icon name="chevron" size={16} />
+                      </span>
+                    </button>
+                    {isOpen && (
+                      <div className="fn-faq-answer-body">
+                        <p>{faq.a}</p>
+                      </div>
+                    )}
+                  </div>
+                );
+              })}
+            </div>
+          </div>
+
+          {/* Lead / Quotation Form */}
+          <div id="consultation-form" className="fn-consult-form-card">
+            <div className="fn-cf-header">
+              <div className="fn-cf-pill">
+                <Icon name="check" size={13} />
+                <span>100% Free Doorstep Visit · Zero Obligation</span>
+              </div>
+              <h3 className="fn-cf-title">Book a Free 3D Design Consultation</h3>
+              <p className="fn-cf-sub">
+                Our verified master karigar visits your residence with material swatches, laser measurement tools, and 3D floorplan blueprints.
+              </p>
+            </div>
+
+            {formSubmitted ? (
+              <div className="fn-cf-success-state">
+                <div className="fn-cf-success-icon">
+                  <Icon name="check" size={28} />
+                </div>
+                <h4>Consultation Scheduled Successfully!</h4>
+                <p>
+                  Thank you, <strong>{leadForm.name}</strong>. Our senior karigar supervisor in <strong>{leadForm.city}</strong> will contact you at <strong>+91 {leadForm.phone}</strong> within 2 hours to confirm your preferred visit slot.
+                </p>
+                <div className="fn-cf-success-actions">
+                  <button
+                    type="button"
+                    className="fn-cf-btn secondary"
+                    onClick={() => nav('/bookings')}
+                  >
+                    View in My Bookings
+                  </button>
+                  <button
+                    type="button"
+                    className="fn-cf-btn outline"
+                    onClick={() => setFormSubmitted(false)}
+                  >
+                    Submit Another Request
+                  </button>
+                </div>
+              </div>
+            ) : (
+              <form className="fn-cf-form" onSubmit={handleLeadSubmit}>
+                <div className="fn-form-row">
+                  <div className="fn-form-field">
+                    <label className="fn-form-label" htmlFor="cf-name">Full Name *</label>
+                    <input
+                      id="cf-name"
+                      type="text"
+                      className="fn-form-input"
+                      placeholder="e.g. Shivam Singh"
+                      value={leadForm.name}
+                      onChange={(e) => setLeadForm({ ...leadForm, name: e.target.value })}
+                      required
+                    />
+                  </div>
+
+                  <div className="fn-form-field">
+                    <label className="fn-form-label" htmlFor="cf-phone">Mobile Number *</label>
+                    <div className="fn-phone-group">
+                      <span className="fn-phone-prefix">+91</span>
+                      <input
+                        id="cf-phone"
+                        type="tel"
+                        maxLength={10}
+                        className="fn-form-input fn-phone-input"
+                        placeholder="10-digit number"
+                        value={leadForm.phone}
+                        onChange={(e) => setLeadForm({ ...leadForm, phone: e.target.value.replace(/\D/g, '') })}
+                        required
+                      />
+                    </div>
+                  </div>
+                </div>
+
+                <div className="fn-form-row">
+                  <div className="fn-form-field">
+                    <label className="fn-form-label" htmlFor="cf-city">City / District in Rajasthan *</label>
+                    <select
+                      id="cf-city"
+                      className="fn-form-select"
+                      value={leadForm.city}
+                      onChange={(e) => setLeadForm({ ...leadForm, city: e.target.value })}
+                    >
+                      <option value="Barmer">Barmer</option>
+                      <option value="Jaipur">Jaipur</option>
+                      <option value="Jodhpur">Jodhpur</option>
+                      <option value="Udaipur">Udaipur</option>
+                      <option value="Bikaner">Bikaner</option>
+                      <option value="Kota">Kota</option>
+                      <option value="Ajmer">Ajmer</option>
+                      <option value="Alwar">Alwar</option>
+                      <option value="Sikar">Sikar</option>
+                      <option value="Other Rajasthan City">Other Rajasthan City</option>
+                    </select>
+                  </div>
+
+                  <div className="fn-form-field">
+                    <label className="fn-form-label" htmlFor="cf-space">Furniture Requirement *</label>
+                    <select
+                      id="cf-space"
+                      className="fn-form-select"
+                      value={leadForm.spaceType}
+                      onChange={(e) => setLeadForm({ ...leadForm, spaceType: e.target.value })}
+                    >
+                      <option value="Modular Kitchen">Modular Kitchen</option>
+                      <option value="Master Bedroom Suite">Master Bedroom Suite</option>
+                      <option value="Custom Wardrobe & Storage">Custom Wardrobe &amp; Storage</option>
+                      <option value="Living Room & Sofa Sets">Living Room &amp; Sofa Sets</option>
+                      <option value="TV Media Console & Louvers">TV Media Console &amp; Louvers</option>
+                      <option value="Full Home Woodwork Package">Full Home Woodwork Package</option>
+                    </select>
+                  </div>
+                </div>
+
+                <div className="fn-form-field">
+                  <label className="fn-form-label" htmlFor="cf-notes">
+                    Specific Requirements or Approximate Room Dimensions (Optional)
+                  </label>
+                  <textarea
+                    id="cf-notes"
+                    rows={2}
+                    className="fn-form-textarea"
+                    placeholder="e.g. 14x10 ft modular kitchen, high gloss acrylic finish, L-shaped counter..."
+                    value={leadForm.notes}
+                    onChange={(e) => setLeadForm({ ...leadForm, notes: e.target.value })}
+                  />
+                </div>
+
+                <div className="fn-form-guarantee-note">
+                  <Icon name="shield" size={15} />
+                  <span>Your privacy is protected. No spam calls. Direct contact with our verified master karigar.</span>
+                </div>
+
+                <button type="submit" className="fn-cf-submit-btn">
+                  <span>Get Free Quote &amp; 3D Render</span>
+                  <Icon name="arrow" size={15} />
+                </button>
+              </form>
+            )}
+          </div>
+
+          {/* SARVOTTAM Trust Badges Strip */}
+          <div className="fn-trust-strip">
+            <div className="fn-trust-item">
+              <div className="fn-trust-icon">
+                <Icon name="shield" size={18} />
+              </div>
+              <div className="fn-trust-text">
+                <strong>10-Year Karigar Warranty</strong>
+                <span>On structural plywood &amp; solid wood framing</span>
+              </div>
+            </div>
+
+            <div className="fn-trust-item">
+              <div className="fn-trust-icon">
+                <Icon name="hammer" size={18} />
+              </div>
+              <div className="fn-trust-text">
+                <strong>Verified Rajasthan Artisans</strong>
+                <span>Jodhpur &amp; Shekhawati seasoned master carpenters</span>
+              </div>
+            </div>
+
+            <div className="fn-trust-item">
+              <div className="fn-trust-icon">
+                <Icon name="rupee" size={18} />
+              </div>
+              <div className="fn-trust-text">
+                <strong>Direct Workshop Pricing</strong>
+                <span>Zero retail showroom markups or middleman commissions</span>
+              </div>
+            </div>
+
+            <div className="fn-trust-item">
+              <div className="fn-trust-icon">
+                <Icon name="check" size={18} />
+              </div>
+              <div className="fn-trust-text">
+                <strong>Free Doorstep 3D CAD</strong>
+                <span>Photorealistic renders and accurate laser measurements</span>
+              </div>
+            </div>
+          </div>
+        </section>
+      </main>
+
+      <div className="bottom-spacer" />
+    </div>
+  );
+}
+
+// ══════════════════════════════════════════════════════════════
+// REUSABLE COMPONENT: Curated Collection Carousel (Repeating Component)
+// ══════════════════════════════════════════════════════════════
+function CollectionCarousel({ title, subtitle, badge, items, onSelect }) {
+  return (
+    <div className="fn-carousel-block">
+      <div className="fn-carousel-head">
+        <div className="fn-ch-left">
+          {badge && <span className="fn-carousel-badge">{badge}</span>}
+          <h3 className="fn-carousel-title">{title}</h3>
+          {subtitle && <p className="fn-carousel-sub">{subtitle}</p>}
         </div>
       </div>
 
-      {/* ── 5. MAIN 2-COLUMN DESIGN GRID ── */}
-      <main className="fn-main-grid">
-        {filteredDesigns.map((item, index) => {
-          return (
-            <div key={item.id} className="fn-grid-item">
-              <article className="fn-design-card" onClick={() => setSelectedProject(item)}>
-                <div className="fn-card-image-box">
-                  <img src={item.img} alt={item.name} loading="lazy" />
-                  <span className="fn-card-size-pill">{item.size}</span>
-                  <button
-                    type="button"
-                    className={'fn-card-heart' + (liked[item.id] ? ' on' : '')}
-                    onClick={(e) => toggleLike(item.id, item.name, e)}
-                    aria-label="Save to Wishlist"
-                  >
-                    <Icon name="heart" size={15} />
-                  </button>
-                </div>
-
-                <div className="fn-card-details">
-                  <span className="fn-card-finish-tag">{item.finish}</span>
-                  <h3 className="fn-card-title">{item.name}</h3>
-
-                  <div className="fn-card-price-row">
-                    <span className="fn-card-price-val">{item.price}</span>
-                    <span className="fn-card-rating">
-                      <Icon name="star" size={12} /> {item.rating}
-                    </span>
-                  </div>
-
-                  {/* Dual Actions: Book Consultation & View Project */}
-                  <div className="fn-card-actions-row">
-                    <button
-                      type="button"
-                      className="fn-action-consult"
-                      onClick={(e) => {
-                        e.stopPropagation();
-                        setConsultModal(item);
-                      }}
-                    >
-                      Book Free Consultation
-                    </button>
-                    <button
-                      type="button"
-                      className="fn-action-view"
-                      onClick={(e) => {
-                        e.stopPropagation();
-                        setSelectedProject(item);
-                      }}
-                    >
-                      View Specs
-                    </button>
-                  </div>
-                </div>
-              </article>
-
-              {/* Integrated Promotional Card after item index 1 (Livspace style) */}
-              {index === 1 && !wishlistOnly && (
-                <div className="fn-promo-card-wrapper">
-                  <div className="fn-inline-promo-card">
-                    <div className="fn-promo-badge">Rajasthan Karigar Direct</div>
-                    <h3 className="fn-promo-title">{currentSpace.promo.headline}</h3>
-                    <p className="fn-promo-sub">{currentSpace.promo.sub}</p>
-                    <button
-                      type="button"
-                      className="fn-promo-cta-btn"
-                      onClick={() => setConsultModal({ name: currentSpace.promo.headline })}
-                    >
-                      {currentSpace.promo.cta}
-                    </button>
-                  </div>
-                </div>
-              )}
-            </div>
-          );
-        })}
-
-        {filteredDesigns.length === 0 && (
-          <div className="fn-empty-state">
-            <Icon name="search" size={32} />
-            <h3>No designs found in this filter</h3>
-            <p>Try selecting "All" or clear your search keyword to view all curated designs.</p>
-            <button
-              type="button"
-              className="fn-reset-btn"
-              onClick={() => {
-                setActiveSubcat('All');
-                setSearch('');
-                setWishlistOnly(false);
-              }}
-            >
-              Reset Filters
-            </button>
-          </div>
-        )}
-      </main>
-
-      {/* ── 6. PROJECT DETAIL SHEET (Livspace-inspired viewer) ── */}
-      {selectedProject && (
-        <div className="fn-sheet-overlay" onClick={() => setSelectedProject(null)}>
-          <div className="fn-project-sheet" onClick={(e) => e.stopPropagation()}>
-            {/* Sheet Top Controls */}
-            <div className="fn-ps-header">
-              <button
-                type="button"
-                className="fn-ps-close"
-                onClick={() => setSelectedProject(null)}
-                aria-label="Close"
-              >
-                <Icon name="close" size={18} />
-              </button>
-              <h3 className="fn-ps-top-title">{selectedProject.name}</h3>
-              <button
-                type="button"
-                className={'fn-ps-heart' + (liked[selectedProject.id] ? ' on' : '')}
-                onClick={(e) => toggleLike(selectedProject.id, selectedProject.name, e)}
-                aria-label="Save"
-              >
-                <Icon name="heart" size={18} />
-              </button>
+      <div className="fn-carousel-track">
+        {items.map((item) => (
+          <article
+            key={item.id}
+            className="fn-carousel-card"
+            onClick={() => onSelect(item)}
+            role="button"
+            tabIndex={0}
+            onKeyDown={(e) => {
+              if (e.key === 'Enter' || e.key === ' ') {
+                e.preventDefault();
+                onSelect(item);
+              }
+            }}
+          >
+            <div className="fn-cc-media">
+              <img
+                src={item.img}
+                alt={item.title}
+                loading="lazy"
+                className="fn-cc-img"
+              />
+              {item.tag && <span className="fn-cc-tag">{item.tag}</span>}
             </div>
 
-            {/* Scrollable Sheet Content */}
-            <div className="fn-ps-scroll">
-              <div className="fn-ps-hero-img-wrap">
-                <img src={selectedProject.img} alt={selectedProject.name} />
-                <div className="fn-ps-hero-overlay">
-                  <span className="fn-ps-size-tag">{selectedProject.size}</span>
-                  <span className="fn-ps-rating-tag">
-                    <Icon name="star" size={12} /> {selectedProject.rating} Rating
-                  </span>
-                </div>
-              </div>
-
-              <div className="fn-ps-content-body">
-                <div className="fn-ps-meta-row">
-                  <div>
-                    <h2 className="fn-ps-title">{selectedProject.name}</h2>
-                    <p className="fn-ps-finish">{selectedProject.finish}</p>
-                  </div>
-                  <div className="fn-ps-price-box">
-                    <span className="fn-ps-price-lbl">Estimate Range</span>
-                    <span className="fn-ps-price-val">{selectedProject.price}</span>
-                  </div>
-                </div>
-
-                {/* SARVOTTAM Karigar Promise Box */}
-                <div className="fn-karigar-promise-box">
-                  <div className="fn-kp-icon">
-                    <Icon name="shield" size={20} />
-                  </div>
-                  <div className="fn-kp-text">
-                    <strong>100% Verified Local Rajasthani Master Woodwork</strong>
-                    <p>Direct workshop pricing, premium IS-certified materials, and zero middleman inflation.</p>
-                  </div>
-                </div>
-
-                {/* Technical Specifications Table */}
-                <h4 className="fn-ps-section-heading">Design Specifications</h4>
-                <div className="fn-ps-specs-table">
-                  {selectedProject.specs?.map(([k, v]) => (
-                    <div key={k} className="fn-ps-spec-row">
-                      <span className="fn-ps-spec-key">{k}</span>
-                      <strong className="fn-ps-spec-val">{v}</strong>
-                    </div>
-                  ))}
-                </div>
-
-                {/* Quick Consultation Callout */}
-                <div className="fn-ps-consult-banner">
-                  <div className="fn-ps-cb-text">
-                    <strong>Want this exact look customized for your home?</strong>
-                    <p>Get a free doorstep measurement visit with 3D CAD blueprints from our carpenters.</p>
-                  </div>
-                  <button
-                    type="button"
-                    className="fn-ps-cb-btn"
-                    onClick={() => {
-                      setConsultModal(selectedProject);
-                    }}
-                  >
-                    Book Measurement Visit
-                  </button>
-                </div>
-              </div>
-            </div>
-
-            {/* Sticky Previous / Next Project Footer (Livspace style) */}
-            <div className="fn-ps-nav-footer">
-              {projectNav.prev && (
+            <div className="fn-cc-body">
+              <h4 className="fn-cc-title">{item.title}</h4>
+              <div className="fn-cc-foot">
+                <span className="fn-cc-price">{item.price}</span>
                 <button
                   type="button"
-                  className="fn-ps-nav-btn prev"
-                  onClick={() => setSelectedProject(projectNav.prev)}
+                  className="fn-cc-cta-btn"
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    onSelect(item);
+                  }}
                 >
-                  <Icon name="chevron" size={14} />
-                  <span className="fn-ps-nav-text">
-                    <small>Previous</small>
-                    <strong>{projectNav.prev.name}</strong>
-                  </span>
+                  View Space
                 </button>
-              )}
-
-              {projectNav.next && (
-                <button
-                  type="button"
-                  className="fn-ps-nav-btn next"
-                  onClick={() => setSelectedProject(projectNav.next)}
-                >
-                  <span className="fn-ps-nav-text">
-                    <small>Next Design</small>
-                    <strong>{projectNav.next.name}</strong>
-                  </span>
-                  <Icon name="chevron" size={14} />
-                </button>
-              )}
+              </div>
             </div>
-          </div>
-        </div>
-      )}
-
-      {/* ── 7. BOOK FREE CONSULTATION MODAL ── */}
-      {consultModal && (
-        <div className="fn-sheet-overlay" onClick={() => setConsultModal(null)}>
-          <div className="fn-consult-modal" onClick={(e) => e.stopPropagation()}>
-            <div className="fn-cm-head">
-              <div>
-                <span className="fn-cm-badge">Free Doorstep Visit · ₹0</span>
-                <h3 className="fn-cm-title">Book Design Consultation</h3>
-                <p className="fn-cm-sub">
-                  Selected: <strong>{consultModal.name || currentSpace.title}</strong>
-                </p>
-              </div>
-              <button
-                type="button"
-                className="fn-cm-close"
-                onClick={() => setConsultModal(null)}
-                aria-label="Close"
-              >
-                <Icon name="close" size={18} />
-              </button>
-            </div>
-
-            <form className="fn-cm-form" onSubmit={handleConsultSubmit}>
-              <div className="fn-cm-field">
-                <label className="fn-cm-label">Your Name</label>
-                <input
-                  type="text"
-                  className="fn-cm-input"
-                  value={cName}
-                  onChange={(e) => setCName(e.target.value)}
-                  required
-                />
-              </div>
-
-              <div className="fn-cm-field">
-                <label className="fn-cm-label">Mobile Number</label>
-                <div className="fn-cm-phone-wrap">
-                  <span className="fn-cm-prefix">+91</span>
-                  <input
-                    type="tel"
-                    maxLength={10}
-                    className="fn-cm-input fn-cm-phone"
-                    value={cPhone}
-                    onChange={(e) => setCPhone(e.target.value.replace(/\D/g, ''))}
-                    placeholder="10-digit number"
-                    required
-                  />
-                </div>
-              </div>
-
-              <div className="fn-cm-field">
-                <label className="fn-cm-label">Preferred Date &amp; Time</label>
-                <select
-                  className="fn-cm-select"
-                  value={cDate}
-                  onChange={(e) => setCDate(e.target.value)}
-                >
-                  <option>Tomorrow (Morning 09:00 AM – 12:00 PM)</option>
-                  <option>Tomorrow (Afternoon 12:00 PM – 04:00 PM)</option>
-                  <option>Tomorrow (Evening 04:00 PM – 07:00 PM)</option>
-                  <option>Within 2 Days</option>
-                  <option>This Weekend</option>
-                </select>
-              </div>
-
-              <div className="fn-cm-field">
-                <label className="fn-cm-label">Doorstep Address / City</label>
-                <input
-                  type="text"
-                  className="fn-cm-input"
-                  value={cAddress}
-                  onChange={(e) => setCAddress(e.target.value)}
-                  placeholder="House/Plot No., Area, City in Rajasthan"
-                  required
-                />
-              </div>
-
-              <div className="fn-cm-field">
-                <label className="fn-cm-label">Notes or Custom Requirements (Optional)</label>
-                <textarea
-                  className="fn-cm-textarea"
-                  rows={2}
-                  value={cNotes}
-                  onChange={(e) => setCNotes(e.target.value)}
-                  placeholder="e.g. Need L-shaped modular kitchen with chimney space..."
-                />
-              </div>
-
-              <div className="fn-cm-guarantee-note">
-                <Icon name="check" size={14} />
-                <span>Zero obligation · No hidden inspection charges</span>
-              </div>
-
-              <button type="submit" className="fn-cm-submit-btn">
-                Confirm Free Measurement Visit
-              </button>
-            </form>
-          </div>
-        </div>
-      )}
-
-      <div className="bottom-spacer" />
+          </article>
+        ))}
+      </div>
     </div>
   );
 }
