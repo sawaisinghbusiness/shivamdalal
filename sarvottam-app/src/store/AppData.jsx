@@ -4,201 +4,8 @@ import { signUp, signIn, signOutUser, watchAuth, fetchProfile } from '../service
 const AppDataContext = createContext(null);
 export const useAppData = () => useContext(AppDataContext);
 
-// Seed bookings matching the status-based admin-progressed marketplace spec
-const DEFAULT_BOOKINGS = [
-  {
-    id: 'CP849201',
-    service: 'Electrician',
-    subService: 'Complete Diagnosis & Inspection',
-    icon: 'bolt',
-    status: 'PROCESSING', // PROCESSING, CONFIRMED, COMPLETED, CANCELLED
-    date: 'Today, 8 Jun 2026',
-    slot: '08:00 AM – 10:00 AM',
-    city: 'Barmer',
-    addressArea: 'Indra Colony',
-    address: '12, Indra Colony, Near Water Tank, Barmer, Rajasthan',
-    customer: {
-      name: 'Shivam Singh',
-      phone: '9876543210',
-      notes: 'Please call at main gate before entering',
-    },
-    services: [
-      {
-        id: 'electrician',
-        name: 'Electrician',
-        issue: 'Problem pata nahi? Complete Diagnosis',
-        price: '₹149',
-        minPrice: 149,
-        maxPrice: 149,
-      },
-    ],
-    estimate: {
-      visitCharge: 99,
-      laborMin: 149,
-      laborMax: 149,
-      gstMin: 12,
-      gstMax: 12,
-      totalMin: 260,
-      totalMax: 260,
-      savings: 0,
-    },
-    amount: 260,
-    karigar: null,
-    timeline: [
-      { status: 'PROCESSING', title: 'Booking Placed', desc: 'Assigned to SARVOTTAM operations desk', time: '10 mins ago', done: true },
-      { status: 'CONFIRMED', title: 'Karigar Assignment', desc: 'Platform assigning verified technician', time: 'In progress', done: false },
-      { status: 'IN_PROGRESS', title: 'Doorstep Inspection', desc: 'Technician reaches address on time', time: 'Pending', done: false },
-      { status: 'COMPLETED', title: 'Work Done & Final Bill', desc: 'Payment after complete satisfaction', time: 'Pending', done: false },
-    ],
-  },
-  {
-    id: 'CP712849',
-    service: 'AC Repair',
-    subService: 'Power Jet Deep Clean Servicing',
-    icon: 'fan',
-    status: 'CONFIRMED',
-    date: 'Tomorrow, 9 Jun 2026',
-    slot: '12:00 PM – 02:00 PM',
-    city: 'Barmer',
-    addressArea: 'Station Road',
-    address: 'Shop 4, First Floor, Station Road, Barmer, Rajasthan',
-    customer: {
-      name: 'Shivam Singh',
-      phone: '9876543210',
-      notes: '',
-    },
-    services: [
-      {
-        id: 'ac',
-        name: 'AC Repair',
-        issue: 'Power Jet Deep Clean Servicing',
-        price: '₹499',
-        minPrice: 499,
-        maxPrice: 499,
-      },
-    ],
-    estimate: {
-      visitCharge: 99,
-      laborMin: 499,
-      laborMax: 499,
-      gstMin: 30,
-      gstMax: 30,
-      totalMin: 628,
-      totalMax: 628,
-      savings: 0,
-    },
-    amount: 628,
-    karigar: {
-      name: 'Dinesh Jain',
-      phone: '+91 94140 88214',
-      skill: 'AC Repair Specialist',
-      area: 'Station Road, Barmer',
-      rating: 4.9,
-      jobsDone: 420,
-    },
-    timeline: [
-      { status: 'PROCESSING', title: 'Booking Placed', desc: 'Received by operations', time: 'Yesterday', done: true },
-      { status: 'CONFIRMED', title: 'Technician Assigned', desc: 'Dinesh Jain allocated for this job', time: '2 hrs ago', done: true },
-      { status: 'IN_PROGRESS', title: 'Doorstep Inspection', desc: 'Scheduled for 12:00 PM slot', time: 'Pending', done: false },
-      { status: 'COMPLETED', title: 'Work Done & Final Bill', desc: 'Payment after complete satisfaction', time: 'Pending', done: false },
-    ],
-  },
-  {
-    id: 'CP554910',
-    service: 'Plumber',
-    subService: 'Tap / Mixer Repair & Installation',
-    icon: 'droplet',
-    status: 'COMPLETED',
-    date: '28 May 2026',
-    slot: '04:00 PM – 06:00 PM',
-    city: 'Barmer',
-    addressArea: 'Indra Colony',
-    address: '12, Indra Colony, Near Water Tank, Barmer, Rajasthan',
-    customer: {
-      name: 'Shivam Singh',
-      phone: '9876543210',
-      notes: '',
-    },
-    services: [
-      {
-        id: 'plumber',
-        name: 'Plumber',
-        issue: 'Tap / Mixer Repair & Installation',
-        price: '₹199–₹399',
-        minPrice: 199,
-        maxPrice: 399,
-      },
-    ],
-    estimate: {
-      visitCharge: 99,
-      laborMin: 199,
-      laborMax: 399,
-      gstMin: 15,
-      gstMax: 25,
-      totalMin: 313,
-      totalMax: 523,
-      savings: 0,
-    },
-    amount: 420,
-    karigar: {
-      name: 'Suresh Mali',
-      phone: '+91 94140 12345',
-      skill: 'Plumbing Specialist',
-      area: 'Barmer City',
-      rating: 4.8,
-      jobsDone: 310,
-    },
-    timeline: [
-      { status: 'PROCESSING', title: 'Booking Placed', desc: 'Received by operations', time: '28 May', done: true },
-      { status: 'CONFIRMED', title: 'Technician Assigned', desc: 'Suresh Mali assigned', time: '28 May', done: true },
-      { status: 'IN_PROGRESS', title: 'Doorstep Inspection', desc: 'Diagnosis & repair completed', time: '28 May', done: true },
-      { status: 'COMPLETED', title: 'Job Completed', desc: 'Paid ₹420 via UPI with 30-day warranty', time: '28 May', done: true },
-    ],
-  },
-  {
-    id: 'CP391048',
-    service: 'Carpenter',
-    subService: 'Door Lock / Handle Repair',
-    icon: 'hammer',
-    status: 'CANCELLED',
-    date: '20 May 2026',
-    slot: '10:00 AM – 12:00 PM',
-    city: 'Barmer',
-    addressArea: 'Station Road',
-    address: 'Shop 4, First Floor, Station Road, Barmer, Rajasthan',
-    customer: {
-      name: 'Shivam Singh',
-      phone: '9876543210',
-      notes: '',
-    },
-    services: [
-      {
-        id: 'carpenter',
-        name: 'Carpenter',
-        issue: 'Door Lock / Handle Repair & Change',
-        price: '₹249–₹499',
-        minPrice: 249,
-        maxPrice: 499,
-      },
-    ],
-    estimate: {
-      visitCharge: 99,
-      laborMin: 249,
-      laborMax: 499,
-      gstMin: 17,
-      gstMax: 30,
-      totalMin: 365,
-      totalMax: 628,
-      savings: 0,
-    },
-    amount: 0,
-    karigar: null,
-    timeline: [
-      { status: 'PROCESSING', title: 'Booking Placed', desc: 'Received by operations', time: '20 May', done: true },
-      { status: 'CANCELLED', title: 'Cancelled by User', desc: 'User rescheduled appointment', time: '20 May', done: true },
-    ],
-  },
-];
+// No demo bookings — bookings are created real-time by users
+const DEFAULT_BOOKINGS = [];
 
 const DEFAULTS = {
   user: {
@@ -213,7 +20,7 @@ const DEFAULTS = {
     { id: 'a1', label: 'Ghar',   icon: 'home',     full: '12, Indra Colony, Barmer, Rajasthan 344001' },
     { id: 'a2', label: 'Office', icon: 'building', full: 'Shop 4, Station Road, Barmer, Rajasthan 344001' },
   ],
-  bookings: DEFAULT_BOOKINGS,
+  bookings: [],
   wallet: {
     balance: 250,
     methods: [
@@ -221,26 +28,30 @@ const DEFAULTS = {
       { id: 'm2', type: 'card', label: 'HDFC Card', sub: '•••• 4521' },
     ],
     transactions: [
-      { id: 't1', title: 'AC Repair payment',  date: '2 Jun 2026',  amount: -680, type: 'debit' },
-      { id: 't2', title: 'Wallet top-up',      date: '1 Jun 2026',  amount: 500,  type: 'credit' },
-      { id: 't3', title: 'Plumber payment',    date: '28 May 2026', amount: -420, type: 'debit' },
-      { id: 't4', title: 'Referral bonus',     date: '25 May 2026', amount: 100,  type: 'credit' },
+      { id: 't2', title: 'Wallet top-up',  date: '1 Jun 2026',  amount: 500,  type: 'credit' },
+      { id: 't4', title: 'Referral bonus', date: '25 May 2026', amount: 100,  type: 'credit' },
     ],
   },
   notifications: [
-    { id: 'n1', icon: 'bolt',     title: 'Booking Confirmed',   msg: 'Your booking CP849201 is in processing. Platform will assign a verified technician shortly.',  time: '2 min ago', unread: true },
-    { id: 'n2', icon: 'card',     title: '₹100 Cashback Received', msg: '₹100 referral bonus credited to your wallet balance.', time: '1 hr ago',  unread: true },
-    { id: 'n3', icon: 'star',     title: 'Rate your service',   msg: 'How was your Plumber service? Share your rating with us.',     time: 'Yesterday', unread: false },
-    { id: 'n4', icon: 'bell',     title: 'Monsoon Offer',       msg: '20% off on all Painting services this week.',            time: '2 days ago',unread: false },
+    { id: 'n2', icon: 'card', title: '₹100 Cashback Received', msg: '₹100 referral bonus credited to your wallet balance.', time: '1 hr ago', unread: true },
+    { id: 'n4', icon: 'bell', title: 'Monsoon Offer',          msg: '20% off on all Painting services this week.',          time: '2 days ago', unread: false },
   ],
 };
 
-const KEY = 'sarvottam_data_v8';
+const KEY = 'sarvottam_data_v10';
+
+const DEMO_BOOKING_IDS = new Set(['CP849201', 'CP712849', 'CP554910', 'CP391048']);
 
 function load() {
   try {
     const saved = localStorage.getItem(KEY);
-    if (saved) return { ...DEFAULTS, ...JSON.parse(saved) };
+    if (saved) {
+      const parsed = JSON.parse(saved);
+      const cleanBookings = Array.isArray(parsed.bookings)
+        ? parsed.bookings.filter((b) => !DEMO_BOOKING_IDS.has(b.id))
+        : [];
+      return { ...DEFAULTS, ...parsed, bookings: cleanBookings };
+    }
   } catch { /* ignore */ }
   return DEFAULTS;
 }

@@ -21,10 +21,11 @@
 
 .as-grid-container {
   display: grid;
-  grid-template-columns: repeat(3, 1fr);   /* CHANGED: 2 -> 3 columns (reference jaisi ek row) */
-  gap: 12px;                                /* CHANGED: 16px -> 12px (chhote tiles ke liye tighter) */
-  padding: 0 16px 24px;                     /* CHANGED: 0 20px -> 0 16px (3 columns fit) */
-  align-items: start;                       /* ADDED: tiles vertically stretch na hon */
+  grid-template-columns: repeat(2, 1fr);
+  gap: 16px;
+  padding: 0 20px 24px;
+  max-width: 480px;
+  align-items: start;
 }
 
 .as-tile-btn {
@@ -56,9 +57,9 @@
 .as-tile-panel {
   position: relative;
   width: 100%;
-  aspect-ratio: 1 / 0.78;                   /* CHANGED: 1/1 (bada square) -> 1/0.78 (chhota rectangle) */
+  aspect-ratio: 1 / 0.88;
   background-color: #F2F4F6;
-  border-radius: 16px;                      /* CHANGED: 18px -> 16px (chhote panel ke hisaab se) */
+  border-radius: 18px;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -74,10 +75,9 @@
 }
 
 .as-tile-img {
-  width: 62%;                               /* CHANGED: 72% -> 62% (chhote panel me proportion) */
-  height: 62%;                              /* CHANGED: 72% -> 62% */
+  width: 72%;
+  height: 72%;
   object-fit: contain;
-  mix-blend-mode: multiply;                 /* ADDED: PNG ka white backdrop grey panel me blend (white box gayab) */
   opacity: 1 !important;
   filter: none !important;
   user-select: none;

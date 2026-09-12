@@ -20,8 +20,12 @@ export default function Emergency() {
       <div className="em-list">
         {EMERGENCY_SERVICES.map((s) => (
           <div className="em-card" key={s.id}>
-            <div className="em-ic" style={{ color: s.color, background: s.color + '18' }}>
-              <Icon name={s.icon} size={26} />
+            <div className="em-ic" style={{ background: s.color + '15' }}>
+              {s.img ? (
+                <img src={s.img} alt={s.name} className="em-img" />
+              ) : (
+                <Icon name={s.icon} size={26} />
+              )}
             </div>
             <div className="em-info">
               <h3>{s.name}</h3>
