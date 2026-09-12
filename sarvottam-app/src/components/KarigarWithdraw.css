@@ -1,0 +1,666 @@
+/* SARVOTTAM — Karigar Withdrawal Screen */
+.kw-page {
+  position: absolute;
+  inset: 0;
+  z-index: 150;
+  background-color: #F8FAFC;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  animation: slideInUp .22s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+@keyframes slideInUp {
+  from { transform: translateY(20px); opacity: 0; }
+  to { transform: translateY(0); opacity: 1; }
+}
+
+.kw-header {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  background: #fff;
+  padding: 16px 18px;
+  border-bottom: 1px solid #E2E8F0;
+  flex-shrink: 0;
+  box-shadow: 0 1px 3px rgba(0,0,0,0.03);
+}
+
+.kw-back-btn {
+  width: 38px;
+  height: 38px;
+  border-radius: 12px;
+  border: 1px solid #E2E8F0;
+  background: #fff;
+  color: #1E293B;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  flex-shrink: 0;
+  transition: background 0.15s ease;
+}
+.kw-back-btn:active { background: #F1F5F9; }
+
+.kw-head-title h2 {
+  font-size: 17px;
+  font-weight: 800;
+  color: #0F172A;
+  margin: 0;
+  line-height: 1.25;
+}
+.kw-head-title p {
+  font-size: 11.5px;
+  color: #64748B;
+  margin: 2px 0 0;
+}
+
+.kw-content {
+  flex: 1;
+  overflow-y: auto;
+  padding: 16px 18px 40px;
+  -webkit-overflow-scrolling: touch;
+}
+
+/* Balance Hero Card */
+.kw-balance-card {
+  background: linear-gradient(135deg, #0F766E 0%, #115E59 100%);
+  color: #fff;
+  border-radius: 18px;
+  padding: 20px 18px;
+  box-shadow: 0 8px 20px rgba(15, 118, 110, 0.22);
+  position: relative;
+  overflow: hidden;
+}
+.kw-balance-card::after {
+  content: '';
+  position: absolute;
+  right: -30px;
+  top: -40px;
+  width: 140px;
+  height: 140px;
+  border-radius: 50%;
+  background: radial-gradient(circle, rgba(255,255,255,0.18), transparent 65%);
+}
+.kw-bal-sub {
+  font-size: 11.5px;
+  opacity: 0.85;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  font-weight: 700;
+}
+.kw-bal-amt {
+  font-size: 34px;
+  font-weight: 850;
+  margin: 6px 0 10px;
+  font-variant-numeric: tabular-nums;
+  letter-spacing: -0.02em;
+}
+.kw-bal-note {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 11px;
+  opacity: 0.9;
+}
+
+/* Section Card */
+.kw-sec-card {
+  background: #fff;
+  border: 1px solid #E2E8F0;
+  border-radius: 16px;
+  padding: 18px 16px;
+  margin-top: 14px;
+  box-shadow: 0 1px 3px rgba(0,0,0,0.02);
+}
+.kw-sec-label {
+  display: block;
+  font-size: 13px;
+  font-weight: 750;
+  color: #1E293B;
+  margin-bottom: 10px;
+}
+
+/* Currency Input */
+.kw-input-wrap {
+  display: flex;
+  align-items: center;
+  border: 2px solid #E2E8F0;
+  border-radius: 14px;
+  padding: 8px 14px;
+  background: #FAFCFC;
+  transition: border-color 0.15s ease, box-shadow 0.15s ease;
+}
+.kw-input-wrap:focus-within {
+  border-color: #0F766E;
+  background: #fff;
+  box-shadow: 0 0 0 4px rgba(15, 118, 110, 0.1);
+}
+.kw-currency-symbol {
+  font-size: 24px;
+  font-weight: 800;
+  color: #0F766E;
+  margin-right: 6px;
+}
+.kw-amt-input {
+  flex: 1;
+  border: none;
+  outline: none;
+  background: transparent;
+  font-size: 26px;
+  font-weight: 800;
+  color: #0F172A;
+  width: 100%;
+}
+.kw-clear-btn {
+  background: #E2E8F0;
+  border: none;
+  color: #64748B;
+  width: 24px;
+  height: 24px;
+  border-radius: 50%;
+  font-size: 12px;
+  cursor: pointer;
+}
+
+/* Chips */
+.kw-chips {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-top: 12px;
+}
+.kw-chip {
+  background: #F1F5F9;
+  border: 1.5px solid #E2E8F0;
+  border-radius: 20px;
+  padding: 7px 13px;
+  font-size: 12px;
+  font-weight: 700;
+  color: #334155;
+  cursor: pointer;
+  transition: all 0.15s ease;
+}
+.kw-chip:hover { border-color: #CBD5E1; }
+.kw-chip.active {
+  background: #CCFBF1;
+  border-color: #0F766E;
+  color: #0F766E;
+}
+.kw-chip.withdraw-all {
+  background: #EFF6FF;
+  border-color: #BFDBFE;
+  color: #1D4ED8;
+}
+
+.kw-min-note {
+  display: block;
+  font-size: 11px;
+  color: #94A3B8;
+  margin-top: 8px;
+}
+
+/* Method Group */
+.kw-method-group {
+  border: 1.5px solid #E2E8F0;
+  border-radius: 14px;
+  padding: 14px;
+  margin-top: 12px;
+  background: #F8FAFC;
+}
+.kw-group-header {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 10px;
+}
+.kw-group-icon {
+  width: 32px;
+  height: 32px;
+  border-radius: 10px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+.kw-group-icon.upi { background: #E0E7FF; color: #4338CA; }
+.kw-group-icon.bank { background: #FEF3C7; color: #B45309; }
+.kw-group-header strong {
+  display: block;
+  font-size: 13.5px;
+  font-weight: 750;
+  color: #0F172A;
+}
+.kw-group-header small {
+  display: block;
+  font-size: 11px;
+  color: #64748B;
+}
+
+/* Saved Item Cards */
+.kw-item-card {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  background: #fff;
+  border: 1.5px solid #E2E8F0;
+  border-radius: 12px;
+  padding: 11px 13px;
+  margin-bottom: 8px;
+  cursor: pointer;
+  transition: all 0.15s ease;
+}
+.kw-item-card:hover { border-color: #94A3B8; }
+.kw-item-card.selected {
+  border-color: #0F766E;
+  background: #F0FDFA;
+  box-shadow: 0 0 0 2px rgba(15,118,110,0.12);
+}
+.kw-radio-dot {
+  width: 18px;
+  height: 18px;
+  border-radius: 50%;
+  border: 2px solid #CBD5E1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+.kw-item-card.selected .kw-radio-dot {
+  border-color: #0F766E;
+}
+.kw-radio-dot span {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: #0F766E;
+}
+.kw-item-info { flex: 1; min-width: 0; }
+.kw-item-val {
+  display: block;
+  font-size: 13px;
+  font-weight: 750;
+  color: #0F172A;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.kw-item-name {
+  display: block;
+  font-size: 11px;
+  color: #64748B;
+  margin-top: 1px;
+}
+.kw-status-tag {
+  font-size: 10px;
+  font-weight: 750;
+  padding: 3px 7px;
+  border-radius: 6px;
+  flex-shrink: 0;
+}
+.kw-status-tag.verified {
+  background: #DCFCE7;
+  color: #15803D;
+}
+.kw-status-tag.review {
+  background: #FEF3C7;
+  color: #B45309;
+}
+
+.kw-add-link-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  width: 100%;
+  justify-content: center;
+  padding: 9px;
+  background: #fff;
+  border: 1.5px dashed #CBD5E1;
+  border-radius: 10px;
+  color: #0F766E;
+  font-size: 12.5px;
+  font-weight: 700;
+  cursor: pointer;
+  margin-top: 4px;
+  transition: all 0.15s ease;
+}
+.kw-add-link-btn:hover {
+  background: #F0FDFA;
+  border-color: #0F766E;
+}
+
+/* Forms (Add UPI & Add Bank) */
+.kw-form { display: flex; flex-direction: column; gap: 14px; }
+.kw-input-box {
+  display: flex;
+  gap: 8px;
+}
+.kw-field-input {
+  flex: 1;
+  border: 1.5px solid #E2E8F0;
+  border-radius: 12px;
+  padding: 12px 14px;
+  font-size: 14px;
+  color: #0F172A;
+  background: #FAFCFC;
+  outline: none;
+  transition: all 0.15s ease;
+  width: 100%;
+}
+.kw-field-input:focus {
+  border-color: #0F766E;
+  background: #fff;
+  box-shadow: 0 0 0 4px rgba(15, 118, 110, 0.1);
+}
+.kw-field-input.disabled {
+  background: #F1F5F9;
+  color: #64748B;
+  cursor: not-allowed;
+}
+.kw-field-input.error {
+  border-color: #EF4444;
+}
+
+.kw-locked-field {
+  position: relative;
+  display: flex;
+  align-items: center;
+}
+.kw-field-tag {
+  position: absolute;
+  right: 10px;
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  background: #F1F5F9;
+  padding: 3px 8px;
+  border-radius: 6px;
+  font-size: 11px;
+  font-weight: 700;
+  color: #64748B;
+}
+.kw-hint-note {
+  display: block;
+  font-size: 11px;
+  color: #94A3B8;
+  margin-top: 4px;
+}
+
+.kw-verify-inline-btn {
+  background: #0F766E;
+  color: #fff;
+  border: none;
+  border-radius: 12px;
+  padding: 0 16px;
+  font-size: 13px;
+  font-weight: 750;
+  cursor: pointer;
+  flex-shrink: 0;
+  transition: opacity 0.15s ease;
+}
+.kw-verify-inline-btn:disabled { opacity: 0.5; cursor: not-allowed; }
+
+.kw-upi-suggestions {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 6px;
+  margin-top: 10px;
+}
+.kw-upi-suggestions small {
+  font-size: 11px;
+  color: #64748B;
+  font-weight: 600;
+}
+.kw-suf-chip {
+  background: #F1F5F9;
+  border: 1px solid #E2E8F0;
+  border-radius: 6px;
+  padding: 3px 8px;
+  font-size: 11px;
+  font-weight: 700;
+  color: #334155;
+  cursor: pointer;
+}
+.kw-suf-chip:hover { background: #E2E8F0; }
+
+.kw-verified-card {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  background: #ECFDF5;
+  border: 1.5px solid #A7F3D0;
+  border-radius: 12px;
+  padding: 12px 14px;
+  margin-top: 12px;
+}
+.kw-verified-ic {
+  width: 28px;
+  height: 28px;
+  border-radius: 50%;
+  background: #10B981;
+  color: #fff;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+.kw-verified-card strong {
+  display: block;
+  font-size: 12.5px;
+  color: #065F46;
+  font-weight: 750;
+}
+.kw-verified-card p {
+  font-size: 12px;
+  color: #047857;
+  margin: 2px 0 0;
+}
+
+.kw-bank-detect-pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  background: #EFF6FF;
+  border: 1px solid #BFDBFE;
+  color: #1D4ED8;
+  border-radius: 8px;
+  padding: 6px 10px;
+  font-size: 12px;
+  font-weight: 700;
+  margin-top: 8px;
+}
+.kw-error-msg {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  color: #DC2626;
+  font-size: 12px;
+  font-weight: 600;
+  margin-top: 8px;
+}
+.kw-error-txt {
+  display: block;
+  color: #DC2626;
+  font-size: 11px;
+  font-weight: 600;
+  margin-top: 3px;
+}
+
+/* Review Screen (1-2 Days) */
+.kw-review-screen {
+  text-align: center;
+  padding: 16px 4px;
+}
+.kw-review-icon-box {
+  width: 72px;
+  height: 72px;
+  border-radius: 24px;
+  background: #FEF3C7;
+  color: #D97706;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin: 10px auto 14px;
+  box-shadow: 0 4px 14px rgba(217,119,6,0.18);
+}
+.kw-review-tag {
+  display: inline-block;
+  background: #FEF3C7;
+  color: #B45309;
+  font-size: 12px;
+  font-weight: 750;
+  padding: 4px 12px;
+  border-radius: 20px;
+  margin-bottom: 8px;
+}
+.kw-review-title {
+  font-size: 20px;
+  font-weight: 800;
+  color: #0F172A;
+  margin: 0 0 6px;
+}
+.kw-review-desc {
+  font-size: 13px;
+  color: #64748B;
+  line-height: 1.5;
+  margin: 0 0 16px;
+}
+.kw-summary-card {
+  background: #fff;
+  border: 1px solid #E2E8F0;
+  border-radius: 14px;
+  padding: 14px 16px;
+  text-align: left;
+  margin-bottom: 14px;
+}
+.kw-sum-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 8px 0;
+  font-size: 12.5px;
+  border-bottom: 1px solid #F1F5F9;
+}
+.kw-sum-row:last-child { border-bottom: none; }
+.kw-sum-row span { color: #64748B; font-weight: 500; }
+.kw-sum-row strong { color: #0F172A; font-weight: 750; }
+
+.kw-instant-tip {
+  display: flex;
+  align-items: flex-start;
+  gap: 10px;
+  background: #F0FDFA;
+  border: 1px solid #CCFBF1;
+  border-radius: 12px;
+  padding: 12px 14px;
+  text-align: left;
+  font-size: 12px;
+  color: #0F766E;
+  line-height: 1.45;
+  margin-bottom: 20px;
+}
+
+/* Processing */
+.kw-proc-screen {
+  text-align: center;
+  padding: 60px 18px;
+}
+.kw-spinner {
+  width: 44px;
+  height: 44px;
+  border: 4px solid #E2E8F0;
+  border-top-color: #0F766E;
+  border-radius: 50%;
+  animation: kwSpin .8s linear infinite;
+  margin: 0 auto 16px;
+}
+@keyframes kwSpin { to { transform: rotate(360deg); } }
+.kw-proc-screen h3 { font-size: 18px; font-weight: 800; color: #0F172A; margin: 0 0 6px; }
+.kw-proc-screen p { font-size: 13px; color: #64748B; margin: 0; }
+
+/* Success */
+.kw-success-screen {
+  text-align: center;
+  padding: 16px 4px;
+}
+.kw-success-badge {
+  width: 68px;
+  height: 68px;
+  border-radius: 50%;
+  background: #10B981;
+  color: #fff;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin: 12px auto 14px;
+  box-shadow: 0 8px 24px rgba(16, 185, 129, 0.28);
+}
+.kw-success-title {
+  font-size: 22px;
+  font-weight: 850;
+  color: #0F172A;
+  margin: 0 0 4px;
+}
+.kw-success-sub {
+  font-size: 13px;
+  color: #64748B;
+  margin: 0 0 16px;
+}
+.kw-receipt-card {
+  background: #fff;
+  border: 1px solid #E2E8F0;
+  border-radius: 16px;
+  padding: 16px;
+  text-align: left;
+  margin-bottom: 24px;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.03);
+}
+
+/* Footer CTAs */
+.kw-footer-cta {
+  margin-top: 18px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+.kw-primary-btn {
+  width: 100%;
+  background: linear-gradient(135deg, #0F766E 0%, #115E59 100%);
+  color: #fff;
+  border: none;
+  padding: 15px;
+  border-radius: 14px;
+  font-size: 15px;
+  font-weight: 750;
+  cursor: pointer;
+  box-shadow: 0 4px 12px rgba(15, 118, 110, 0.25);
+  transition: transform 0.15s ease, opacity 0.15s ease;
+}
+.kw-primary-btn:active { transform: scale(0.98); }
+.kw-primary-btn:disabled {
+  opacity: 0.55;
+  cursor: not-allowed;
+  box-shadow: none;
+}
+.kw-outline-btn {
+  width: 100%;
+  background: #fff;
+  border: 1.5px solid #0F766E;
+  color: #0F766E;
+  padding: 13px;
+  border-radius: 14px;
+  font-size: 14px;
+  font-weight: 700;
+  cursor: pointer;
+}
+.kw-ghost-btn {
+  width: 100%;
+  background: transparent;
+  border: none;
+  color: #64748B;
+  padding: 10px;
+  font-size: 13.5px;
+  font-weight: 650;
+  cursor: pointer;
+}

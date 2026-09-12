@@ -71,6 +71,9 @@ function buildKarigar(profile, prev) {
     return {
       ...prev,
       avatar: profile?.avatar || profile?.photoURL || prev?.avatar || null,
+      balance: prev.balance !== undefined ? prev.balance : 1450,
+      payoutMethods: prev.payoutMethods || { upis: [], banks: [] },
+      withdrawals: prev.withdrawals || [],
     };
   }
   return {
@@ -81,7 +84,18 @@ function buildKarigar(profile, prev) {
     area: profile?.area || 'Barmer',
     exp: profile?.exp || '5',
     avatar: profile?.avatar || profile?.photoURL || null,
-    rating: 5.0, online: false, todayEarn: 0, totalEarn: 0, balance: 0, jobsDone: 0, history: [],
+    rating: 5.0,
+    online: false,
+    todayEarn: 450,
+    totalEarn: 8650,
+    balance: 1450,
+    jobsDone: 18,
+    history: [],
+    payoutMethods: {
+      upis: [],
+      banks: [],
+    },
+    withdrawals: [],
   };
 }
 
@@ -191,7 +205,52 @@ export function AppDataProvider({ children }) {
       },
     })),
 
-    karigarWithdraw: () => setData((d) => ({ ...d, karigar: { ...d.karigar, balance: 0 } })),
+    karigarWithdraw: (amount, method) => {
+      const amt = Math.max(1, Math.round(Number(amount) || 0));
+      const tx = {
+        id: 'WDR' + Math.floor(100000 + Math.random() * 900000),
+        utr: 'UTR' + Math.floor(1000000000 + Math.random() * 9000000000),
+        amount: amt,
+        method: method || { type: 'bank', detail: 'Bank Account' },
+        date: new Date().toLocaleDateString('en-IN', { day: 'numeric', month: 'short', year: 'numeric' }) + ', ' +
+              new Date().toLocaleTimeString('en-IN', { hour: '2-digit', minute: '2-digit' }),
+        status: 'SUCCESS',
+      };
+      setData((d) => {
+        const curBal = d.karigar?.balance || 0;
+        const newBal = Math.max(0, curBal - amt);
+        return {
+          ...d,
+          karigar: {
+            ...d.karigar,
+            balance: newBal,
+            withdrawals: [tx, ...(d.karigar?.withdrawals || [])],
+          },
+        };
+      });
+      return tx;
+    },
+
+    saveKarigarPayoutMethod: (type, item) => {
+      setData((d) => {
+        const methods = d.karigar?.payoutMethods || { upis: [], banks: [] };
+        let updated;
+        if (type === 'upi') {
+          const list = (methods.upis || []).filter((u) => u.id !== item.id);
+          updated = { ...methods, upis: [item, ...list] };
+        } else {
+          const list = (methods.banks || []).filter((b) => b.id !== item.id);
+          updated = { ...methods, banks: [item, ...list] };
+        }
+        return {
+          ...d,
+          karigar: {
+            ...d.karigar,
+            payoutMethods: updated,
+          },
+        };
+      });
+    },
 
     // Add structured booking to store
     addBooking: (bookingObj) => {

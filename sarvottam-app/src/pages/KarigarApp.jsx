@@ -4,6 +4,7 @@ import Icon from '../components/Icon';
 import { useToast } from '../components/Toast';
 import { useAppData } from '../store/AppData';
 import { dispatchService } from '../services/dispatchService';
+import KarigarWithdraw from '../components/KarigarWithdraw';
 import './KarigarApp.css';
 
 /* Fallback simulated jobs matched to the Karigar's skill */
@@ -46,6 +47,7 @@ export default function KarigarApp() {
   const { karigar, setKarigarOnline, karigarCompleteJob, karigarWithdraw, updateKarigar, logout } = useAppData();
 
   const [tab, setTab] = useState('home');           // home | orders | earnings | profile
+  const [showWithdraw, setShowWithdraw] = useState(false); // dedicated withdrawal view
   const [incoming, setIncoming] = useState(null);   // job offer popup
   const [secs, setSecs] = useState(30);
   const [job, setJob] = useState(null);             // active job
@@ -361,7 +363,6 @@ export default function KarigarApp() {
 
   const OrdersTab = (
     <div className="ka-orders">
-      <h3 className="ka-tab-title">Order History</h3>
       {(k.history || []).length === 0 && (
         <div className="ka-empty">
           <Icon name="history" size={30} />
@@ -389,15 +390,13 @@ export default function KarigarApp() {
     <div className="ka-earnings">
       <div className="ka-earn-card">
         <small>Available Balance in Wallet</small>
-        <h2>₹{k.balance || 0}</h2>
+        <h2>₹{(k.balance !== undefined ? k.balance : 1450).toLocaleString('en-IN')}</h2>
         <button
+          type="button"
           className="ka-withdraw"
-          onClick={() => {
-            if (!k.balance) { toast('No balance to withdraw'); return; }
-            karigarWithdraw();
-            toast('Withdrawal requested — Transfer to bank in 24h');
-          }}>
-          <Icon name="rupee" size={15} /> Instant Withdraw to Bank
+          onClick={() => setShowWithdraw(true)}
+        >
+          <Icon name="rupee" size={15} /> Withdrawal
         </button>
       </div>
 
@@ -512,23 +511,48 @@ export default function KarigarApp() {
   /* ───────────────── RENDER ───────────────── */
   return (
     <div className="ka-screen">
-      {/* header */}
-      <div className="ka-header">
-        <div className="ka-head-row">
-          <div className="ka-avatar-box">
-            {k.avatar ? (
-              <img src={k.avatar} alt={k.name} className="ka-avatar-img" />
-            ) : (
-              <div className="ka-avatar">{(k.name || 'K')[0]}</div>
-            )}
+      {/* ── HEADER SWITCHING BY TAB ── */}
+      {tab === 'home' && (
+        <div className="ka-header">
+          <div className="ka-head-row">
+            <div className="ka-avatar-box">
+              {k.avatar ? (
+                <img src={k.avatar} alt={k.name} className="ka-avatar-img" />
+              ) : (
+                <div className="ka-avatar">{(k.name || 'K')[0]}</div>
+              )}
+            </div>
+            <div className="ka-head-info">
+              <h2>{k.name || 'Karigar Captain'}</h2>
+              <p>{k.skill || 'Electrician'} · {k.area || 'Barmer'}</p>
+            </div>
+            <span className={'ka-status-pill' + (k.online ? ' on' : '')}>
+              {k.online ? 'ONLINE' : 'OFFLINE'}
+            </span>
           </div>
-          <div className="ka-head-info">
-            <h2>{k.name || 'Karigar Captain'}</h2>
-            <p>{k.skill || 'Electrician'} · {k.area || 'Barmer'}</p>
-          </div>
-          <span className={'ka-status-pill' + (k.online ? ' on' : '')}>{k.online ? 'ONLINE' : 'OFFLINE'}</span>
         </div>
-      </div>
+      )}
+
+      {tab === 'orders' && (
+        <div className="ka-clean-header">
+          <h1 className="ka-clean-title">Order History</h1>
+          <p className="ka-clean-sub">Completed jobs and doorstep service records</p>
+        </div>
+      )}
+
+      {tab === 'earnings' && (
+        <div className="ka-clean-header">
+          <h1 className="ka-clean-title">Earnings</h1>
+          <p className="ka-clean-sub">Wallet balance, withdrawal &amp; payout summary</p>
+        </div>
+      )}
+
+      {tab === 'profile' && (
+        <div className="ka-clean-header">
+          <h1 className="ka-clean-title">Captain Profile</h1>
+          <p className="ka-clean-sub">Verified partner identity &amp; account settings</p>
+        </div>
+      )}
 
       {/* body */}
       <div className="ka-body">
@@ -577,6 +601,11 @@ export default function KarigarApp() {
             </div>
           </div>
         </div>
+      )}
+
+      {/* Dedicated Withdrawal Screen */}
+      {showWithdraw && (
+        <KarigarWithdraw onBack={() => setShowWithdraw(false)} />
       )}
     </div>
   );
