@@ -43,7 +43,7 @@ const WEEK_BARS = [62, 40, 78, 55, 90, 35, 0];
 export default function KarigarApp() {
   const nav = useNavigate();
   const toast = useToast();
-  const { karigar, setKarigarOnline, karigarCompleteJob, karigarWithdraw, logout } = useAppData();
+  const { karigar, setKarigarOnline, karigarCompleteJob, karigarWithdraw, updateKarigar, logout } = useAppData();
 
   const [tab, setTab] = useState('home');           // home | orders | earnings | profile
   const [incoming, setIncoming] = useState(null);   // job offer popup
@@ -54,9 +54,51 @@ export default function KarigarApp() {
 
   const offerTimer = useRef();
   const countTimer = useRef();
+  const karigarFileInputRef = useRef(null);
 
   const k = karigar || {};
   const pool = JOBS_BY_SKILL[k.skill] || JOBS_BY_SKILL.Other;
+
+  const handleKarigarPhotoSelect = (e) => {
+    const file = e.target.files?.[0];
+    if (!file) return;
+    if (!file.type.startsWith('image/')) {
+      toast('Please select an image file from your gallery');
+      return;
+    }
+
+    const reader = new FileReader();
+    reader.onload = (event) => {
+      const result = event.target?.result;
+      const img = new Image();
+      img.onload = () => {
+        const canvas = document.createElement('canvas');
+        const MAX = 400;
+        let w = img.width;
+        let h = img.height;
+        if (w > h) {
+          if (w > MAX) {
+            h = Math.round((h * MAX) / w);
+            w = MAX;
+          }
+        } else {
+          if (h > MAX) {
+            w = Math.round((w * MAX) / h);
+            h = MAX;
+          }
+        }
+        canvas.width = w;
+        canvas.height = h;
+        const ctx = canvas.getContext('2d');
+        ctx.drawImage(img, 0, 0, w, h);
+        const optimized = canvas.toDataURL('image/jpeg', 0.85);
+        updateKarigar({ avatar: optimized });
+        toast('Captain profile photo updated from gallery!');
+      };
+      img.src = result;
+    };
+    reader.readAsDataURL(file);
+  };
 
   // ── Listen for Real-Time Dispatch Bookings from Customer App ──
   useEffect(() => {
@@ -380,21 +422,84 @@ export default function KarigarApp() {
 
   const ProfileTab = (
     <div className="ka-profile">
+      <input
+        type="file"
+        ref={karigarFileInputRef}
+        accept="image/*"
+        style={{ display: 'none' }}
+        onChange={handleKarigarPhotoSelect}
+      />
+
       <div className="ka-prof-card">
-        <div className="ka-prof-avatar">{(k.name || 'K')[0]}</div>
-        <div>
-          <h3>{k.name}</h3>
+        <div
+          className="ka-prof-avatar-wrap"
+          onClick={() => karigarFileInputRef.current?.click()}
+          title="Upload photo from gallery"
+          role="button"
+          tabIndex={0}
+        >
+          {k.avatar ? (
+            <img src={k.avatar} alt={k.name} className="ka-prof-avatar-img" />
+          ) : (
+            <div className="ka-prof-avatar">{(k.name || 'K')[0]}</div>
+          )}
+          <span className="ka-avatar-badge" title="Change photo">
+            <Icon name="camera" size={13} />
+          </span>
+        </div>
+        <div className="ka-prof-info">
+          <div className="ka-prof-name-row">
+            <h3>{k.name || 'Karigar Captain'}</h3>
+            <span className="ka-locked-pill" title="Captain name cannot be changed">
+              <Icon name="lock" size={11} /> Locked
+            </span>
+          </div>
           <p>{k.skill} · {k.area}</p>
           <span className="ka-prof-rating"><Icon name="star" size={12} /> {(k.rating || 5).toFixed(1)} Rating</span>
+          <button
+            type="button"
+            className="ka-upload-btn"
+            onClick={() => karigarFileInputRef.current?.click()}
+          >
+            <Icon name="camera" size={13} /> {k.avatar ? 'Change Gallery Photo' : 'Upload Photo from Gallery'}
+          </button>
         </div>
       </div>
 
       <div className="ka-prof-rows">
-        <div className="ka-prof-row"><span><Icon name="shield" size={16} /> Verification Status</span><b className="ok">Verified Partner</b></div>
-        <div className="ka-prof-row"><span><Icon name="wrench" size={16} /> Registered Skill</span><b>{k.skill || 'Electrician'}</b></div>
-        <div className="ka-prof-row"><span><Icon name="pin" size={16} /> Operational Area</span><b>{k.area || 'Barmer'}</b></div>
-        <div className="ka-prof-row"><span><Icon name="clock" size={16} /> Work Experience</span><b>{k.exp ? `${k.exp} yrs` : '5+ yrs'}</b></div>
-        <div className="ka-prof-row"><span><Icon name="phone" size={16} /> Mobile Phone</span><b>{k.phone ? `+91 ${k.phone}` : '+91 94140 12345'}</b></div>
+        <div className="ka-prof-row">
+          <span><Icon name="shield" size={16} /> Verification Status</span>
+          <b className="ok">Verified Partner</b>
+        </div>
+        <div className="ka-prof-row">
+          <span><Icon name="user" size={16} /> Captain Name</span>
+          <b className="locked-val">{k.name || 'Karigar Captain'} <Icon name="lock" size={11} /></b>
+        </div>
+        <div className="ka-prof-row">
+          <span><Icon name="phone" size={16} /> Registered Phone</span>
+          <b className="locked-val">{k.phone ? `+91 ${k.phone}` : '+91 94140 12345'} <Icon name="lock" size={11} /></b>
+        </div>
+        <div className="ka-prof-row">
+          <span><Icon name="mail" size={16} /> Registered Email</span>
+          <b className="locked-val">{k.email || 'partner@sarvottam.in'} <Icon name="lock" size={11} /></b>
+        </div>
+        <div className="ka-prof-row">
+          <span><Icon name="wrench" size={16} /> Registered Skill</span>
+          <b>{k.skill || 'Electrician'}</b>
+        </div>
+        <div className="ka-prof-row">
+          <span><Icon name="pin" size={16} /> Operational Area</span>
+          <b>{k.area || 'Barmer'}</b>
+        </div>
+        <div className="ka-prof-row">
+          <span><Icon name="clock" size={16} /> Work Experience</span>
+          <b>{k.exp ? `${k.exp} yrs` : '5+ yrs'}</b>
+        </div>
+      </div>
+
+      <div className="ka-lock-notice">
+        <Icon name="lock" size={15} />
+        <span>Captain Name, registered Phone Number, and Email are verified and strictly locked by SARVOTTAM operations desk for compliance &amp; background verification.</span>
       </div>
 
       <button className="ka-prof-help" onClick={() => toast('Partner Support: 1800-123-456')}>
@@ -410,7 +515,13 @@ export default function KarigarApp() {
       {/* header */}
       <div className="ka-header">
         <div className="ka-head-row">
-          <div className="ka-avatar">{(k.name || 'K')[0]}</div>
+          <div className="ka-avatar-box">
+            {k.avatar ? (
+              <img src={k.avatar} alt={k.name} className="ka-avatar-img" />
+            ) : (
+              <div className="ka-avatar">{(k.name || 'K')[0]}</div>
+            )}
+          </div>
           <div className="ka-head-info">
             <h2>{k.name || 'Karigar Captain'}</h2>
             <p>{k.skill || 'Electrician'} · {k.area || 'Barmer'}</p>

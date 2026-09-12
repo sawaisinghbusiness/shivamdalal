@@ -12,6 +12,7 @@ const DEFAULTS = {
     name: 'Shivam Singh',
     phone: '9876543210',
     email: 'shivam@sarvottam.in',
+    avatar: null,
   },
   karigar: null,
   cart: [],
@@ -56,22 +57,30 @@ function load() {
   return DEFAULTS;
 }
 
-function buildUser(profile) {
+function buildUser(profile, prev) {
   return {
-    name: ((profile.name || '') + ' ' + (profile.surname || '')).trim() || 'Shivam Singh',
-    email: profile.email || 'shivam@sarvottam.in',
-    phone: profile.phone ? '+91 ' + profile.phone : '9876543210',
+    name: ((profile?.name || '') + ' ' + (profile?.surname || '')).trim() || prev?.name || 'Shivam Singh',
+    email: profile?.email || prev?.email || 'shivam@sarvottam.in',
+    phone: profile?.phone ? '+91 ' + profile.phone : (prev?.phone || '9876543210'),
+    avatar: profile?.avatar || profile?.photoURL || prev?.avatar || null,
   };
 }
 
 function buildKarigar(profile, prev) {
-  if (prev) return prev;
+  if (prev) {
+    return {
+      ...prev,
+      avatar: profile?.avatar || profile?.photoURL || prev?.avatar || null,
+    };
+  }
   return {
-    name: ((profile.name || '') + ' ' + (profile.surname || '')).trim(),
-    phone: profile.phone || '',
-    skill: profile.skill || 'Electrician',
-    area: profile.area || 'Barmer',
-    exp: profile.exp || '',
+    name: ((profile?.name || '') + ' ' + (profile?.surname || '')).trim() || 'Karigar Captain',
+    phone: profile?.phone || '9414012345',
+    email: profile?.email || 'partner@sarvottam.in',
+    skill: profile?.skill || 'Electrician',
+    area: profile?.area || 'Barmer',
+    exp: profile?.exp || '5',
+    avatar: profile?.avatar || profile?.photoURL || null,
     rating: 5.0, online: false, todayEarn: 0, totalEarn: 0, balance: 0, jobsDone: 0, history: [],
   };
 }
@@ -246,6 +255,7 @@ export function AppDataProvider({ children }) {
     })),
 
     updateUser: (patch) => setData((d) => ({ ...d, user: { ...d.user, ...patch } })),
+    updateKarigar: (patch) => setData((d) => ({ ...d, karigar: { ...d.karigar, ...patch } })),
 
     addAddress: (addr) =>
       setData((d) => ({ ...d, addresses: [...d.addresses, { ...addr, id: 'a' + Date.now() }] })),

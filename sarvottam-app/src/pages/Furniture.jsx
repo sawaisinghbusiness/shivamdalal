@@ -99,30 +99,6 @@ const DESIGN_COUNTS = {
   balcony: '110 Designs',
 };
 
-// FAQ data
-const FAQS = [
-  {
-    q: 'How does SARVOTTAM ensure woodwork quality and pricing?',
-    a: 'All our custom furniture and modular cabinetry are crafted directly by verified Rajasthan master karigars using IS-710 Boiling Water Proof (BWP) marine plywood, seasoned solid Sheesham, and genuine Teak wood. Because we operate workshops locally without middlemen, our prices are up to 35% lower than retail interior design studios.',
-  },
-  {
-    q: 'Can I customize dimensions, internal organizers, and finishes?',
-    a: 'Yes, absolutely. Every piece is 100% made to order according to your exact room measurements. You can choose high-gloss acrylic, matte suede laminate, PU lacquer, natural veneers, and fluted acoustic glass with custom internal drawers and organizers.',
-  },
-  {
-    q: 'Is the doorstep measurement visit and 3D CAD design really free?',
-    a: 'Yes. When you request a consultation, a senior master karigar visits your home with material finish catalogs, laminate swatches, and laser measuring equipment. We deliver accurate 3D floorplan blueprints and transparent quotation breakdowns with zero obligation.',
-  },
-  {
-    q: 'What warranty is provided on custom furniture and hardware?',
-    a: 'We provide a 10-Year Karigar Warranty on structural carcass plywood and solid wood framing, along with official manufacturer warranties on international hardware fittings including Blum, Hettich, and Hafele soft-close systems.',
-  },
-  {
-    q: 'What is the typical delivery and installation timeline in Rajasthan?',
-    a: 'Standard modular kitchens, wardrobes, and TV media walls are fabricated and delivered within 12 to 18 working days. Solid Sheesham and carved wooden furniture pieces typically require 14 to 21 working days for seasoning, assembly, and multi-coat lacquer polish.',
-  },
-];
-
 export default function Furniture() {
   const nav = useNavigate();
   const toast = useToast();
@@ -133,9 +109,6 @@ export default function Furniture() {
 
   // Section B: Category grid expansion (6 by default, expand to all 10)
   const [showAllCategories, setShowAllCategories] = useState(false);
-
-  // Section D: FAQ accordion
-  const [openFaq, setOpenFaq] = useState(0);
 
   // Section D: Consultation form state
   const [leadForm, setLeadForm] = useState({
@@ -361,45 +334,9 @@ export default function Furniture() {
         </section>
 
         {/* ══════════════════════════════════════════════════════════════
-            SECTION D — LEAD CAPTURE
-            Part 1: FAQ Accordion
-            Part 2: Contact / Quotation Form
+            SECTION D — LEAD CAPTURE & CONSULTATION
             ══════════════════════════════════════════════════════════════ */}
         <section className="lv-section lv-lead-section">
-          {/* FAQ Accordion */}
-          <div className="lv-faq-block">
-            <div className="lv-sec-head">
-              <h2 className="lv-sec-title">Frequently Asked Questions</h2>
-              <p className="lv-sec-sub">Everything you need to know about our custom furniture and woodwork</p>
-            </div>
-
-            <div className="lv-faq-list">
-              {FAQS.map((faq, index) => {
-                const isOpen = openFaq === index;
-                return (
-                  <div key={index} className={'lv-faq-item' + (isOpen ? ' open' : '')}>
-                    <button
-                      type="button"
-                      className="lv-faq-trigger"
-                      onClick={() => setOpenFaq(isOpen ? -1 : index)}
-                      aria-expanded={isOpen}
-                    >
-                      <span className="lv-faq-q">{faq.q}</span>
-                      <span className={'lv-faq-arrow' + (isOpen ? ' open' : '')}>
-                        <Icon name="chevron" size={15} />
-                      </span>
-                    </button>
-                    {isOpen && (
-                      <div className="lv-faq-body">
-                        <p>{faq.a}</p>
-                      </div>
-                    )}
-                  </div>
-                );
-              })}
-            </div>
-          </div>
-
           {/* Contact / Quotation Form Card (Livspace style) */}
           <div id="consultation-form" className="lv-form-card">
             <div className="lv-form-head">

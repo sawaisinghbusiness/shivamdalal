@@ -1,3 +1,4 @@
+import { useRef } from 'react';
 import { useNavigate } from 'react-router-dom';
 import Icon from '../components/Icon';
 import { useToast } from '../components/Toast';
@@ -7,10 +8,52 @@ import './Profile.css';
 export default function Profile() {
   const nav = useNavigate();
   const toast = useToast();
-  const { user, bookings, addresses, notifications, logout } = useAppData();
+  const { user, updateUser, bookings, addresses, notifications, logout } = useAppData();
+  const fileInputRef = useRef(null);
 
   const initial = (user.name.trim()[0] || 'U').toUpperCase();
   const unread = notifications.filter((n) => n.unread).length;
+
+  const handlePhotoSelect = (e) => {
+    const file = e.target.files?.[0];
+    if (!file) return;
+    if (!file.type.startsWith('image/')) {
+      toast('Please select an image file from your gallery');
+      return;
+    }
+
+    const reader = new FileReader();
+    reader.onload = (event) => {
+      const result = event.target?.result;
+      const img = new Image();
+      img.onload = () => {
+        const canvas = document.createElement('canvas');
+        const MAX = 400;
+        let w = img.width;
+        let h = img.height;
+        if (w > h) {
+          if (w > MAX) {
+            h = Math.round((h * MAX) / w);
+            w = MAX;
+          }
+        } else {
+          if (h > MAX) {
+            w = Math.round((w * MAX) / h);
+            h = MAX;
+          }
+        }
+        canvas.width = w;
+        canvas.height = h;
+        const ctx = canvas.getContext('2d');
+        ctx.drawImage(img, 0, 0, w, h);
+        const optimized = canvas.toDataURL('image/jpeg', 0.85);
+        updateUser({ avatar: optimized });
+        toast('Profile photo updated from gallery!');
+      };
+      img.src = result;
+    };
+    reader.readAsDataURL(file);
+  };
 
   const STATS = [
     { num: String(bookings.length), label: 'Bookings' },
@@ -33,8 +76,32 @@ export default function Profile() {
         <p className="ih-sub">Your account and preferences</p>
       </div>
 
+      {/* Hidden gallery file input */}
+      <input
+        type="file"
+        ref={fileInputRef}
+        accept="image/*"
+        style={{ display: 'none' }}
+        onChange={handlePhotoSelect}
+      />
+
       <div className="pf-user-card">
-        <div className="pf-avatar">{initial}</div>
+        <div
+          className="pf-avatar-wrap"
+          onClick={() => fileInputRef.current?.click()}
+          title="Upload photo from gallery"
+          role="button"
+          tabIndex={0}
+        >
+          {user.avatar ? (
+            <img src={user.avatar} alt={user.name} className="pf-avatar-img" />
+          ) : (
+            <div className="pf-avatar">{initial}</div>
+          )}
+          <span className="pf-avatar-badge" title="Change photo">
+            <Icon name="camera" size={12} />
+          </span>
+        </div>
         <div className="pf-user-info">
           <h2>{user.name}</h2>
           <p>{user.phone}</p>
