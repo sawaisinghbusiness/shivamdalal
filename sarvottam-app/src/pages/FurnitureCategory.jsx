@@ -39,8 +39,7 @@ export default function FurnitureCategory() {
     }
   });
 
-  // Modal states
-  const [selectedProject, setSelectedProject] = useState(null);
+  // Modal state for direct consultation booking
   const [consultModal, setConsultModal] = useState(null);
 
   // Consultation form state
@@ -63,7 +62,6 @@ export default function FurnitureCategory() {
     setSearch('');
     setWishlistOnly(false);
     setReadMore(false);
-    setSelectedProject(null);
     setConsultModal(null);
     window.scrollTo(0, 0);
   }, [categorySlug]);
@@ -91,15 +89,6 @@ export default function FurnitureCategory() {
     });
   }, [designs, activeSubcat, search, wishlistOnly, liked]);
 
-  const projectNav = useMemo(() => {
-    if (!selectedProject || designs.length === 0) return { prev: null, next: null };
-    const idx = designs.findIndex((p) => p.id === selectedProject.id);
-    return {
-      prev: idx > 0 ? designs[idx - 1] : designs[designs.length - 1],
-      next: idx < designs.length - 1 ? designs[idx + 1] : designs[0],
-    };
-  }, [selectedProject, designs]);
-
   const handleConsultSubmit = (e) => {
     e.preventDefault();
     const cleanPhone = cPhone.replace(/\D/g, '');
@@ -121,7 +110,6 @@ export default function FurnitureCategory() {
 
     toast('Free Consultation booked! Our master karigar will visit you.');
     setConsultModal(null);
-    setSelectedProject(null);
     nav('/bookings');
   };
 
@@ -284,7 +272,7 @@ export default function FurnitureCategory() {
             <article
               key={item.id}
               className="lvc-card"
-              onClick={() => setSelectedProject(item)}
+              onClick={() => nav(`/furniture/${categorySlug}/${item.id}`)}
             >
               <div className="lvc-card-media">
                 <img src={item.img} alt={item.name} loading="lazy" className="lvc-card-img" />
@@ -326,7 +314,7 @@ export default function FurnitureCategory() {
                     className="lvc-btn-cta-outline"
                     onClick={(e) => {
                       e.stopPropagation();
-                      setSelectedProject(item);
+                      nav(`/furniture/${categorySlug}/${item.id}`);
                     }}
                   >
                     View Specs
@@ -357,121 +345,6 @@ export default function FurnitureCategory() {
         </main>
       </div>
 
-      {/* ── PROJECT DETAIL SHEET OVERLAY ── */}
-      {selectedProject && (
-        <div className="lvc-overlay" onClick={() => setSelectedProject(null)}>
-          <div className="lvc-sheet" onClick={(e) => e.stopPropagation()}>
-            <div className="lvc-sheet-head">
-              <button
-                type="button"
-                className="lvc-sheet-close"
-                onClick={() => setSelectedProject(null)}
-                aria-label="Close"
-              >
-                <Icon name="close" size={18} />
-              </button>
-              <h3 className="lvc-sheet-top-title">{selectedProject.name}</h3>
-              <button
-                type="button"
-                className={'lvc-sheet-heart' + (liked[selectedProject.id] ? ' on' : '')}
-                onClick={(e) => toggleLike(selectedProject.id, selectedProject.name, e)}
-                aria-label="Save"
-              >
-                <Icon name="heart" size={18} />
-              </button>
-            </div>
-
-            <div className="lvc-sheet-scroll">
-              <div className="lvc-sheet-hero">
-                <img src={selectedProject.img} alt={selectedProject.name} />
-                <div className="lvc-sheet-hero-badges">
-                  <span>{selectedProject.size}</span>
-                  <span><Icon name="star" size={12} /> {selectedProject.rating} Rating</span>
-                </div>
-              </div>
-
-              <div className="lvc-sheet-body">
-                <div className="lvc-sheet-summary">
-                  <div>
-                    <h2 className="lvc-sheet-h2">{selectedProject.name}</h2>
-                    <p className="lvc-sheet-tag">{selectedProject.finish}</p>
-                  </div>
-                  <div className="lvc-sheet-price-col">
-                    <span className="lvc-sp-lbl">Estimate Range</span>
-                    <span className="lvc-sp-val">{selectedProject.price}</span>
-                  </div>
-                </div>
-
-                <div className="lvc-karigar-card">
-                  <div className="lvc-kc-ic">
-                    <Icon name="shield" size={20} />
-                  </div>
-                  <div className="lvc-kc-txt">
-                    <strong>100% Verified Rajasthan Artisans</strong>
-                    <p>Direct workshop fabrication with 10-year warranty and zero showroom markup.</p>
-                  </div>
-                </div>
-
-                <h4 className="lvc-sheet-h4">Technical Specifications</h4>
-                <div className="lvc-specs-table">
-                  {selectedProject.specs?.map(([k, v]) => (
-                    <div key={k} className="lvc-spec-row">
-                      <span className="lvc-spec-k">{k}</span>
-                      <strong className="lvc-spec-v">{v}</strong>
-                    </div>
-                  ))}
-                </div>
-
-                <div className="lvc-sheet-cta-box">
-                  <div>
-                    <strong>Want this exact look customized for your room?</strong>
-                    <p>Get a free doorstep measurement visit with 3D CAD blueprints.</p>
-                  </div>
-                  <button
-                    type="button"
-                    className="lvc-btn-fill w-full mt-2"
-                    onClick={() => setConsultModal(selectedProject)}
-                  >
-                    Book Measurement Visit
-                  </button>
-                </div>
-              </div>
-            </div>
-
-            {/* Previous / Next Design Footer */}
-            <div className="lvc-sheet-footer">
-              {projectNav.prev && (
-                <button
-                  type="button"
-                  className="lvc-nav-btn prev"
-                  onClick={() => setSelectedProject(projectNav.prev)}
-                >
-                  <Icon name="chevron" size={14} />
-                  <span className="lvc-nav-btn-txt">
-                    <small>Previous</small>
-                    <strong>{projectNav.prev.name}</strong>
-                  </span>
-                </button>
-              )}
-
-              {projectNav.next && (
-                <button
-                  type="button"
-                  className="lvc-nav-btn next"
-                  onClick={() => setSelectedProject(projectNav.next)}
-                >
-                  <span className="lvc-nav-btn-txt">
-                    <small>Next Design</small>
-                    <strong>{projectNav.next.name}</strong>
-                  </span>
-                  <Icon name="chevron" size={14} />
-                </button>
-              )}
-            </div>
-          </div>
-        </div>
-      )}
-
       {/* ── CONSULTATION BOOKING MODAL ── */}
       {consultModal && (
         <div className="lvc-overlay" onClick={() => setConsultModal(null)}>
@@ -484,7 +357,7 @@ export default function FurnitureCategory() {
               </div>
               <button
                 type="button"
-                className="lvc-sheet-close"
+                className="lvc-close-btn"
                 onClick={() => setConsultModal(null)}
                 aria-label="Close"
               >

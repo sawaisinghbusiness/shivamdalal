@@ -343,7 +343,7 @@ export default function Furniture() {
             title="Modern Luxe Rajasthani Interiors"
             subtitle="Handcrafted solid Sheesham & Teak spaces with contemporary gold inlays"
             items={STYLE_COLLECTION}
-            onSelect={(item) => nav(`/furniture/${item.slug}`)}
+            onSelect={(item) => nav(`/furniture/${item.slug}/${item.id}`)}
           />
 
           {/* 2. Top Trending */}
@@ -351,7 +351,7 @@ export default function Furniture() {
             title="Top Trending Designs"
             subtitle="Chosen by Rajasthan homeowners in September 2026"
             items={trendingDesigns}
-            onSelect={(item) => nav(`/furniture/${item.slug}`)}
+            onSelect={(item) => nav(`/furniture/${item.slug}/${item.id}`)}
           />
 
           {/* 3. Recently Added */}
@@ -359,7 +359,7 @@ export default function Furniture() {
             title="Recently Added Designs"
             subtitle="Curated on 10 September 2026"
             items={RECENTLY_ADDED}
-            onSelect={(item) => nav(`/furniture/${item.slug}`)}
+            onSelect={(item) => nav(`/furniture/${item.slug}/${item.id}`)}
           />
         </section>
 
@@ -624,7 +624,7 @@ function LivspaceCarousel({ title, subtitle, items, onSelect }) {
                   onSelect(item);
                 }}
               >
-                Book Free Consultation
+                View Design &amp; Specs
               </button>
             </div>
           </article>
