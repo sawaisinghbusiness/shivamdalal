@@ -487,78 +487,368 @@
   margin-top: 3px;
 }
 
-/* Review Screen (1-2 Days) */
-.kw-review-screen {
-  text-align: center;
-  padding: 16px 4px;
-}
-.kw-review-icon-box {
-  width: 72px;
-  height: 72px;
-  border-radius: 24px;
-  background: #FEF3C7;
-  color: #D97706;
+/* ════════════════════════════════════════════════════════
+   Fintech-Grade Bank Audit Screen (CRED / Razorpay style)
+   ════════════════════════════════════════════════════════ */
+.kw-fintech-audit {
   display: flex;
-  align-items: center;
-  justify-content: center;
-  margin: 10px auto 14px;
-  box-shadow: 0 4px 14px rgba(217,119,6,0.18);
+  flex-direction: column;
+  gap: 14px;
+  padding-bottom: 24px;
 }
-.kw-review-tag {
-  display: inline-block;
-  background: #FEF3C7;
-  color: #B45309;
-  font-size: 12px;
-  font-weight: 750;
-  padding: 4px 12px;
-  border-radius: 20px;
-  margin-bottom: 8px;
+
+/* 1. Audit Header Banner */
+.kw-audit-banner {
+  background: linear-gradient(135deg, #0F172A 0%, #1E293B 100%);
+  border-radius: 16px;
+  padding: 16px 18px;
+  color: #fff;
+  box-shadow: 0 4px 16px rgba(15, 23, 42, 0.12);
 }
-.kw-review-title {
-  font-size: 20px;
-  font-weight: 800;
-  color: #0F172A;
-  margin: 0 0 6px;
-}
-.kw-review-desc {
-  font-size: 13px;
-  color: #64748B;
-  line-height: 1.5;
-  margin: 0 0 16px;
-}
-.kw-summary-card {
-  background: #fff;
-  border: 1px solid #E2E8F0;
-  border-radius: 14px;
-  padding: 14px 16px;
-  text-align: left;
-  margin-bottom: 14px;
-}
-.kw-sum-row {
+.kw-audit-banner-top {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  padding: 8px 0;
-  font-size: 12.5px;
-  border-bottom: 1px solid #F1F5F9;
+  margin-bottom: 14px;
+  padding-bottom: 10px;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+  font-size: 11px;
 }
-.kw-sum-row:last-child { border-bottom: none; }
-.kw-sum-row span { color: #64748B; font-weight: 500; }
-.kw-sum-row strong { color: #0F172A; font-weight: 750; }
-
-.kw-instant-tip {
+.kw-audit-node-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  background: rgba(16, 185, 129, 0.16);
+  border: 1px solid rgba(16, 185, 129, 0.3);
+  color: #34D399;
+  font-weight: 750;
+  letter-spacing: 0.5px;
+  padding: 3px 8px;
+  border-radius: 6px;
+  font-size: 10px;
+}
+.kw-pulse-dot {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: #34D399;
+  box-shadow: 0 0 6px #34D399;
+  animation: kwPulse 1.8s infinite;
+}
+@keyframes kwPulse {
+  0% { transform: scale(0.9); opacity: 0.7; }
+  50% { transform: scale(1.3); opacity: 1; }
+  100% { transform: scale(0.9); opacity: 0.7; }
+}
+.kw-audit-ref {
+  color: #94A3B8;
+  font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+  font-size: 11px;
+  font-weight: 600;
+}
+.kw-audit-ref span {
+  color: #F8FAFC;
+  font-weight: 700;
+}
+.kw-audit-headline {
   display: flex;
   align-items: flex-start;
-  gap: 10px;
-  background: #F0FDFA;
-  border: 1px solid #CCFBF1;
+  gap: 14px;
+}
+.kw-audit-bank-icon {
+  width: 44px;
+  height: 44px;
+  border-radius: 12px;
+  background: rgba(255, 255, 255, 0.1);
+  border: 1px solid rgba(255, 255, 255, 0.15);
+  color: #38BDF8;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+.kw-audit-head-text {
+  flex: 1;
+}
+.kw-audit-title {
+  font-size: 16px;
+  font-weight: 800;
+  color: #F8FAFC;
+  margin: 0 0 4px;
+  letter-spacing: -0.2px;
+}
+.kw-audit-sub {
+  font-size: 12.5px;
+  color: #CBD5E1;
+  line-height: 1.45;
+  margin: 0;
+}
+.kw-audit-sub strong {
+  color: #fff;
+}
+
+/* 2. Fintech Cards General */
+.kw-fintech-card {
+  background: #fff;
+  border: 1px solid #E2E8F0;
+  border-radius: 16px;
+  padding: 16px;
+  box-shadow: 0 1px 3px rgba(15, 23, 42, 0.03);
+}
+.kw-card-hdr {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 14px;
+  padding-bottom: 10px;
+  border-bottom: 1px solid #F1F5F9;
+}
+.kw-card-title {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 13px;
+  font-weight: 750;
+  color: #0F172A;
+}
+.kw-card-title .ic {
+  color: #0F766E;
+}
+.kw-eta-pill {
+  background: #F8FAFC;
+  border: 1px solid #E2E8F0;
+  color: #475569;
+  font-size: 11px;
+  font-weight: 700;
+  padding: 3px 9px;
+  border-radius: 20px;
+}
+.kw-secure-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  background: #ECFDF5;
+  border: 1px solid #A7F3D0;
+  color: #065F46;
+  font-size: 10.5px;
+  font-weight: 750;
+  padding: 3px 8px;
+  border-radius: 6px;
+}
+
+/* 3. Precision Timeline Ledger */
+.kw-timeline {
+  display: flex;
+  flex-direction: column;
+}
+.kw-tl-step {
+  display: flex;
+  gap: 12px;
+  position: relative;
+}
+.kw-tl-track {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: 24px;
+  flex-shrink: 0;
+}
+.kw-tl-node {
+  width: 24px;
+  height: 24px;
+  border-radius: 50%;
+  background: #F1F5F9;
+  border: 2px solid #CBD5E1;
+  color: #64748B;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1;
+}
+.kw-tl-step.done .kw-tl-node {
+  background: #0F766E;
+  border-color: #0F766E;
+  color: #fff;
+}
+.kw-tl-step.active .kw-tl-node {
+  background: #EFF6FF;
+  border-color: #2563EB;
+}
+.kw-node-pulse {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: #2563EB;
+  animation: kwNodePulse 1.4s infinite;
+}
+@keyframes kwNodePulse {
+  0% { transform: scale(0.8); opacity: 0.6; }
+  50% { transform: scale(1.3); opacity: 1; }
+  100% { transform: scale(0.8); opacity: 0.6; }
+}
+.kw-tl-line {
+  width: 2px;
+  flex: 1;
+  background: #E2E8F0;
+  margin: 4px 0;
+}
+.kw-tl-step.done .kw-tl-line {
+  background: #0F766E;
+}
+.kw-tl-body {
+  flex: 1;
+  padding-bottom: 18px;
+}
+.kw-tl-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 3px;
+}
+.kw-tl-name {
+  font-size: 13px;
+  font-weight: 750;
+  color: #0F172A;
+}
+.kw-tl-desc {
+  font-size: 12px;
+  color: #64748B;
+  line-height: 1.4;
+  margin: 0 0 4px;
+}
+.kw-tl-time {
+  display: block;
+  font-size: 11px;
+  color: #94A3B8;
+  font-weight: 500;
+}
+.kw-tl-tag {
+  font-size: 10px;
+  font-weight: 750;
+  padding: 2px 7px;
+  border-radius: 6px;
+  text-transform: uppercase;
+  letter-spacing: 0.3px;
+}
+.kw-tl-tag.done {
+  background: #ECFDF5;
+  color: #059669;
+}
+.kw-tl-tag.active {
+  background: #EFF6FF;
+  color: #2563EB;
+}
+.kw-tl-tag.pending {
+  background: #F1F5F9;
+  color: #64748B;
+}
+
+/* 4. Dossier Grid */
+.kw-dossier-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 12px;
+  background: #F8FAFC;
+  border: 1px solid #E2E8F0;
   border-radius: 12px;
   padding: 12px 14px;
-  text-align: left;
+  margin-bottom: 12px;
+}
+@media (max-width: 480px) {
+  .kw-dossier-grid {
+    grid-template-columns: 1fr;
+    gap: 10px;
+  }
+}
+.kw-dossier-item {
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+}
+.kw-dossier-label {
+  font-size: 10px;
+  font-weight: 750;
+  letter-spacing: 0.5px;
+  color: #64748B;
+}
+.kw-dossier-val {
+  font-size: 12.5px;
+  font-weight: 700;
+  color: #0F172A;
+}
+.kw-dossier-val.mono {
+  font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
   font-size: 12px;
-  color: #0F766E;
+  letter-spacing: 0.4px;
+}
+.kw-micro-note {
+  display: flex;
+  align-items: flex-start;
+  gap: 8px;
+  font-size: 11px;
+  color: #64748B;
   line-height: 1.45;
-  margin-bottom: 20px;
+}
+.kw-micro-note .ic {
+  color: #0F766E;
+  flex-shrink: 0;
+  margin-top: 1px;
+}
+
+/* 5. Fast-Track Instant UPI Bypass Card */
+.kw-instant-bypass-card {
+  display: flex;
+  align-items: flex-start;
+  gap: 12px;
+  background: linear-gradient(135deg, #F0FDF4 0%, #ECFDF5 100%);
+  border: 1.5px solid #A7F3D0;
+  border-radius: 16px;
+  padding: 14px 16px;
+}
+.kw-bypass-icon {
+  width: 36px;
+  height: 36px;
+  border-radius: 10px;
+  background: #059669;
+  color: #fff;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  box-shadow: 0 4px 12px rgba(5, 150, 105, 0.25);
+}
+.kw-bypass-info {
+  flex: 1;
+}
+.kw-bypass-info strong {
+  display: block;
+  font-size: 13.5px;
+  color: #064E3B;
+  margin-bottom: 3px;
+}
+.kw-bypass-info p {
+  font-size: 12px;
+  color: #047857;
+  line-height: 1.4;
+  margin: 0 0 10px;
+}
+.kw-bypass-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  background: #059669;
+  color: #fff;
+  border: none;
+  border-radius: 10px;
+  padding: 8px 14px;
+  font-size: 12px;
+  font-weight: 750;
+  cursor: pointer;
+  transition: all 0.15s ease;
+}
+.kw-bypass-btn:hover {
+  background: #047857;
+  transform: translateY(-1px);
 }
 
 /* Processing */
