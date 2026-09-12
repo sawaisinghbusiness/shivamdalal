@@ -1,4 +1,4 @@
-import { useState, useMemo, useEffect } from 'react';
+import { useState, useMemo, useEffect, useRef } from 'react';
 import { useParams, useNavigate, Link } from 'react-router-dom';
 import Icon from '../components/Icon';
 import { useToast } from '../components/Toast';
@@ -13,10 +13,12 @@ export default function FurnitureDetail() {
   const nav = useNavigate();
   const toast = useToast();
   const { user, addBookingDemo } = useAppData();
+  const scrollRef = useRef(null);
 
   // Scroll to top whenever categorySlug or designId changes
   useEffect(() => {
     window.scrollTo({ top: 0, behavior: 'smooth' });
+    scrollRef.current?.scrollTo({ top: 0, behavior: 'smooth' });
   }, [categorySlug, designId]);
 
   // Current category data
@@ -153,7 +155,8 @@ export default function FurnitureDetail() {
         </button>
       </header>
 
-      <main className="fd-content">
+      <div className="fd-scroll-body" ref={scrollRef}>
+        <main className="fd-content">
         {/* ── BREADCRUMB ── */}
         <nav className="fd-breadcrumb" aria-label="Breadcrumb">
           <Link to="/" className="fd-bc-link">Home</Link>
@@ -371,7 +374,8 @@ export default function FurnitureDetail() {
             </div>
           </section>
         )}
-      </main>
+        </main>
+      </div>
 
       {/* ── STICKY FOOTER PREVIOUS / NEXT NAVIGATION BAR (MATCHES SCREENSHOT) ── */}
       <footer className="fd-sticky-nav-bar">
@@ -409,8 +413,6 @@ export default function FurnitureDetail() {
           </button>
         )}
       </footer>
-
-      <div className="bottom-spacer" />
     </div>
   );
 }

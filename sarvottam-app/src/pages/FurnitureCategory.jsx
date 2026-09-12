@@ -137,7 +137,7 @@ export default function FurnitureCategory() {
   }
 
   return (
-    <div className="lvc-page">
+    <div className="page lvc-page">
       {/* ── TOP NAV HEADER ── */}
       <header className="lvc-top-nav">
         <div className="lvc-nav-left">

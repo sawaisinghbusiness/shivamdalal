@@ -200,7 +200,7 @@ export default function Furniture() {
   };
 
   return (
-    <div className="lv-page">
+    <div className="page lv-page">
       {/* ── CLEAN TOP HEADER BAR ── */}
       <header className="lv-top-nav">
         <div className="lv-nav-inner">
