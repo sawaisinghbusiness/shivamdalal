@@ -1,0 +1,568 @@
+/* ══════════════════════════════════════════════════════════════
+   SARVOTTAM — TALK TO A DESIGNER CONSULTATION PAGE
+   Exact Replication of Livspace Consultation Screen (media_1789217360238.png)
+   - Clean top bar with ✕ and "Talk to a designer"
+   - Clean outlined inputs with floating label for Phone Number
+   - Indian Flag 🇮🇳 dropdown indicator
+   - WhatsApp checkbox with green floating badge
+   - City dropdown selector
+   - Signature Coral Pill Button: #EB595F
+   - Terms disclaimer with coral links
+   - Floating chat bubble and red helper button
+   ══════════════════════════════════════════════════════════════ */
+
+.fc-page {
+  background-color: #FFFFFF;
+  flex: 1;
+  min-height: 0;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  position: relative;
+  overflow: hidden;
+  color: #18181B;
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+  -webkit-font-smoothing: antialiased;
+}
+
+/* ── HEADER ── */
+.fc-header {
+  flex-shrink: 0;
+  background-color: #FFFFFF;
+  border-bottom: 1px solid #E5E7EB;
+  padding: 14px 18px;
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  z-index: 20;
+}
+
+.fc-close-btn {
+  width: 32px;
+  height: 32px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: none;
+  background: transparent;
+  color: #18181B;
+  cursor: pointer;
+  padding: 0;
+  border-radius: 50%;
+  transition: background-color 150ms ease;
+}
+
+.fc-close-btn:hover {
+  background-color: #F4F4F5;
+}
+
+.fc-close-btn:active {
+  transform: scale(0.92);
+}
+
+.fc-header-title {
+  margin: 0;
+  font-size: 19px;
+  font-weight: 750;
+  color: #18181B;
+  letter-spacing: -0.01em;
+}
+
+/* ── MAIN SCROLLABLE BODY ── */
+.fc-main {
+  flex: 1;
+  min-height: 0;
+  overflow-y: auto;
+  -webkit-overflow-scrolling: touch;
+  padding: 24px 20px 100px;
+  display: flex;
+  flex-direction: column;
+}
+
+.fc-form {
+  max-width: 440px;
+  width: 100%;
+  margin: 0 auto;
+  display: flex;
+  flex-direction: column;
+  gap: 18px;
+}
+
+/* Context card when opened for a specific design */
+.fc-context-card {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 10px 14px;
+  background-color: #F8FAFC;
+  border: 1px solid #E2E8F0;
+  border-radius: 10px;
+  margin-bottom: 6px;
+}
+
+.fc-ctx-img {
+  width: 52px;
+  height: 52px;
+  border-radius: 8px;
+  object-fit: cover;
+  flex-shrink: 0;
+}
+
+.fc-ctx-info {
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+}
+
+.fc-ctx-tag {
+  font-size: 11px;
+  font-weight: 700;
+  color: #0F766E;
+  text-transform: uppercase;
+}
+
+.fc-ctx-title {
+  margin: 2px 0 0;
+  font-size: 13.5px;
+  font-weight: 700;
+  color: #18181B;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.fc-ctx-price {
+  font-size: 12px;
+  font-weight: 750;
+  color: #475569;
+}
+
+/* ── INPUT FIELDS (EXACT LIVSPACE FORM STYLING) ── */
+.fc-field {
+  position: relative;
+  width: 100%;
+}
+
+.fc-input {
+  width: 100%;
+  box-sizing: border-box;
+  padding: 14px 16px;
+  border-radius: 8px;
+  border: 1.2px solid #CBD5E1;
+  background-color: #FFFFFF;
+  font-size: 14.5px;
+  color: #18181B;
+  font-family: inherit;
+  outline: none;
+  min-height: 48px;
+  transition: border-color 150ms ease, box-shadow 150ms ease;
+}
+
+.fc-input::placeholder {
+  color: #94A3B8;
+  font-weight: 400;
+}
+
+.fc-input:focus {
+  border-color: #EB595F;
+  box-shadow: 0 0 0 3px rgba(235, 89, 95, 0.12);
+}
+
+/* ── PHONE NUMBER WITH INDIAN FLAG ── */
+.fc-phone-field {
+  border: 1.2px solid #CBD5E1;
+  border-radius: 8px;
+  padding: 0 14px;
+  position: relative;
+  background-color: #FFFFFF;
+  transition: border-color 150ms ease, box-shadow 150ms ease;
+}
+
+.fc-phone-field:focus-within {
+  border-color: #EB595F;
+  box-shadow: 0 0 0 3px rgba(235, 89, 95, 0.12);
+}
+
+.fc-field-label-float {
+  position: absolute;
+  top: -9px;
+  left: 12px;
+  background-color: #FFFFFF;
+  padding: 0 6px;
+  font-size: 11px;
+  font-weight: 600;
+  color: #64748B;
+  letter-spacing: 0.02em;
+}
+
+.fc-phone-wrap {
+  display: flex;
+  align-items: center;
+  min-height: 48px;
+}
+
+.fc-flag-box {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  padding-right: 12px;
+  border-right: 1px solid #E2E8F0;
+  cursor: default;
+  user-select: none;
+}
+
+.fc-flag {
+  font-size: 18px;
+  line-height: 1;
+}
+
+.fc-flag-arrow {
+  font-size: 11px;
+  color: #64748B;
+}
+
+.fc-phone-inp {
+  border: none !important;
+  box-shadow: none !important;
+  padding-left: 12px;
+}
+
+/* ── WHATSAPP ROW & FLOATING BADGE ── */
+.fc-wa-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-top: -2px;
+}
+
+.fc-checkbox-label {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  cursor: pointer;
+  user-select: none;
+}
+
+.fc-checkbox {
+  position: absolute;
+  opacity: 0;
+  width: 0;
+  height: 0;
+}
+
+.fc-custom-check {
+  width: 18px;
+  height: 18px;
+  border-radius: 4px;
+  border: 1.5px solid #EB595F;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #EB595F;
+  background-color: #FFFFFF;
+  transition: all 150ms ease;
+  flex-shrink: 0;
+}
+
+.fc-checkbox:checked + .fc-custom-check {
+  background-color: #EB595F;
+  color: #FFFFFF;
+}
+
+.fc-wa-text {
+  font-size: 13.5px;
+  color: #18181B;
+  font-weight: 500;
+}
+
+.fc-wa-badge-pill {
+  width: 34px;
+  height: 34px;
+  border-radius: 8px;
+  background-color: #FFFFFF;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.08);
+  border: 1px solid #E2E8F0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #25D366;
+  flex-shrink: 0;
+}
+
+/* ── CITY SELECT DROPDOWN ── */
+.fc-select-field {
+  position: relative;
+}
+
+.fc-select {
+  width: 100%;
+  box-sizing: border-box;
+  padding: 14px 16px;
+  padding-right: 36px;
+  border-radius: 8px;
+  border: 1.2px solid #CBD5E1;
+  background-color: #FFFFFF;
+  font-size: 14.5px;
+  color: #18181B;
+  font-family: inherit;
+  outline: none;
+  min-height: 48px;
+  cursor: pointer;
+  appearance: none;
+  -webkit-appearance: none;
+  transition: border-color 150ms ease, box-shadow 150ms ease;
+}
+
+.fc-select:focus {
+  border-color: #EB595F;
+  box-shadow: 0 0 0 3px rgba(235, 89, 95, 0.12);
+}
+
+.fc-select-arrow {
+  position: absolute;
+  right: 14px;
+  top: 50%;
+  transform: translateY(-50%);
+  pointer-events: none;
+  font-size: 13px;
+  color: #64748B;
+}
+
+/* ── SIGNATURE CORAL BUTTON (EXACT MATCH TO SCREENSHOT) ── */
+.fc-submit-btn {
+  width: 100%;
+  padding: 15px 24px;
+  border-radius: 9999px;
+  border: none;
+  background-color: #EB595F;
+  color: #FFFFFF;
+  font-size: 14px;
+  font-weight: 750;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+  cursor: pointer;
+  margin-top: 6px;
+  box-shadow: 0 4px 16px rgba(235, 89, 95, 0.32);
+  transition: background-color 180ms ease, transform 150ms ease, box-shadow 180ms ease;
+}
+
+.fc-submit-btn:hover {
+  background-color: #E2484E;
+  box-shadow: 0 6px 20px rgba(235, 89, 95, 0.42);
+}
+
+.fc-submit-btn:active {
+  transform: scale(0.98);
+}
+
+/* ── TERMS DISCLAIMER ── */
+.fc-disclaimer {
+  margin: 6px 0 0;
+  text-align: center;
+  font-size: 12px;
+  line-height: 1.5;
+  color: #18181B;
+}
+
+.fc-link {
+  color: #EB595F;
+  text-decoration: none;
+  font-weight: 600;
+}
+
+.fc-link:hover {
+  text-decoration: underline;
+}
+
+/* ── FLOATING CHAT ASSISTANT (MATCHING SCREENSHOT) ── */
+.fc-floating-chat-container {
+  position: absolute;
+  bottom: 24px;
+  right: 20px;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  z-index: 30;
+}
+
+.fc-chat-prompt {
+  background-color: #FFFFFF;
+  border-radius: 10px;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.12);
+  border: 1px solid #F1F5F9;
+  padding: 10px 14px 10px 24px;
+  position: relative;
+  font-size: 12.5px;
+  color: #334155;
+  white-space: nowrap;
+  animation: fcPopIn 220ms ease;
+}
+
+@keyframes fcPopIn {
+  from { opacity: 0; transform: translateX(8px); }
+  to { opacity: 1; transform: translateX(0); }
+}
+
+.fc-chat-dismiss {
+  position: absolute;
+  top: 5px;
+  left: 6px;
+  border: none;
+  background: transparent;
+  color: #94A3B8;
+  font-size: 10px;
+  cursor: pointer;
+  padding: 2px;
+  line-height: 1;
+}
+
+.fc-chat-prompt-txt {
+  font-weight: 500;
+}
+
+.fc-floating-chat-btn {
+  width: 48px;
+  height: 48px;
+  border-radius: 50%;
+  border: none;
+  background-color: #EB595F;
+  color: #FFFFFF;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  box-shadow: 0 4px 16px rgba(235, 89, 95, 0.4);
+  transition: transform 150ms ease, background-color 150ms ease;
+  flex-shrink: 0;
+}
+
+.fc-floating-chat-btn:hover {
+  background-color: #E2484E;
+  transform: scale(1.05);
+}
+
+.fc-floating-chat-btn:active {
+  transform: scale(0.94);
+}
+
+/* ── SUCCESS STATE ── */
+.fc-success-box {
+  max-width: 440px;
+  width: 100%;
+  margin: 20px auto;
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.fc-success-badge {
+  width: 64px;
+  height: 64px;
+  border-radius: 50%;
+  background-color: #E6F4F1;
+  color: #0F766E;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 16px;
+}
+
+.fc-success-heading {
+  margin: 0 0 8px;
+  font-size: 22px;
+  font-weight: 800;
+  color: #18181B;
+}
+
+.fc-success-desc {
+  margin: 0 0 20px;
+  font-size: 13.5px;
+  color: #52525B;
+  line-height: 1.6;
+}
+
+.fc-design-preview-chip {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  background-color: #F8FAFC;
+  border: 1px solid #E2E8F0;
+  border-radius: 10px;
+  padding: 10px 14px;
+  margin-bottom: 24px;
+  width: 100%;
+  box-sizing: border-box;
+  text-align: left;
+}
+
+.fc-design-preview-chip img {
+  width: 56px;
+  height: 56px;
+  border-radius: 8px;
+  object-fit: cover;
+}
+
+.fc-dpc-text {
+  display: flex;
+  flex-direction: column;
+}
+
+.fc-dpc-text small {
+  font-size: 10.5px;
+  font-weight: 700;
+  color: #0F766E;
+  text-transform: uppercase;
+}
+
+.fc-dpc-text strong {
+  font-size: 13.5px;
+  font-weight: 750;
+  color: #18181B;
+}
+
+.fc-dpc-text span {
+  font-size: 12px;
+  font-weight: 600;
+  color: #64748B;
+}
+
+.fc-success-actions {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  width: 100%;
+}
+
+.fc-btn-primary {
+  width: 100%;
+  padding: 13px 20px;
+  border-radius: 9999px;
+  border: none;
+  background-color: #0F766E;
+  color: #FFFFFF;
+  font-size: 14px;
+  font-weight: 750;
+  cursor: pointer;
+  transition: background-color 150ms ease;
+}
+
+.fc-btn-primary:hover {
+  background-color: #0d635d;
+}
+
+.fc-btn-secondary {
+  width: 100%;
+  padding: 12px 20px;
+  border-radius: 9999px;
+  border: 1.5px solid #CBD5E1;
+  background: transparent;
+  color: #334155;
+  font-size: 13.5px;
+  font-weight: 700;
+  cursor: pointer;
+}
+
+.fc-btn-secondary:hover {
+  background-color: #F1F5F9;
+}

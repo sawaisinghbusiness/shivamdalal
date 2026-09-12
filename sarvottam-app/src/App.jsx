@@ -8,6 +8,7 @@ import Emergency from './pages/Emergency';
 import Furniture from './pages/Furniture';
 import FurnitureCategory from './pages/FurnitureCategory';
 import FurnitureDetail from './pages/FurnitureDetail';
+import FurnitureConsultation from './pages/FurnitureConsultation';
 import Painting from './pages/Painting';
 import Profile from './pages/Profile';
 import EditProfile from './pages/EditProfile';
@@ -88,9 +89,10 @@ export default function App() {
     );
   }
 
-  // Logged in as Customer → full customer app (hide bottom nav on dedicated design detail page)
+  // Logged in as Customer → full customer app (hide bottom nav on dedicated detail & consultation pages)
   const isFurnitureDetail = pathname.startsWith('/furniture/') && pathname.split('/').filter(Boolean).length >= 3;
-  const showNav = (MAIN_TABS.includes(pathname) || pathname.startsWith('/furniture')) && !isFurnitureDetail;
+  const isConsultation = pathname === '/furniture/consultation';
+  const showNav = (MAIN_TABS.includes(pathname) || pathname.startsWith('/furniture')) && !isFurnitureDetail && !isConsultation;
   return (
     <ToastProvider>
       <div className="app-wrapper">
@@ -100,6 +102,7 @@ export default function App() {
             <Route path="/services" element={<AllServices />} />
             <Route path="/emergency" element={<Emergency />} />
             <Route path="/furniture" element={<Furniture />} />
+            <Route path="/furniture/consultation" element={<FurnitureConsultation />} />
             <Route path="/furniture/:categorySlug" element={<FurnitureCategory />} />
             <Route path="/furniture/:categorySlug/:designId" element={<FurnitureDetail />} />
             <Route path="/painting" element={<Painting />} />

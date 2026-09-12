@@ -15,10 +15,14 @@ export default function FurnitureDetail() {
   const { user, addBookingDemo } = useAppData();
   const scrollRef = useRef(null);
 
+  // Active photo in 4-image gallery
+  const [activeImgIdx, setActiveImgIdx] = useState(0);
+
   // Scroll to top whenever categorySlug or designId changes
   useEffect(() => {
     window.scrollTo({ top: 0, behavior: 'smooth' });
     scrollRef.current?.scrollTo({ top: 0, behavior: 'smooth' });
+    setActiveImgIdx(0);
   }, [categorySlug, designId]);
 
   // Current category data
@@ -35,6 +39,14 @@ export default function FurnitureDetail() {
   const currentDesign = useMemo(() => {
     return designs.find((d) => d.id === designId) || designs[0] || null;
   }, [designs, designId]);
+
+  // 4 high-res images for this design
+  const designImages = useMemo(() => {
+    if (currentDesign?.images && currentDesign.images.length > 0) {
+      return currentDesign.images;
+    }
+    return [currentDesign?.img || 'https://images.unsplash.com/photo-1556909212-d5b604d0c90d?auto=format&fit=crop&w=1000&q=85'];
+  }, [currentDesign]);
 
   // Previous and Next design navigation
   const { prevDesign, nextDesign } = useMemo(() => {
@@ -109,12 +121,18 @@ export default function FurnitureDetail() {
     toast('Consultation booked! Our master karigar will visit you.');
   };
 
+  const openTalkToDesigner = () => {
+    nav('/furniture/consultation', {
+      state: { design: currentDesign, space: currentSpaceMeta },
+    });
+  };
+
   if (!currentDesign) {
     return (
       <div className="fd-page">
         <header className="fd-top-bar">
-          <button type="button" className="fd-nav-btn" onClick={() => nav('/furniture')}>
-            <Icon name="back" size={20} />
+          <button type="button" className="fd-round-btn" onClick={() => nav('/furniture')}>
+            <Icon name="close" size={18} />
           </button>
           <span className="fd-bar-title">Design Not Found</span>
         </header>
@@ -155,225 +173,288 @@ export default function FurnitureDetail() {
         </button>
       </header>
 
+      {/* ── SCROLLABLE BODY CONTAINER ── */}
       <div className="fd-scroll-body" ref={scrollRef}>
         <main className="fd-content">
-        {/* ── BREADCRUMB ── */}
-        <nav className="fd-breadcrumb" aria-label="Breadcrumb">
-          <Link to="/" className="fd-bc-link">Home</Link>
-          <span className="fd-bc-sep">/</span>
-          <Link to="/furniture" className="fd-bc-link">Furniture</Link>
-          <span className="fd-bc-sep">/</span>
-          <Link to={`/furniture/${categorySlug}`} className="fd-bc-link">
-            {currentSpaceMeta.name}
-          </Link>
-          <span className="fd-bc-sep">/</span>
-          <span className="fd-bc-current">{currentDesign.name}</span>
-        </nav>
+          {/* ── BREADCRUMB ── */}
+          <nav className="fd-breadcrumb" aria-label="Breadcrumb">
+            <Link to="/" className="fd-bc-link">Home</Link>
+            <span className="fd-bc-sep">/</span>
+            <Link to="/furniture" className="fd-bc-link">Furniture</Link>
+            <span className="fd-bc-sep">/</span>
+            <Link to={`/furniture/${categorySlug}`} className="fd-bc-link">
+              {currentSpaceMeta.name}
+            </Link>
+            <span className="fd-bc-sep">/</span>
+            <span className="fd-bc-current">{currentDesign.name}</span>
+          </nav>
 
-        {/* ── HERO IMAGE SECTION ── */}
-        <div className="fd-hero-image-wrap">
-          <img
-            src={currentDesign.img}
-            alt={currentDesign.name}
-            className="fd-hero-img"
-          />
-          <div className="fd-hero-badge-left">{currentDesign.size}</div>
-          <div className="fd-hero-badge-right">
-            <Icon name="star" size={13} />
-            <span>{currentDesign.rating} Rating</span>
-          </div>
-        </div>
-
-        {/* ── TITLE & PRICE BLOCK ── */}
-        <div className="fd-meta-card">
-          <div className="fd-title-col">
-            <h2 className="fd-design-title">{currentDesign.name}</h2>
-            <p className="fd-design-finish">{currentDesign.finish}</p>
-          </div>
-
-          <div className="fd-price-col">
-            <span className="fd-price-label">Estimate Range</span>
-            <span className="fd-price-value">{currentDesign.price}</span>
-          </div>
-        </div>
-
-        {/* ── 100% VERIFIED RAJASTHAN ARTISANS PROMISE BOX ── */}
-        <div className="fd-promise-box">
-          <div className="fd-promise-ic">
-            <Icon name="shield" size={20} />
-          </div>
-          <div className="fd-promise-text">
-            <strong>100% Verified Rajasthan Artisans</strong>
-            <p>Direct workshop fabrication with 10-year warranty and zero showroom markup.</p>
-          </div>
-        </div>
-
-        {/* ── TECHNICAL SPECIFICATIONS TABLE (MATCHES SCREENSHOT) ── */}
-        <section className="fd-specs-section">
-          <h3 className="fd-specs-heading">Technical Specifications</h3>
-          <div className="fd-specs-table">
-            {currentDesign.specs?.map(([k, v]) => (
-              <div key={k} className="fd-spec-row">
-                <span className="fd-spec-key">{k}</span>
-                <span className="fd-spec-val">{v}</span>
+          {/* ── 4-IMAGE INTERACTIVE GALLERY ── */}
+          <div className="fd-gallery-container">
+            <div className="fd-hero-image-wrap">
+              <img
+                src={designImages[activeImgIdx] || currentDesign.img}
+                alt={`${currentDesign.name} - Angle ${activeImgIdx + 1}`}
+                className="fd-hero-img"
+              />
+              <div className="fd-hero-badge-left">{currentDesign.size}</div>
+              <div className="fd-hero-badge-right">
+                <span className="fd-badge-count-pill">{activeImgIdx + 1} / {designImages.length}</span>
+                <span className="fd-badge-dot">·</span>
+                <Icon name="star" size={12} />
+                <span>{currentDesign.rating}</span>
               </div>
-            ))}
-          </div>
-        </section>
 
-        {/* ── IN-PAGE CONSULTATION BOOKING CARD ── */}
-        <section id="book-consultation" className="fd-consult-section">
-          <div className="fd-consult-card">
-            <div className="fd-cc-head">
-              <span className="fd-cc-badge">100% Free Doorstep Visit · ₹0</span>
-              <h3 className="fd-cc-title">Want this exact look customized for your home?</h3>
-              <p className="fd-cc-sub">
-                Our master karigar visits your residence with material swatches, laser measurement tools, and 3D CAD layouts.
-              </p>
+              {/* Gallery Previous / Next Overlay Controls */}
+              {designImages.length > 1 && (
+                <>
+                  <button
+                    type="button"
+                    className="fd-gal-arrow prev"
+                    onClick={(e) => {
+                      e.stopPropagation();
+                      setActiveImgIdx((prev) => (prev > 0 ? prev - 1 : designImages.length - 1));
+                    }}
+                    aria-label="Previous image"
+                  >
+                    <Icon name="chevron" size={14} />
+                  </button>
+                  <button
+                    type="button"
+                    className="fd-gal-arrow next"
+                    onClick={(e) => {
+                      e.stopPropagation();
+                      setActiveImgIdx((prev) => (prev < designImages.length - 1 ? prev + 1 : 0));
+                    }}
+                    aria-label="Next image"
+                  >
+                    <Icon name="chevron" size={14} />
+                  </button>
+                </>
+              )}
             </div>
 
-            {booked ? (
-              <div className="fd-booked-state">
-                <div className="fd-booked-icon">
-                  <Icon name="check" size={26} />
-                </div>
-                <h4>Measurement Visit Scheduled!</h4>
-                <p>
-                  Thank you, <strong>{cName}</strong>. Our supervisor will contact you at <strong>+91 {cPhone}</strong> to confirm your slot: <strong>{cDate}</strong>.
-                </p>
-                <div className="fd-booked-actions">
+            {/* 4 Thumbnail Previews */}
+            {designImages.length > 1 && (
+              <div className="fd-thumb-row">
+                {designImages.map((imgUrl, idx) => (
                   <button
+                    key={idx}
                     type="button"
-                    className="fd-btn-fill"
-                    onClick={() => nav('/bookings')}
+                    className={'fd-thumb-btn' + (activeImgIdx === idx ? ' active' : '')}
+                    onClick={() => setActiveImgIdx(idx)}
+                    aria-label={`Select angle ${idx + 1}`}
                   >
-                    View in My Bookings
+                    <img src={imgUrl} alt={`Thumbnail ${idx + 1}`} loading="lazy" />
+                    {activeImgIdx === idx && <span className="fd-thumb-active-indicator" />}
                   </button>
-                  <button
-                    type="button"
-                    className="fd-btn-outline"
-                    onClick={() => setBooked(false)}
-                  >
-                    Book Another Slot
-                  </button>
-                </div>
+                ))}
               </div>
-            ) : (
-              <form className="fd-consult-form" onSubmit={handleConsultSubmit}>
-                <div className="fd-form-row">
-                  <div className="fd-field">
-                    <label className="fd-label">Your Name</label>
-                    <input
-                      type="text"
-                      className="fd-input"
-                      placeholder="e.g. Shivam Singh"
-                      value={cName}
-                      onChange={(e) => setCName(e.target.value)}
-                      required
-                    />
-                  </div>
-
-                  <div className="fd-field">
-                    <label className="fd-label">Mobile Number</label>
-                    <div className="fd-phone-box">
-                      <span className="fd-prefix">+91</span>
-                      <input
-                        type="tel"
-                        maxLength={10}
-                        className="fd-input fd-phone-inp"
-                        placeholder="10-digit number"
-                        value={cPhone}
-                        onChange={(e) => setCPhone(e.target.value.replace(/\D/g, ''))}
-                        required
-                      />
-                    </div>
-                  </div>
-                </div>
-
-                <div className="fd-form-row">
-                  <div className="fd-field">
-                    <label className="fd-label">Preferred Time Slot</label>
-                    <select
-                      className="fd-select"
-                      value={cDate}
-                      onChange={(e) => setCDate(e.target.value)}
-                    >
-                      <option>Tomorrow (Morning 09:00 AM – 12:00 PM)</option>
-                      <option>Tomorrow (Afternoon 12:00 PM – 04:00 PM)</option>
-                      <option>Tomorrow (Evening 04:00 PM – 07:00 PM)</option>
-                      <option>Within 2 Days</option>
-                      <option>This Weekend</option>
-                    </select>
-                  </div>
-
-                  <div className="fd-field">
-                    <label className="fd-label">Address / Rajasthan City</label>
-                    <input
-                      type="text"
-                      className="fd-input"
-                      placeholder="Area, Colony, City"
-                      value={cAddress}
-                      onChange={(e) => setCAddress(e.target.value)}
-                      required
-                    />
-                  </div>
-                </div>
-
-                <div className="fd-field">
-                  <label className="fd-label">Custom Requirements or Dimensions (Optional)</label>
-                  <textarea
-                    rows={2}
-                    className="fd-textarea"
-                    placeholder="Approx room size, preferred finishes or modifications..."
-                    value={cNotes}
-                    onChange={(e) => setCNotes(e.target.value)}
-                  />
-                </div>
-
-                <button type="submit" className="fd-submit-btn">
-                  Book Free Doorstep Measurement
-                </button>
-              </form>
             )}
           </div>
-        </section>
 
-        {/* ── RELATED DESIGNS IN THIS SPACE CAROUSEL ── */}
-        {relatedDesigns.length > 0 && (
-          <section className="fd-related-section">
-            <div className="fd-sec-head">
-              <h3 className="fd-sec-title">More {currentSpaceMeta.name} Designs</h3>
-              <p className="fd-sec-sub">Explore alternative finishes and layouts</p>
+          {/* ── TITLE & PRICE BLOCK ── */}
+          <div className="fd-meta-card">
+            <div className="fd-title-col">
+              <h2 className="fd-design-title">{currentDesign.name}</h2>
+              <p className="fd-design-finish">{currentDesign.finish}</p>
             </div>
 
-            <div className="fd-related-track">
-              {relatedDesigns.map((rel) => (
-                <div
-                  key={rel.id}
-                  className="fd-rel-card"
-                  onClick={() => nav(`/furniture/${categorySlug}/${rel.id}`)}
-                  role="button"
-                  tabIndex={0}
-                  onKeyDown={(e) => {
-                    if (e.key === 'Enter' || e.key === ' ') {
-                      e.preventDefault();
-                      nav(`/furniture/${categorySlug}/${rel.id}`);
-                    }
-                  }}
-                >
-                  <div className="fd-rel-img-wrap">
-                    <img src={rel.img} alt={rel.name} loading="lazy" />
-                    <span className="fd-rel-dim">{rel.size}</span>
-                  </div>
-                  <div className="fd-rel-body">
-                    <h4 className="fd-rel-title">{rel.name}</h4>
-                    <p className="fd-rel-price">{rel.price}</p>
-                  </div>
+            <div className="fd-price-col">
+              <span className="fd-price-label">Estimate Range</span>
+              <span className="fd-price-value">{currentDesign.price}</span>
+            </div>
+          </div>
+
+          {/* ── TALK TO A DESIGNER PRIMARY CTA BUTTON ── */}
+          <div className="fd-consult-action-strip">
+            <button
+              type="button"
+              className="fd-cta-talk-btn"
+              onClick={openTalkToDesigner}
+            >
+              <Icon name="phone" size={18} />
+              <span>Talk to a Designer / Book Consultation</span>
+            </button>
+          </div>
+
+          {/* ── 100% VERIFIED RAJASTHAN ARTISANS PROMISE BOX ── */}
+          <div className="fd-promise-box">
+            <div className="fd-promise-ic">
+              <Icon name="shield" size={20} />
+            </div>
+            <div className="fd-promise-text">
+              <strong>100% Verified Rajasthan Artisans</strong>
+              <p>Direct workshop fabrication with 10-year warranty and zero showroom markup.</p>
+            </div>
+          </div>
+
+          {/* ── TECHNICAL SPECIFICATIONS TABLE (MATCHES SCREENSHOT) ── */}
+          <section className="fd-specs-section">
+            <h3 className="fd-specs-heading">Technical Specifications</h3>
+            <div className="fd-specs-table">
+              {currentDesign.specs?.map(([k, v]) => (
+                <div key={k} className="fd-spec-row">
+                  <span className="fd-spec-key">{k}</span>
+                  <span className="fd-spec-val">{v}</span>
                 </div>
               ))}
             </div>
           </section>
-        )}
+
+          {/* ── IN-PAGE CONSULTATION BOOKING CARD ── */}
+          <section id="book-consultation" className="fd-consult-section">
+            <div className="fd-consult-card">
+              <div className="fd-cc-head">
+                <span className="fd-cc-badge">100% Free Doorstep Visit · ₹0</span>
+                <h3 className="fd-cc-title">Want this exact look customized for your home?</h3>
+                <p className="fd-cc-sub">
+                  Our master karigar visits your residence with material swatches, laser measurement tools, and 3D CAD layouts.
+                </p>
+              </div>
+
+              {booked ? (
+                <div className="fd-booked-state">
+                  <div className="fd-booked-icon">
+                    <Icon name="check" size={26} />
+                  </div>
+                  <h4>Measurement Visit Scheduled!</h4>
+                  <p>
+                    Thank you, <strong>{cName}</strong>. Our supervisor will contact you at <strong>+91 {cPhone}</strong> to confirm your slot: <strong>{cDate}</strong>.
+                  </p>
+                  <div className="fd-booked-actions">
+                    <button
+                      type="button"
+                      className="fd-btn-fill"
+                      onClick={() => nav('/bookings')}
+                    >
+                      View in My Bookings
+                    </button>
+                    <button
+                      type="button"
+                      className="fd-btn-outline"
+                      onClick={() => setBooked(false)}
+                    >
+                      Book Another Slot
+                    </button>
+                  </div>
+                </div>
+              ) : (
+                <form className="fd-consult-form" onSubmit={handleConsultSubmit}>
+                  <div className="fd-form-row">
+                    <div className="fd-field">
+                      <label className="fd-label">Your Name</label>
+                      <input
+                        type="text"
+                        className="fd-input"
+                        placeholder="e.g. Shivam Singh"
+                        value={cName}
+                        onChange={(e) => setCName(e.target.value)}
+                        required
+                      />
+                    </div>
+
+                    <div className="fd-field">
+                      <label className="fd-label">Mobile Number</label>
+                      <div className="fd-phone-box">
+                        <span className="fd-prefix">+91</span>
+                        <input
+                          type="tel"
+                          maxLength={10}
+                          className="fd-input fd-phone-inp"
+                          placeholder="10-digit number"
+                          value={cPhone}
+                          onChange={(e) => setCPhone(e.target.value.replace(/\D/g, ''))}
+                          required
+                        />
+                      </div>
+                    </div>
+                  </div>
+
+                  <div className="fd-form-row">
+                    <div className="fd-field">
+                      <label className="fd-label">Preferred Time Slot</label>
+                      <select
+                        className="fd-select"
+                        value={cDate}
+                        onChange={(e) => setCDate(e.target.value)}
+                      >
+                        <option>Tomorrow (Morning 09:00 AM – 12:00 PM)</option>
+                        <option>Tomorrow (Afternoon 12:00 PM – 04:00 PM)</option>
+                        <option>Tomorrow (Evening 04:00 PM – 07:00 PM)</option>
+                        <option>Within 2 Days</option>
+                        <option>This Weekend</option>
+                      </select>
+                    </div>
+
+                    <div className="fd-field">
+                      <label className="fd-label">Address / Rajasthan City</label>
+                      <input
+                        type="text"
+                        className="fd-input"
+                        placeholder="Area, Colony, City"
+                        value={cAddress}
+                        onChange={(e) => setCAddress(e.target.value)}
+                        required
+                      />
+                    </div>
+                  </div>
+
+                  <div className="fd-field">
+                    <label className="fd-label">Custom Requirements or Dimensions (Optional)</label>
+                    <textarea
+                      rows={2}
+                      className="fd-textarea"
+                      placeholder="Approx room size, preferred finishes or modifications..."
+                      value={cNotes}
+                      onChange={(e) => setCNotes(e.target.value)}
+                    />
+                  </div>
+
+                  <button type="submit" className="fd-submit-btn">
+                    Book Free Doorstep Measurement
+                  </button>
+                </form>
+              )}
+            </div>
+          </section>
+
+          {/* ── RELATED DESIGNS IN THIS SPACE CAROUSEL ── */}
+          {relatedDesigns.length > 0 && (
+            <section className="fd-related-section">
+              <div className="fd-sec-head">
+                <h3 className="fd-sec-title">More {currentSpaceMeta.name} Designs</h3>
+                <p className="fd-sec-sub">Explore alternative finishes and layouts</p>
+              </div>
+
+              <div className="fd-related-track">
+                {relatedDesigns.map((rel) => (
+                  <div
+                    key={rel.id}
+                    className="fd-rel-card"
+                    onClick={() => nav(`/furniture/${categorySlug}/${rel.id}`)}
+                    role="button"
+                    tabIndex={0}
+                    onKeyDown={(e) => {
+                      if (e.key === 'Enter' || e.key === ' ') {
+                        e.preventDefault();
+                        nav(`/furniture/${categorySlug}/${rel.id}`);
+                      }
+                    }}
+                  >
+                    <div className="fd-rel-img-wrap">
+                      <img src={rel.img} alt={rel.name} loading="lazy" />
+                      <span className="fd-rel-dim">{rel.size}</span>
+                    </div>
+                    <div className="fd-rel-body">
+                      <h4 className="fd-rel-title">{rel.name}</h4>
+                      <p className="fd-rel-price">{rel.price}</p>
+                    </div>
+                  </div>
+                ))}
+              </div>
+            </section>
+          )}
         </main>
       </div>
 

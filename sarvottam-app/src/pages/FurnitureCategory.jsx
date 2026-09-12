@@ -2,7 +2,6 @@ import { useState, useMemo, useEffect } from 'react';
 import { useParams, useNavigate, Link } from 'react-router-dom';
 import Icon from '../components/Icon';
 import { useToast } from '../components/Toast';
-import { useAppData } from '../store/AppData';
 import { FURNITURE_CATALOG, SPACES } from '../data/furnitureData';
 import './FurnitureCategory.css';
 
@@ -12,7 +11,6 @@ export default function FurnitureCategory() {
   const { categorySlug } = useParams();
   const nav = useNavigate();
   const toast = useToast();
-  const { user, addBookingDemo } = useAppData();
 
   const currentSpace = useMemo(() => {
     return FURNITURE_CATALOG[categorySlug] || null;
@@ -39,16 +37,6 @@ export default function FurnitureCategory() {
     }
   });
 
-  // Modal state for direct consultation booking
-  const [consultModal, setConsultModal] = useState(null);
-
-  // Consultation form state
-  const [cName, setCName] = useState(user?.name || '');
-  const [cPhone, setCPhone] = useState(user?.phone?.replace('+91 ', '') || '');
-  const [cAddress, setCAddress] = useState('Barmer, Rajasthan');
-  const [cDate, setCDate] = useState('Tomorrow (Morning 09:00 AM – 12:00 PM)');
-  const [cNotes, setCNotes] = useState('');
-
   useEffect(() => {
     try {
       localStorage.setItem(LIKED_STORAGE_KEY, JSON.stringify(liked));
@@ -62,7 +50,6 @@ export default function FurnitureCategory() {
     setSearch('');
     setWishlistOnly(false);
     setReadMore(false);
-    setConsultModal(null);
     window.scrollTo(0, 0);
   }, [categorySlug]);
 
@@ -89,44 +76,28 @@ export default function FurnitureCategory() {
     });
   }, [designs, activeSubcat, search, wishlistOnly, liked]);
 
-  const handleConsultSubmit = (e) => {
-    e.preventDefault();
-    const cleanPhone = cPhone.replace(/\D/g, '');
-    if (!cleanPhone || cleanPhone.length < 10) {
-      toast('Please enter a valid 10-digit mobile number');
-      return;
-    }
+  const wishlistCount = useMemo(() => {
+    return Object.values(liked).filter(Boolean).length;
+  }, [liked]);
 
-    const title = consultModal?.name || `${currentSpace?.title || 'Furniture'} Consultation`;
-
-    addBookingDemo({
-      service: `Consultation: ${title}`,
-      icon: 'hammer',
-      karigar: 'Master Karigar assigned on schedule',
-      amount: 0,
-      status: 'upcoming',
-      notes: `Slot: ${cDate}. Address: ${cAddress}. Details: ${cNotes || 'Standard 3D Measurement'}`,
+  const openConsultation = (item = null) => {
+    nav('/furniture/consultation', {
+      state: { design: item, space: currentSpaceMeta },
     });
-
-    toast('Free Consultation booked! Our master karigar will visit you.');
-    setConsultModal(null);
-    nav('/bookings');
   };
-
-  const wishlistCount = Object.values(liked).filter(Boolean).length;
 
   if (!currentSpace) {
     return (
-      <div className="lvc-page">
+      <div className="page lvc-page">
         <header className="lvc-top-nav">
           <button type="button" className="lvc-back-btn" onClick={() => nav('/furniture')}>
             <Icon name="back" size={20} />
           </button>
-          <span className="lvc-nav-title">Category Not Found</span>
+          <span className="lvc-top-title">Space Not Found</span>
         </header>
-        <div className="lvc-empty-box">
+        <div className="lvc-empty-state">
           <Icon name="search" size={40} />
-          <h2>Category Not Found</h2>
+          <h2>Space Not Found</h2>
           <p>The space you are looking for is not currently available.</p>
           <Link to="/furniture" className="lvc-btn-fill">
             Explore All Spaces
@@ -145,25 +116,26 @@ export default function FurnitureCategory() {
             type="button"
             className="lvc-back-btn"
             onClick={() => nav('/furniture')}
-            aria-label="Back to Furniture Ideas"
+            aria-label="Back to Furniture"
           >
             <Icon name="back" size={20} />
           </button>
-          <div className="lvc-nav-text">
-            <span className="lvc-nav-tag">SARVOTTAM</span>
-            <span className="lvc-nav-title">{currentSpace.title}</span>
+          <div className="lvc-title-group">
+            <span className="lvc-sub-badge">{currentSpaceMeta.name}</span>
+            <h2 className="lvc-top-title">{currentSpace.title}</h2>
           </div>
         </div>
 
-        <div className="lvc-nav-actions">
+        <div className="lvc-nav-right">
           <button
             type="button"
             className={'lvc-icon-btn' + (showSearch ? ' active' : '')}
             onClick={() => setShowSearch((v) => !v)}
-            aria-label="Search"
+            aria-label="Search designs"
           >
             <Icon name="search" size={18} />
           </button>
+
           <button
             type="button"
             className={'lvc-icon-btn' + (wishlistOnly ? ' active' : '')}
@@ -240,7 +212,7 @@ export default function FurnitureCategory() {
               <button
                 type="button"
                 className="lvc-pb-btn"
-                onClick={() => setConsultModal({ name: currentSpace.promo.headline })}
+                onClick={() => openConsultation(null)}
               >
                 {currentSpace.promo.cta}
               </button>
@@ -304,7 +276,7 @@ export default function FurnitureCategory() {
                     className="lvc-btn-cta-fill"
                     onClick={(e) => {
                       e.stopPropagation();
-                      setConsultModal(item);
+                      openConsultation(item);
                     }}
                   >
                     Book Free Consultation
@@ -344,101 +316,6 @@ export default function FurnitureCategory() {
           )}
         </main>
       </div>
-
-      {/* ── CONSULTATION BOOKING MODAL ── */}
-      {consultModal && (
-        <div className="lvc-overlay" onClick={() => setConsultModal(null)}>
-          <div className="lvc-consult-modal" onClick={(e) => e.stopPropagation()}>
-            <div className="lvc-cm-header">
-              <div>
-                <span className="lvc-cm-badge">Free Doorstep Visit · ₹0</span>
-                <h3 className="lvc-cm-title">Book Design Consultation</h3>
-                <p className="lvc-cm-sub">Space: <strong>{consultModal.name || currentSpace.title}</strong></p>
-              </div>
-              <button
-                type="button"
-                className="lvc-close-btn"
-                onClick={() => setConsultModal(null)}
-                aria-label="Close"
-              >
-                <Icon name="close" size={18} />
-              </button>
-            </div>
-
-            <form className="lvc-cm-form" onSubmit={handleConsultSubmit}>
-              <div className="lvc-cm-field">
-                <label className="lvc-cm-label">Your Name</label>
-                <input
-                  type="text"
-                  className="lvc-cm-input"
-                  value={cName}
-                  onChange={(e) => setCName(e.target.value)}
-                  placeholder="Enter your full name"
-                  required
-                />
-              </div>
-
-              <div className="lvc-cm-field">
-                <label className="lvc-cm-label">Phone Number</label>
-                <div className="lvc-cm-phone-box">
-                  <span className="lvc-cm-prefix">+91</span>
-                  <input
-                    type="tel"
-                    maxLength={10}
-                    className="lvc-cm-input lvc-cm-phone-inp"
-                    value={cPhone}
-                    onChange={(e) => setCPhone(e.target.value.replace(/\D/g, ''))}
-                    placeholder="10-digit number"
-                    required
-                  />
-                </div>
-              </div>
-
-              <div className="lvc-cm-field">
-                <label className="lvc-cm-label">Preferred Time Slot</label>
-                <select
-                  className="lvc-cm-select"
-                  value={cDate}
-                  onChange={(e) => setCDate(e.target.value)}
-                >
-                  <option>Tomorrow (Morning 09:00 AM – 12:00 PM)</option>
-                  <option>Tomorrow (Afternoon 12:00 PM – 04:00 PM)</option>
-                  <option>Tomorrow (Evening 04:00 PM – 07:00 PM)</option>
-                  <option>Within 2 Days</option>
-                  <option>This Weekend</option>
-                </select>
-              </div>
-
-              <div className="lvc-cm-field">
-                <label className="lvc-cm-label">Doorstep Address / City</label>
-                <input
-                  type="text"
-                  className="lvc-cm-input"
-                  value={cAddress}
-                  onChange={(e) => setCAddress(e.target.value)}
-                  placeholder="House/Plot No., Area, City in Rajasthan"
-                  required
-                />
-              </div>
-
-              <div className="lvc-cm-field">
-                <label className="lvc-cm-label">Room Dimensions or Notes (Optional)</label>
-                <textarea
-                  className="lvc-cm-textarea"
-                  rows={2}
-                  value={cNotes}
-                  onChange={(e) => setCNotes(e.target.value)}
-                  placeholder="e.g. 14x10 ft room, need modular cabinets..."
-                />
-              </div>
-
-              <button type="submit" className="lvc-btn-fill w-full">
-                Confirm Free Measurement Visit
-              </button>
-            </form>
-          </div>
-        </div>
-      )}
 
       <div className="bottom-spacer" />
     </div>

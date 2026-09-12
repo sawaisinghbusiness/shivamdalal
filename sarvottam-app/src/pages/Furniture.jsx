@@ -219,10 +219,7 @@ export default function Furniture() {
           <button
             type="button"
             className="lv-nav-cta"
-            onClick={() => {
-              const el = document.getElementById('consultation-form');
-              if (el) el.scrollIntoView({ behavior: 'smooth' });
-            }}
+            onClick={() => nav('/furniture/consultation')}
           >
             Get Free Quote
           </button>
