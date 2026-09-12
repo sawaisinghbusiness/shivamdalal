@@ -24,6 +24,7 @@ import KarigarApp from './pages/KarigarApp';
 import ProductDetail from './pages/ProductDetail';
 import VerifyEmail from './pages/VerifyEmail';
 import BookingSuccess from './pages/BookingSuccess';
+import BookingWizard from './components/BookingWizard';
 import './App.css';
 
 const MAIN_TABS = ['/', '/services', '/emergency', '/bookings', '/wallet', '/profile', '/furniture', '/painting'];
@@ -50,6 +51,7 @@ export default function App() {
           <div className="route-view" key={pathname}>
             <Routes>
               <Route path="/login" element={<Login />} />
+              <Route path="/karigar" element={<KarigarLogin />} />
               <Route path="/karigar-login" element={<KarigarLogin />} />
               <Route path="/register" element={<Register />} />
               <Route path="*" element={<Navigate to="/login" replace />} />
@@ -89,16 +91,19 @@ export default function App() {
     );
   }
 
-  // Logged in as Customer → full customer app (hide bottom nav on dedicated detail & consultation pages)
+  // Logged in as Customer → full customer app (hide bottom nav on dedicated detail, consultation, & booking pages)
   const isFurnitureDetail = pathname.startsWith('/furniture/') && pathname.split('/').filter(Boolean).length >= 3;
   const isConsultation = pathname === '/furniture/consultation';
-  const showNav = (MAIN_TABS.includes(pathname) || pathname.startsWith('/furniture')) && !isFurnitureDetail && !isConsultation;
+  const isBooking = pathname.startsWith('/book');
+  const showNav = (MAIN_TABS.includes(pathname) || pathname.startsWith('/furniture')) && !isFurnitureDetail && !isConsultation && !isBooking;
   return (
     <ToastProvider>
       <div className="app-wrapper">
         <div className="route-view" key={pathname}>
           <Routes>
             <Route path="/" element={<Home />} />
+            <Route path="/book/:serviceId" element={<BookingWizard />} />
+            <Route path="/book" element={<BookingWizard />} />
             <Route path="/services" element={<AllServices />} />
             <Route path="/emergency" element={<Emergency />} />
             <Route path="/furniture" element={<Furniture />} />

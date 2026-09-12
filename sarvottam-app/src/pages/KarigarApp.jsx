@@ -102,27 +102,62 @@ export default function KarigarApp() {
     reader.readAsDataURL(file);
   };
 
+  // Location & Order states
+  const [locationChecking, setLocationChecking] = useState(false);
+  const [locationDenied, setLocationDenied] = useState(false);
+  const [karigarCoords, setKarigarCoords] = useState({ lat: 25.7532, lng: 71.3965 }); // Barmer base coordinates
+  const [expandedOrder, setExpandedOrder] = useState(false);
+
+  // Haversine distance calculator in Kilometers
+  function calcDistanceKm(lat1, lon1, lat2, lon2) {
+    const R = 6371;
+    const dLat = (lat2 - lat1) * (Math.PI / 180);
+    const dLon = (lon2 - lon1) * (Math.PI / 180);
+    const a =
+      Math.sin(dLat / 2) * Math.sin(dLat / 2) +
+      Math.cos(lat1 * (Math.PI / 180)) * Math.cos(lat2 * (Math.PI / 180)) *
+      Math.sin(dLon / 2) * Math.sin(dLon / 2);
+    const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
+    return Number((R * c).toFixed(1));
+  }
+
   // ── Listen for Real-Time Dispatch Bookings from Customer App ──
   useEffect(() => {
     const handleIncomingTrip = (trip) => {
       if (!k.online || job || incoming) return;
       if (trip && trip.status === 'searching') {
+        // 1. Skill / Category matching
+        const karigarSkill = (k.skill || '').trim().toLowerCase();
+        const tripService = (trip.service || '').trim().toLowerCase();
+        const matchesCategory =
+          !karigarSkill ||
+          tripService.includes(karigarSkill) ||
+          karigarSkill.includes(tripService) ||
+          karigarSkill === 'other';
+
+        if (!matchesCategory) return;
+
+        // 2. 10 km Range check
+        const tripLat = trip.customer?.lat || 25.7532;
+        const tripLng = trip.customer?.lng || 71.3965;
+        const distKm = calcDistanceKm(karigarCoords.lat, karigarCoords.lng, tripLat, tripLng);
+
+        if (distKm > 10) return; // Ignore if beyond 10 km
+
         const gross = (trip.baseCharge || 350) + (trip.visitCharge || 99);
         const jobData = {
           tripId: trip.id,
           service: trip.service,
           area: trip.customer?.address || 'Barmer',
-          dist: '1.5 km',
+          dist: `${distKm || 1.5} km`,
           gross,
-          problem: trip.customer?.problem || 'Emergency repair',
+          problem: trip.customer?.problem || 'Doorstep service requested',
           customer: trip.customer?.name || 'Customer',
           phone: trip.customer?.phone || '+91 98765 43210',
           otp: trip.otp || DEFAULT_OTP,
         };
 
         setIncoming(jobData);
-        setSecs(30);
-        dispatchService.playAlertTone();
       }
     };
 
@@ -140,43 +175,27 @@ export default function KarigarApp() {
 
     return () => {
       unsubscribe();
-      dispatchService.stopAlertTone();
     };
-  }, [k.online, job, incoming]);
-
-  // Offer countdown timer (30 seconds)
-  useEffect(() => {
-    if (!incoming) return;
-    if (secs <= 0) {
-      dispatchService.stopAlertTone();
-      setIncoming(null);
-      toast('Job request expired');
-      return;
-    }
-    countTimer.current = setTimeout(() => setSecs((s) => s - 1), 1000);
-    return () => clearTimeout(countTimer.current);
-  }, [incoming, secs]);
+  }, [k.online, job, incoming, karigarCoords, k.skill]);
 
   const net = (g) => Math.round(g * (1 - COMMISSION));
 
   // Karigar accepts the job
   function accept() {
-    dispatchService.stopAlertTone();
-    if (incoming.tripId) {
+    if (incoming?.tripId) {
       dispatchService.acceptBooking(incoming.tripId, k);
     }
     setJob(incoming);
     setIncoming(null);
     setStage('navigate');
     setTab('home');
-    toast('✓ Job Accepted — Customer ko live status update ho gaya');
+    toast('✓ Job Accepted — Customer order status updated');
   }
 
-  // Karigar skips the job
+  // Karigar skips/ignores the job
   function reject() {
-    dispatchService.stopAlertTone();
     setIncoming(null);
-    toast('Request skipped');
+    toast('Job ignored');
   }
 
   // Karigar arrives at customer doorstep
@@ -214,26 +233,79 @@ export default function KarigarApp() {
     setStage('navigate');
   }
 
-  // Toggle online/offline
-  function toggleOnline(val) {
-    if (!val) {
-      dispatchService.stopAlertTone();
+  // Toggle online/offline with strict GPS permission check
+  function handleToggleOnline() {
+    if (k.online) {
       setIncoming(null);
+      setKarigarOnline(false);
+      toast('You are now OFFLINE');
+      return;
     }
-    setKarigarOnline(val);
-  }
 
-  const targetPct = Math.min(((k.jobsDone || 0) / DAILY_TARGET) * 100, 100);
+    if (!navigator.geolocation) {
+      setKarigarOnline(true);
+      toast('📍 Online — Ready for jobs within 10 km');
+      return;
+    }
+
+    setLocationChecking(true);
+    navigator.geolocation.getCurrentPosition(
+      (pos) => {
+        setLocationChecking(false);
+        setLocationDenied(false);
+        setKarigarCoords({ lat: pos.coords.latitude, lng: pos.coords.longitude });
+        setKarigarOnline(true);
+        toast('📍 Location verified — Online & ready for jobs within 10 km');
+      },
+      () => {
+        setLocationChecking(false);
+        setLocationDenied(true);
+        setKarigarOnline(false);
+        toast('GPS Location is required to go Online');
+      },
+      { enableHighAccuracy: true, timeout: 8000 }
+    );
+  }
 
   /* ───────────────── TABS CONTENT ───────────────── */
 
   const HomeTab = (
     <>
       {/* online toggle */}
-      <button className={'ka-toggle' + (k.online ? ' on' : '')} onClick={() => toggleOnline(!k.online)}>
+      <button
+        className={'ka-toggle' + (k.online ? ' on' : '')}
+        onClick={handleToggleOnline}
+        disabled={locationChecking}
+      >
         <span className="ka-toggle-knob" />
-        <span className="ka-toggle-label">{k.online ? 'ONLINE — Receiving Rapido Job Requests' : 'OFFLINE — Tap to go Online'}</span>
+        <span className="ka-toggle-label">
+          {locationChecking
+            ? 'Checking Location…'
+            : k.online
+            ? 'ONLINE — Ready for Duty (10 km Radius)'
+            : 'OFFLINE — Tap to go Online'}
+        </span>
       </button>
+
+      {/* Location Permission Alert Modal */}
+      {locationDenied && (
+        <div className="ka-loc-alert">
+          <div className="ka-loc-alert-inner">
+            <Icon name="pin" size={20} />
+            <div className="ka-loc-alert-text">
+              <strong>Location Access Required</strong>
+              <p>Please enable device GPS to receive nearby customer requests within 10 km.</p>
+            </div>
+            <button
+              type="button"
+              className="ka-loc-retry-btn"
+              onClick={handleToggleOnline}
+            >
+              Retry GPS
+            </button>
+          </div>
+        </div>
+      )}
 
       {/* today stats */}
       <div className="ka-stats">
@@ -243,17 +315,67 @@ export default function KarigarApp() {
         <div className="ka-stat"><strong>₹{k.balance || 0}</strong><small>Wallet</small></div>
       </div>
 
-      {/* incentive card */}
-      <div className="ka-incentive">
-        <div className="ka-inc-head">
-          <span className="ka-inc-ic"><Icon name="medal" size={18} /></span>
-          <div>
-            <strong>Daily Bonus — ₹200</strong>
-            <small>Complete {DAILY_TARGET} jobs today ({Math.min(k.jobsDone || 0, DAILY_TARGET)}/{DAILY_TARGET} done)</small>
+      {/* ── NEW ORDER REQUEST CARD IN FEED (10 KM MATCH) ── */}
+      {incoming && !job && (
+        <div className="ka-order-feed-card">
+          <div className="ka-ofc-header">
+            <span className="ka-ofc-dist-badge">
+              <Icon name="pin" size={12} /> {incoming.dist} away
+            </span>
+            <span className="ka-ofc-earn-pill">
+              You Earn: ₹{net(incoming.gross)}
+            </span>
+          </div>
+
+          <div className="ka-ofc-body" onClick={() => setExpandedOrder(!expandedOrder)}>
+            <div className="ka-ofc-title-row">
+              <h3 className="ka-ofc-service">{incoming.service}</h3>
+              <span className="ka-ofc-expand-hint">
+                {expandedOrder ? '▲ Less Details' : '▼ View Full Details'}
+              </span>
+            </div>
+            <p className="ka-ofc-problem">"{incoming.problem}"</p>
+            <div className="ka-ofc-loc">
+              <Icon name="map" size={13} />
+              <span>{incoming.area}</span>
+            </div>
+
+            {expandedOrder && (
+              <div className="ka-ofc-expanded-info">
+                <div className="ka-ofc-row">
+                  <span>Customer:</span>
+                  <strong>{incoming.customer}</strong>
+                </div>
+                <div className="ka-ofc-row">
+                  <span>Contact:</span>
+                  <strong>{incoming.phone}</strong>
+                </div>
+                <div className="ka-ofc-row">
+                  <span>Gross Job Value:</span>
+                  <strong>₹{incoming.gross} (20% platform commission)</strong>
+                </div>
+              </div>
+            )}
+          </div>
+
+          <div className="ka-ofc-actions">
+            <button
+              type="button"
+              className="ka-ofc-btn ignore"
+              onClick={reject}
+            >
+              Ignore
+            </button>
+            <button
+              type="button"
+              className="ka-ofc-btn accept"
+              onClick={accept}
+            >
+              Accept Order
+            </button>
           </div>
         </div>
-        <div className="ka-inc-bar"><span style={{ width: `${targetPct}%` }} /></div>
-      </div>
+      )}
 
       {/* active job / waiting / offline */}
       {job ? (
@@ -576,32 +698,6 @@ export default function KarigarApp() {
           </button>
         ))}
       </nav>
-
-      {/* Incoming Rapido-Style Job Alert Modal with Sound */}
-      {incoming && (
-        <div className="ka-offer-overlay">
-          <div className="ka-offer">
-            <div className="ka-offer-timer">{secs}s</div>
-            <span className="ka-offer-tag">⚡ NEW EMERGENCY REQUEST</span>
-            <h2>{incoming.service}</h2>
-            <p className="ka-offer-prob">"{incoming.problem}"</p>
-
-            <div className="ka-offer-rows">
-              <div><Icon name="user" size={15} /> <strong>{incoming.customer}</strong></div>
-              <div><Icon name="pin" size={15} /> {incoming.area} · <strong>{incoming.dist}</strong> away</div>
-              <div><Icon name="phone" size={15} /> {incoming.phone}</div>
-              <div className="ka-offer-pay">
-                <Icon name="rupee" size={15} /> You Earn: <b>₹{net(incoming.gross)}</b> <small>(after 20% commission)</small>
-              </div>
-            </div>
-
-            <div className="ka-offer-btns">
-              <button className="ka-reject" onClick={reject}>Skip</button>
-              <button className="ka-accept" onClick={accept}>⚡ Accept Job</button>
-            </div>
-          </div>
-        </div>
-      )}
 
       {/* Dedicated Withdrawal Screen */}
       {showWithdraw && (

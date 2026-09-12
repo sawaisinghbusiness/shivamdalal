@@ -4,6 +4,21 @@ import { useToast } from './Toast';
 import { useAppData } from '../store/AppData';
 import './KarigarWithdraw.css';
 
+// Authentic Official Vector Logos for Banking & UPI
+export const UpiLogo = () => (
+  <svg viewBox="0 0 52 22" className="kw-official-upi-logo" aria-hidden="true">
+    <polygon points="12,1 21,11 15,11 6,1" fill="#097939" />
+    <polygon points="16,11 25,21 19,21 10,11" fill="#ED7524" />
+    <text x="24" y="17" fontFamily="Arial, Helvetica, sans-serif" fontWeight="900" fontStyle="italic" fontSize="16" fill="#0F172A">UPI</text>
+  </svg>
+);
+
+export const BankLogo = () => (
+  <svg viewBox="0 0 24 24" className="kw-official-bank-logo" aria-hidden="true">
+    <path d="M2 10h20M2 19h20M2 22h20M3 10V6l9-4 9 4v4M5 10v9M9 10v9M15 10v9M19 10v9" fill="none" stroke="#1E3A8A" strokeWidth="1.9" strokeLinecap="round" strokeLinejoin="round" />
+  </svg>
+);
+
 export default function KarigarWithdraw({ onBack }) {
   const { karigar, karigarWithdraw, saveKarigarPayoutMethod } = useAppData();
   const toast = useToast();
@@ -261,7 +276,7 @@ export default function KarigarWithdraw({ onBack }) {
                 )}
               </div>
 
-              <small className="kw-min-note">Min: ₹100 · Max: ₹{balance}</small>
+              <small className="kw-min-note">Min: ₹100 · Max: ₹10,000</small>
             </div>
 
             {/* Payout Methods (UPI & Bank Account) */}
@@ -271,10 +286,10 @@ export default function KarigarWithdraw({ onBack }) {
               {/* ── UPI OPTION BLOCK ── */}
               <div className="kw-method-group">
                 <div className="kw-group-header">
-                  <div className="kw-group-icon upi"><Icon name="bolt" size={16} /></div>
+                  <div className="kw-group-icon upi-official"><UpiLogo /></div>
                   <div>
                     <strong>UPI Transfer</strong>
-                    <small>Instant transfer · 24×7</small>
+                    <small>Instant credit · 24×7 real-time settlement</small>
                   </div>
                 </div>
 
@@ -290,7 +305,6 @@ export default function KarigarWithdraw({ onBack }) {
                       <div className="kw-radio-dot">{isSel && <span />}</div>
                       <div className="kw-item-info">
                         <span className="kw-item-val">{u.id}</span>
-                        <span className="kw-item-name">✓ Verified: {u.holderName || k.name}</span>
                       </div>
                       <span className="kw-status-tag verified">Instant</span>
                     </div>
@@ -315,7 +329,7 @@ export default function KarigarWithdraw({ onBack }) {
               {/* ── BANK ACCOUNT OPTION BLOCK ── */}
               <div className="kw-method-group">
                 <div className="kw-group-header">
-                  <div className="kw-group-icon bank"><Icon name="building" size={16} /></div>
+                  <div className="kw-group-icon bank-official"><BankLogo /></div>
                   <div>
                     <strong>Bank Account</strong>
                     <small>Direct NEFT / IMPS transfer</small>

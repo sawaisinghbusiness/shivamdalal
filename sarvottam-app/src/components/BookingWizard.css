@@ -1,9 +1,22 @@
 /* ══════════════════════════════════════════════════════════════
-   SARVOTTAM — BOOKING WIZARD STYLES (STRICT DESIGN SYSTEM)
+   SARVOTTAM — DEDICATED BOOKING WIZARD SCREEN STYLES
    Palette: Teal #0F766E, Mint #E6F4F1, Ink #1F2937, Amber #B45309/#FEF3C7
-   ZERO emojis · 44pt touch targets · Horizontal slide+fade 250ms
+   Dedicated Full-Page Architecture · Clean Professional Flow
    ══════════════════════════════════════════════════════════════ */
 
+.page.bw-page {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  height: 100%;
+  min-height: 100%;
+  padding-bottom: 0;
+  overflow: hidden;
+  background-color: #F8FAFC;
+  position: relative;
+}
+
+/* Backward compatibility if ever mounted inside sheet */
 .bw-overlay {
   position: fixed;
   inset: 0;
@@ -13,102 +26,48 @@
   display: flex;
   align-items: flex-end;
   justify-content: center;
-  animation: bwFadeIn 250ms cubic-bezier(0.16, 1, 0.3, 1) forwards;
-}
-
-@keyframes bwFadeIn {
-  from { opacity: 0; }
-  to { opacity: 1; }
 }
 
 .bw-modal {
   width: 100%;
   max-width: 480px;
-  height: 92vh;
-  max-height: 840px;
+  height: 100%;
   background-color: #FFFFFF;
-  border-top-left-radius: 20px;
-  border-top-right-radius: 20px;
-  box-shadow: 0 -8px 32px rgba(31, 41, 55, 0.16);
   display: flex;
   flex-direction: column;
   position: relative;
   overflow: hidden;
-  animation: bwSlideUp 250ms cubic-bezier(0.16, 1, 0.3, 1) forwards;
 }
 
-@keyframes bwSlideUp {
-  from { transform: translateY(100%); }
-  to { transform: translateY(0); }
-}
-
-/* ── HEADER STYLES ── */
-.bw-issue-header {
-  padding: 16px 18px 14px;
-  border-bottom: 1px solid #E5E7EB;
+/* ── 1. DEDICATED TOP APP BAR ── */
+.bw-top-bar {
+  position: sticky;
+  top: 0;
+  z-index: 40;
   background-color: #FFFFFF;
-  flex-shrink: 0;
-}
-
-.bw-ih-top {
+  border-bottom: 1px solid #E5E7EB;
   display: flex;
   align-items: center;
   justify-content: space-between;
-  gap: 12px;
-}
-
-.bw-ih-badge {
-  width: 32px;
-  height: 32px;
-  border-radius: 50%;
-  background-color: #E6F4F1;
-  color: #0F766E;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-}
-
-.bw-ih-title {
-  margin: 0;
-  font-size: 18px;
-  font-weight: 700;
-  color: #1F2937;
-}
-
-.bw-ih-sub {
-  margin: 4px 0 0;
-  font-size: 13px;
-  color: #6B7280;
-  font-weight: 500;
-}
-
-.bw-stepper-header {
-  padding: 14px 18px 12px;
-  border-bottom: 1px solid #E5E7EB;
-  background-color: #FFFFFF;
+  padding: 12px 14px;
+  gap: 10px;
   flex-shrink: 0;
-}
-
-.bw-stepper-top {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  margin-bottom: 12px;
 }
 
 .bw-back-btn,
 .bw-close-btn {
   background: none;
   border: none;
-  width: 36px;
-  height: 36px;
+  width: 38px;
+  height: 38px;
   border-radius: 50%;
   display: flex;
   align-items: center;
   justify-content: center;
   color: #1F2937;
   cursor: pointer;
-  transition: background-color 150ms ease;
+  transition: background-color 150ms ease, transform 100ms ease;
+  flex-shrink: 0;
 }
 
 .bw-back-btn:hover,
@@ -116,77 +75,232 @@
   background-color: #F3F4F6;
 }
 
-.bw-step-main-title {
-  margin: 0;
-  font-size: 17px;
-  font-weight: 700;
-  color: #1F2937;
-  text-align: center;
-  flex: 1;
+.bw-back-btn:active,
+.bw-close-btn:active {
+  transform: scale(0.92);
 }
 
-/* Slim Stepper Track */
-.bw-stepper-track {
+.bw-top-info {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  min-width: 0;
+}
+
+.bw-top-title {
+  margin: 0;
+  font-size: 15px;
+  font-weight: 700;
+  color: #111827;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  max-width: 220px;
+  line-height: 1.25;
+}
+
+.bw-top-step-pill {
+  font-size: 10.5px;
+  font-weight: 600;
+  color: #0F766E;
+  background: #E6F4F1;
+  padding: 2px 9px;
+  border-radius: 999px;
+  margin-top: 3px;
+  line-height: 1;
+}
+
+/* ── 2. 5-STEP HORIZONTAL TRACKER ── */
+.bw-stepper-row {
+  position: sticky;
+  top: 63px;
+  z-index: 35;
+  background-color: #FFFFFF;
+  border-bottom: 1px solid #E5E7EB;
   display: flex;
   align-items: center;
   justify-content: space-between;
-  gap: 8px;
+  padding: 8px 12px;
+  gap: 6px;
+  flex-shrink: 0;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.02);
 }
 
-.bw-step-pill {
+.bw-st-btn {
   flex: 1;
   display: flex;
   align-items: center;
   justify-content: center;
-  gap: 6px;
-  padding: 6px 8px;
+  gap: 4px;
+  padding: 5px 6px;
   border-radius: 999px;
   border: 1px solid #E5E7EB;
   background-color: #F9FAFB;
   cursor: default;
-  transition: all 200ms ease;
+  transition: all 180ms ease;
+  min-width: 0;
 }
 
-.bw-step-pill.active {
+.bw-st-btn.active {
   background-color: #E6F4F1;
   border-color: #0F766E;
+  box-shadow: 0 1px 3px rgba(15, 118, 110, 0.15);
 }
 
-.bw-step-pill.done {
-  background-color: #E6F4F1;
-  border-color: #0F766E;
+.bw-st-btn.done {
+  background-color: #F0FDF4;
+  border-color: #86EFAC;
   cursor: pointer;
 }
 
-.bw-step-circle {
-  width: 18px;
-  height: 18px;
+.bw-st-btn.done:hover {
+  background-color: #DCFCE7;
+}
+
+.bw-st-dot {
+  width: 16px;
+  height: 16px;
   border-radius: 50%;
   background-color: #D1D5DB;
   color: #FFFFFF;
-  font-size: 11px;
+  font-size: 9.5px;
   font-weight: 700;
   display: flex;
   align-items: center;
   justify-content: center;
+  flex-shrink: 0;
 }
 
-.bw-step-pill.active .bw-step-circle,
-.bw-step-pill.done .bw-step-circle {
+.bw-st-btn.active .bw-st-dot {
   background-color: #0F766E;
   color: #FFFFFF;
 }
 
-.bw-step-label {
-  font-size: 12px;
+.bw-st-btn.done .bw-st-dot {
+  background-color: #16A34A;
+  color: #FFFFFF;
+}
+
+.bw-st-text {
+  font-size: 11px;
   font-weight: 600;
   color: #6B7280;
   white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
 
-.bw-step-pill.active .bw-step-label,
-.bw-step-pill.done .bw-step-label {
+.bw-st-btn.active .bw-st-text {
   color: #0F766E;
+  font-weight: 700;
+}
+
+.bw-st-btn.done .bw-st-text {
+  color: #15803D;
+}
+
+/* ── 3. HERO SERVICE CARD (STEP 1) ── */
+.bw-service-hero-card {
+  background: #FFFFFF;
+  border: 1.5px solid #E2E8F0;
+  border-radius: 14px;
+  padding: 14px 16px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  box-shadow: 0 1px 4px rgba(0, 0, 0, 0.03);
+  flex-shrink: 0;
+}
+
+.bw-shc-left {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  min-width: 0;
+}
+
+.bw-shc-img-wrap {
+  width: 48px;
+  height: 48px;
+  border-radius: 12px;
+  overflow: hidden;
+  background: #F1F5F9;
+  flex-shrink: 0;
+}
+
+.bw-shc-img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.bw-shc-info {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  min-width: 0;
+}
+
+.bw-shc-badge-row {
+  display: flex;
+  align-items: center;
+}
+
+.bw-shc-tag {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  font-size: 11px;
+  font-weight: 700;
+  color: #0F766E;
+  background: #E6F4F1;
+  padding: 2px 8px;
+  border-radius: 999px;
+}
+
+.bw-shc-title {
+  margin: 3px 0 0;
+  font-size: 15px;
+  font-weight: 700;
+  color: #111827;
+  letter-spacing: -0.01em;
+}
+
+.bw-shc-sub {
+  margin: 0;
+  font-size: 11.5px;
+  color: #64748B;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.bw-shc-fee-badge {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  background: #FEF3C7;
+  border: 1px solid #FDE68A;
+  padding: 6px 10px;
+  border-radius: 10px;
+  flex-shrink: 0;
+}
+
+.bw-shc-fee-lbl {
+  font-size: 9.5px;
+  font-weight: 700;
+  color: #92400E;
+  text-transform: uppercase;
+  letter-spacing: 0.02em;
+}
+
+.bw-shc-fee-val {
+  font-size: 14px;
+  font-weight: 800;
+  color: #B45309;
 }
 
 /* ── SCROLLABLE CONTAINER ── */

@@ -2,7 +2,6 @@ import { useState, useRef } from 'react';
 import { useNavigate } from 'react-router-dom';
 import Icon from '../components/Icon';
 import MapView from '../components/MapView';
-import BookingWizard from '../components/BookingWizard';
 import BottomSheet, { DEFAULT_SHEET_SNAPS } from '../components/BottomSheet';
 import { useToast } from '../components/Toast';
 import { EMERGENCY_SERVICES } from '../data/services';
@@ -93,7 +92,6 @@ export default function Home() {
 
   const [searchQuery, setSearchQuery] = useState('');
   const [selectedLoc, setSelectedLoc] = useState('Vaishali Nagar');
-  const [activeBookingService, setActiveBookingService] = useState(null);
   const [sheetState, setSheetState] = useState('collapsed');
 
   // Dynamic Location found callback from MapView GPS
@@ -103,13 +101,13 @@ export default function Home() {
     }
   };
 
-  // Trigger booking from map marker or card
+  // Trigger booking navigation from map marker or card
   const handleSelectService = (serviceName) => {
     const s =
       ALL_SERVICES.find(
         (item) => item.name.toLowerCase() === (serviceName || '').toLowerCase()
       ) || TOP_SERVICES[0];
-    setActiveBookingService(s.serviceData);
+    nav('/book/' + s.id);
   };
 
   const handleSearchSubmit = (e) => {
@@ -122,11 +120,10 @@ export default function Home() {
       s.name.toLowerCase().includes(searchQuery.toLowerCase().trim())
     );
     if (found) {
-      setActiveBookingService(found.serviceData);
-    } else {
-      bottomSheetRef.current?.expand();
-      toast(`Showing services matching "${searchQuery}"`);
+      nav('/book/' + found.id);
+      return;
     }
+    toast(`No direct match found for "${searchQuery}". Showing available services.`);
   };
 
   // Snap change callback
@@ -217,7 +214,7 @@ export default function Home() {
             <div
               key={s.id}
               className="service-card-item"
-              onClick={() => setActiveBookingService(s.serviceData)}
+              onClick={() => nav('/book/' + s.id)}
             >
               {/* Worker Image Container */}
               <div className="card-img-wrap">
@@ -243,7 +240,7 @@ export default function Home() {
                   style={{ backgroundColor: s.btnColor }}
                   onClick={(e) => {
                     e.stopPropagation();
-                    setActiveBookingService(s.serviceData);
+                    nav('/book/' + s.id);
                   }}
                 >
                   <Icon name="arrow" size={14} />
@@ -260,7 +257,7 @@ export default function Home() {
               <div
                 key={srv.id}
                 className="expanded-service-card"
-                onClick={() => setActiveBookingService(srv.serviceData)}
+                onClick={() => nav('/book/' + srv.id)}
               >
                 <div className="esc-left">
                   {/* Real Image Thumbnail */}
@@ -281,7 +278,7 @@ export default function Home() {
                   style={{ backgroundColor: srv.btnColor }}
                   onClick={(e) => {
                     e.stopPropagation();
-                    setActiveBookingService(srv.serviceData);
+                    nav('/book/' + srv.id);
                   }}
                 >
                   Book
@@ -322,14 +319,6 @@ export default function Home() {
           </div>
         </div>
       </BottomSheet>
-
-      {/* ── 3. BOOKING WIZARD MULTI-STEP MODAL ── */}
-      {activeBookingService && (
-        <BookingWizard
-          initialService={activeBookingService}
-          onClose={() => setActiveBookingService(null)}
-        />
-      )}
     </div>
   );
 }

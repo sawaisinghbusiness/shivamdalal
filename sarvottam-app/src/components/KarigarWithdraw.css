@@ -215,13 +215,31 @@
   margin-bottom: 10px;
 }
 .kw-group-icon {
-  width: 32px;
-  height: 32px;
+  width: 36px;
+  height: 36px;
   border-radius: 10px;
   display: flex;
   align-items: center;
   justify-content: center;
   flex-shrink: 0;
+  background: #fff;
+  border: 1px solid #E2E8F0;
+}
+.kw-group-icon.upi-official {
+  background: #fff;
+  padding: 2px 4px;
+}
+.kw-official-upi-logo {
+  width: 30px;
+  height: auto;
+}
+.kw-group-icon.bank-official {
+  background: #EFF6FF;
+  border-color: #DBEAFE;
+}
+.kw-official-bank-logo {
+  width: 20px;
+  height: 20px;
 }
 .kw-group-icon.upi { background: #E0E7FF; color: #4338CA; }
 .kw-group-icon.bank { background: #FEF3C7; color: #B45309; }

@@ -1,13 +1,10 @@
-import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import Icon from '../components/Icon';
 import { EMERGENCY_SERVICES } from '../data/services';
-import BookingWizard from '../components/BookingWizard';
 import './Emergency.css';
 
 export default function Emergency() {
   const nav = useNavigate();
-  const [active, setActive] = useState(null); // chosen service for the flow
 
   return (
     <div className="page">
@@ -31,7 +28,7 @@ export default function Emergency() {
               <h3>{s.name}</h3>
               <p>{s.desc}</p>
             </div>
-            <button className="em-btn" onClick={() => setActive(s)}>Book Now</button>
+            <button className="em-btn" onClick={() => nav('/book/' + s.id)}>Book Now</button>
           </div>
         ))}
       </div>
@@ -45,8 +42,6 @@ export default function Emergency() {
       </div>
 
       <div className="bottom-spacer" />
-
-      {active && <BookingWizard initialService={active} onClose={() => setActive(null)} />}
     </div>
   );
 }

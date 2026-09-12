@@ -94,24 +94,167 @@
 .ka-stat strong { display: block; font-size: 15.5px; font-weight: 800; color: var(--primary); }
 .ka-stat small { font-size: 10px; color: var(--text-4); font-weight: 650; text-transform: uppercase; letter-spacing: .4px; }
 
-/* Incentive card (goal gradient) */
-.ka-incentive {
+/* Location Alert */
+.ka-loc-alert {
   margin-top: 12px;
-  background: linear-gradient(135deg, #FFF8EC, #FDEED3);
-  border: 1px solid #F3DCAC;
+  background: #FEF2F2;
+  border: 1px solid #FECACA;
   border-radius: var(--r-md);
-  padding: 14px 15px;
+  padding: 12px 14px;
 }
-.ka-inc-head { display: flex; align-items: center; gap: 11px; margin-bottom: 11px; }
-.ka-inc-ic {
-  width: 36px; height: 36px; border-radius: 11px; flex-shrink: 0;
-  background: var(--g-gold); color: #fff;
-  display: flex; align-items: center; justify-content: center;
+.ka-loc-alert-inner {
+  display: flex;
+  align-items: center;
+  gap: 10px;
 }
-.ka-inc-head strong { display: block; font-size: 13.5px; font-weight: 800; color: #8A5A0B; }
-.ka-inc-head small { font-size: 11.5px; color: #A2741B; }
-.ka-inc-bar { height: 7px; border-radius: 5px; background: rgba(160,106,12,.18); overflow: hidden; }
-.ka-inc-bar span { display: block; height: 100%; border-radius: 5px; background: var(--g-gold); transition: width .5s var(--ease); }
+.ka-loc-alert-inner .ic {
+  color: #DC2626;
+  flex-shrink: 0;
+}
+.ka-loc-alert-text {
+  flex: 1;
+}
+.ka-loc-alert-text strong {
+  display: block;
+  font-size: 13px;
+  color: #991B1B;
+}
+.ka-loc-alert-text p {
+  font-size: 11.5px;
+  color: #B91C1C;
+  margin: 2px 0 0;
+}
+.ka-loc-retry-btn {
+  background: #DC2626;
+  color: #fff;
+  border: none;
+  border-radius: 8px;
+  padding: 6px 12px;
+  font-size: 12px;
+  font-weight: 750;
+  cursor: pointer;
+  flex-shrink: 0;
+}
+
+/* New Order Request Card in Feed */
+.ka-order-feed-card {
+  margin-top: 14px;
+  background: #fff;
+  border: 1.5px solid #0F766E;
+  border-radius: 16px;
+  overflow: hidden;
+  box-shadow: 0 4px 18px rgba(15, 118, 110, 0.12);
+}
+.ka-ofc-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  background: linear-gradient(135deg, #F0FDFA, #CCFBF1);
+  padding: 10px 14px;
+  border-bottom: 1px solid #99F6E4;
+}
+.ka-ofc-dist-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  background: #0F766E;
+  color: #fff;
+  font-size: 11px;
+  font-weight: 750;
+  padding: 3px 8px;
+  border-radius: 20px;
+}
+.ka-ofc-earn-pill {
+  font-size: 12.5px;
+  font-weight: 800;
+  color: #0F766E;
+}
+.ka-ofc-body {
+  padding: 14px;
+  cursor: pointer;
+}
+.ka-ofc-title-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 4px;
+}
+.ka-ofc-service {
+  font-size: 16px;
+  font-weight: 800;
+  color: #0F172A;
+  margin: 0;
+}
+.ka-ofc-expand-hint {
+  font-size: 11px;
+  font-weight: 700;
+  color: #0F766E;
+}
+.ka-ofc-problem {
+  font-size: 13px;
+  color: #475569;
+  line-height: 1.45;
+  margin: 0 0 8px;
+}
+.ka-ofc-loc {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 12px;
+  color: #64748B;
+  font-weight: 500;
+}
+.ka-ofc-expanded-info {
+  margin-top: 10px;
+  padding-top: 10px;
+  border-top: 1px dashed #E2E8F0;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+.ka-ofc-row {
+  display: flex;
+  justify-content: space-between;
+  font-size: 12px;
+}
+.ka-ofc-row span {
+  color: #64748B;
+}
+.ka-ofc-row strong {
+  color: #0F172A;
+}
+.ka-ofc-actions {
+  display: flex;
+  gap: 8px;
+  padding: 10px 14px 14px;
+  background: #F8FAFC;
+  border-top: 1px solid #E2E8F0;
+}
+.ka-ofc-btn {
+  flex: 1;
+  padding: 11px;
+  border-radius: 10px;
+  font-size: 13px;
+  font-weight: 750;
+  cursor: pointer;
+  border: none;
+  transition: all 0.15s ease;
+}
+.ka-ofc-btn.ignore {
+  background: #fff;
+  border: 1.5px solid #CBD5E1;
+  color: #64748B;
+}
+.ka-ofc-btn.ignore:hover {
+  background: #F1F5F9;
+}
+.ka-ofc-btn.accept {
+  background: #0F766E;
+  color: #fff;
+}
+.ka-ofc-btn.accept:hover {
+  background: #115E59;
+}
 
 /* Waiting / offline */
 .ka-waiting, .ka-offline { text-align: center; padding: 34px 20px; }
