@@ -34,17 +34,14 @@ export default function AllServices() {
           <span className="as-tile-label">Home Services</span>
         </button>
 
-        {/* 2. Furniture (Coming Soon) */}
+        {/* 2. Furniture */}
         <button
           type="button"
-          className="as-tile-btn as-tile-disabled"
-          disabled
-          aria-disabled="true"
-          onClickCapture={handleDisabledClick}
-          aria-label="Furniture - Coming Soon"
+          className="as-tile-btn as-tile-enabled"
+          onClick={() => nav('/furniture')}
+          aria-label="Furniture"
         >
           <div className="as-tile-panel">
-            <span className="as-pill-coming-soon">Coming Soon</span>
             <img src={svcFurniture} alt="Furniture" className="as-tile-img" />
           </div>
           <span className="as-tile-label">Furniture</span>

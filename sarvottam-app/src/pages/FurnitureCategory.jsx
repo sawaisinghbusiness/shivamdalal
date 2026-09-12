@@ -14,7 +14,6 @@ export default function FurnitureCategory() {
   const toast = useToast();
   const { user, addBookingDemo } = useAppData();
 
-  // Find current space by slug (or fallback to kitchen)
   const currentSpace = useMemo(() => {
     return FURNITURE_CATALOG[categorySlug] || null;
   }, [categorySlug]);
@@ -30,7 +29,7 @@ export default function FurnitureCategory() {
   const [wishlistOnly, setWishlistOnly] = useState(false);
   const [readMore, setReadMore] = useState(false);
 
-  // Wishlist state (persisted in localStorage)
+  // Wishlist state
   const [liked, setLiked] = useState(() => {
     try {
       const saved = localStorage.getItem(LIKED_STORAGE_KEY);
@@ -47,11 +46,10 @@ export default function FurnitureCategory() {
   // Consultation form state
   const [cName, setCName] = useState(user?.name || '');
   const [cPhone, setCPhone] = useState(user?.phone?.replace('+91 ', '') || '');
-  const [cAddress, setCAddress] = useState('Indra Colony, Barmer, Rajasthan');
+  const [cAddress, setCAddress] = useState('Barmer, Rajasthan');
   const [cDate, setCDate] = useState('Tomorrow (Morning 09:00 AM – 12:00 PM)');
   const [cNotes, setCNotes] = useState('');
 
-  // Persist wishlist
   useEffect(() => {
     try {
       localStorage.setItem(LIKED_STORAGE_KEY, JSON.stringify(liked));
@@ -60,7 +58,6 @@ export default function FurnitureCategory() {
     }
   }, [liked]);
 
-  // Reset subcategory when route changes
   useEffect(() => {
     setActiveSubcat('All');
     setSearch('');
@@ -75,12 +72,11 @@ export default function FurnitureCategory() {
     e.stopPropagation();
     setLiked((prev) => {
       const next = { ...prev, [id]: !prev[id] };
-      toast(next[id] ? `Added to wishlist: ${title}` : 'Removed from wishlist');
+      toast(next[id] ? `Saved to wishlist: ${title}` : 'Removed from wishlist');
       return next;
     });
   };
 
-  // Filtered designs
   const designs = currentSpace?.designs || [];
   const filteredDesigns = useMemo(() => {
     return designs.filter((item) => {
@@ -95,7 +91,6 @@ export default function FurnitureCategory() {
     });
   }, [designs, activeSubcat, search, wishlistOnly, liked]);
 
-  // Project navigation for detail sheet
   const projectNav = useMemo(() => {
     if (!selectedProject || designs.length === 0) return { prev: null, next: null };
     const idx = designs.findIndex((p) => p.id === selectedProject.id);
@@ -105,10 +100,10 @@ export default function FurnitureCategory() {
     };
   }, [selectedProject, designs]);
 
-  // Consultation booking handler
   const handleConsultSubmit = (e) => {
     e.preventDefault();
-    if (!cPhone || cPhone.replace(/\D/g, '').length < 10) {
+    const cleanPhone = cPhone.replace(/\D/g, '');
+    if (!cleanPhone || cleanPhone.length < 10) {
       toast('Please enter a valid 10-digit mobile number');
       return;
     }
@@ -121,7 +116,7 @@ export default function FurnitureCategory() {
       karigar: 'Master Karigar assigned on schedule',
       amount: 0,
       status: 'upcoming',
-      notes: `Preferred slot: ${cDate}. Address: ${cAddress}. Notes: ${cNotes || 'Standard 3D Measurement'}`,
+      notes: `Slot: ${cDate}. Address: ${cAddress}. Details: ${cNotes || 'Standard 3D Measurement'}`,
     });
 
     toast('Free Consultation booked! Our master karigar will visit you.');
@@ -132,22 +127,21 @@ export default function FurnitureCategory() {
 
   const wishlistCount = Object.values(liked).filter(Boolean).length;
 
-  // Invalid category fallback
   if (!currentSpace) {
     return (
-      <div className="fc-page fc-empty-container">
-        <header className="fc-top-bar">
-          <button type="button" className="fc-back-btn" onClick={() => nav('/furniture')}>
+      <div className="lvc-page">
+        <header className="lvc-top-nav">
+          <button type="button" className="lvc-back-btn" onClick={() => nav('/furniture')}>
             <Icon name="back" size={20} />
           </button>
-          <h1 className="fc-header-title">Category Not Found</h1>
+          <span className="lvc-nav-title">Category Not Found</span>
         </header>
-        <div className="fc-not-found-body">
+        <div className="lvc-empty-box">
           <Icon name="search" size={40} />
-          <h2>Space Category Not Found</h2>
-          <p>The space you are looking for does not exist or has been relocated.</p>
-          <Link to="/furniture" className="fc-action-btn-primary">
-            Explore All Furniture Spaces
+          <h2>Category Not Found</h2>
+          <p>The space you are looking for is not currently available.</p>
+          <Link to="/furniture" className="lvc-btn-fill">
+            Explore All Spaces
           </Link>
         </div>
       </div>
@@ -155,60 +149,60 @@ export default function FurnitureCategory() {
   }
 
   return (
-    <div className="fc-page">
+    <div className="lvc-page">
       {/* ── TOP NAV HEADER ── */}
-      <header className="fc-top-bar">
-        <div className="fc-tb-left">
+      <header className="lvc-top-nav">
+        <div className="lvc-nav-left">
           <button
             type="button"
-            className="fc-back-btn"
+            className="lvc-back-btn"
             onClick={() => nav('/furniture')}
             aria-label="Back to Furniture Ideas"
           >
             <Icon name="back" size={20} />
           </button>
-          <div className="fc-tb-titles">
-            <span className="fc-tb-eyebrow">SARVOTTAM DESIGN IDEAS</span>
-            <h1 className="fc-tb-title">{currentSpace.title}</h1>
+          <div className="lvc-nav-text">
+            <span className="lvc-nav-tag">SARVOTTAM</span>
+            <span className="lvc-nav-title">{currentSpace.title}</span>
           </div>
         </div>
 
-        <div className="fc-tb-actions">
+        <div className="lvc-nav-actions">
           <button
             type="button"
-            className={'fc-icon-btn' + (showSearch ? ' active' : '')}
+            className={'lvc-icon-btn' + (showSearch ? ' active' : '')}
             onClick={() => setShowSearch((v) => !v)}
-            aria-label="Toggle Search"
+            aria-label="Search"
           >
             <Icon name="search" size={18} />
           </button>
           <button
             type="button"
-            className={'fc-icon-btn' + (wishlistOnly ? ' active' : '')}
+            className={'lvc-icon-btn' + (wishlistOnly ? ' active' : '')}
             onClick={() => setWishlistOnly((v) => !v)}
             aria-label="Wishlist"
           >
             <Icon name="heart" size={18} />
-            {wishlistCount > 0 && <span className="fc-badge-counter">{wishlistCount}</span>}
+            {wishlistCount > 0 && <span className="lvc-badge-count">{wishlistCount}</span>}
           </button>
         </div>
       </header>
 
-      {/* Optional Search Bar */}
+      {/* Search Bar Dropdown */}
       {showSearch && (
-        <div className="fc-search-banner">
-          <div className="fc-search-input-wrap">
+        <div className="lvc-search-bar">
+          <div className="lvc-search-inner">
             <Icon name="search" size={16} />
             <input
               type="text"
-              className="fc-search-input"
+              className="lvc-search-input"
               placeholder={`Search ${currentSpaceMeta.name} by finish, size, or style...`}
               value={search}
               onChange={(e) => setSearch(e.target.value)}
               autoFocus
             />
             {search && (
-              <button type="button" className="fc-clear-search" onClick={() => setSearch('')}>
+              <button type="button" className="lvc-clear-search" onClick={() => setSearch('')}>
                 <Icon name="close" size={14} />
               </button>
             )}
@@ -216,171 +210,170 @@ export default function FurnitureCategory() {
         </div>
       )}
 
-      {/* ── BREADCRUMB & EDITORIAL HEADER ── */}
-      <div className="fc-header-section">
-        <nav className="fc-breadcrumb" aria-label="Breadcrumb">
-          <Link to="/" className="fc-bc-link">Home</Link>
-          <span className="fc-bc-sep">/</span>
-          <Link to="/furniture" className="fc-bc-link">Furniture</Link>
-          <span className="fc-bc-sep">/</span>
-          <span className="fc-bc-current">{currentSpaceMeta.name}</span>
-        </nav>
+      <div className="lvc-container">
+        {/* ── EDITORIAL HEADER & BREADCRUMB ── */}
+        <section className="lvc-hero-block">
+          <nav className="lvc-breadcrumb" aria-label="Breadcrumb">
+            <Link to="/" className="lvc-bc-link">Home</Link>
+            <span className="lvc-bc-sep">/</span>
+            <Link to="/furniture" className="lvc-bc-link">Furniture</Link>
+            <span className="lvc-bc-sep">/</span>
+            <span className="lvc-bc-current">{currentSpaceMeta.name}</span>
+          </nav>
 
-        <div className="fc-meta-pill-row">
-          <span className="fc-results-pill">
-            Showing {filteredDesigns.length} {filteredDesigns.length === 1 ? 'Design' : 'Designs'}
-          </span>
-          {wishlistOnly && <span className="fc-wishlist-filter-tag">Wishlist Filter Active</span>}
-        </div>
-
-        <h2 className="fc-headline">{currentSpace.title}</h2>
-        <p className="fc-desc">
-          {readMore ? currentSpace.longDesc : currentSpace.shortDesc}
-        </p>
-
-        <button
-          type="button"
-          className="fc-read-more-btn"
-          onClick={() => setReadMore((prev) => !prev)}
-        >
-          <span>{readMore ? 'Read Less' : 'Read More About Specifications'}</span>
-          <span className={'fc-chevron-icon' + (readMore ? ' open' : '')}>
-            <Icon name="chevron" size={12} />
-          </span>
-        </button>
-
-        {/* Promo Highlight Banner */}
-        {currentSpace.promo && !wishlistOnly && (
-          <div className="fc-promo-highlight">
-            <div className="fc-ph-text">
-              <strong>{currentSpace.promo.headline}</strong>
-              <p>{currentSpace.promo.sub}</p>
+          <div className="lvc-hero-head">
+            <div className="lvc-count-tag">
+              Showing {filteredDesigns.length} {filteredDesigns.length === 1 ? 'Design' : 'Designs'}
             </div>
+            <h1 className="lvc-title">{currentSpace.title}</h1>
+            <p className="lvc-desc">
+              {readMore ? currentSpace.longDesc : currentSpace.shortDesc}
+            </p>
+
             <button
               type="button"
-              className="fc-ph-cta"
-              onClick={() => setConsultModal({ name: currentSpace.promo.headline })}
+              className="lvc-read-more"
+              onClick={() => setReadMore((v) => !v)}
             >
-              {currentSpace.promo.cta}
+              <span>{readMore ? 'Read Less' : 'Read More Specifications'}</span>
+              <span className={'lvc-rm-arrow' + (readMore ? ' open' : '')}>
+                <Icon name="chevron" size={12} />
+              </span>
             </button>
           </div>
+
+          {/* Promo Callout */}
+          {currentSpace.promo && !wishlistOnly && (
+            <div className="lvc-promo-banner">
+              <div className="lvc-pb-text">
+                <strong>{currentSpace.promo.headline}</strong>
+                <p>{currentSpace.promo.sub}</p>
+              </div>
+              <button
+                type="button"
+                className="lvc-pb-btn"
+                onClick={() => setConsultModal({ name: currentSpace.promo.headline })}
+              >
+                {currentSpace.promo.cta}
+              </button>
+            </div>
+          )}
+        </section>
+
+        {/* ── SUBCATEGORY FILTER CHIPS ── */}
+        {currentSpace.subcategories && currentSpace.subcategories.length > 1 && (
+          <div className="lvc-subcat-wrapper">
+            <div className="lvc-subcat-scroll">
+              {currentSpace.subcategories.map((sub) => (
+                <button
+                  key={sub}
+                  type="button"
+                  className={'lvc-subcat-pill' + (activeSubcat === sub ? ' active' : '')}
+                  onClick={() => setActiveSubcat(sub)}
+                >
+                  {sub}
+                </button>
+              ))}
+            </div>
+          </div>
         )}
+
+        {/* ── DESIGN CARDS GRID (EXACT LIVSPACE CARDS) ── */}
+        <main className="lvc-grid">
+          {filteredDesigns.map((item) => (
+            <article
+              key={item.id}
+              className="lvc-card"
+              onClick={() => setSelectedProject(item)}
+            >
+              <div className="lvc-card-media">
+                <img src={item.img} alt={item.name} loading="lazy" className="lvc-card-img" />
+                <span className="lvc-card-dim-pill">{item.size}</span>
+                <button
+                  type="button"
+                  className={'lvc-card-heart' + (liked[item.id] ? ' on' : '')}
+                  onClick={(e) => toggleLike(item.id, item.name, e)}
+                  aria-label="Wishlist"
+                >
+                  <Icon name="heart" size={16} />
+                </button>
+              </div>
+
+              <div className="lvc-card-body">
+                <span className="lvc-card-finish">{item.finish}</span>
+                <h3 className="lvc-card-title">{item.name}</h3>
+
+                <div className="lvc-card-meta-row">
+                  <span className="lvc-card-price">{item.price}</span>
+                  <span className="lvc-card-rating">
+                    <Icon name="star" size={13} /> {item.rating}
+                  </span>
+                </div>
+
+                <div className="lvc-card-actions">
+                  <button
+                    type="button"
+                    className="lvc-btn-cta-fill"
+                    onClick={(e) => {
+                      e.stopPropagation();
+                      setConsultModal(item);
+                    }}
+                  >
+                    Book Free Consultation
+                  </button>
+                  <button
+                    type="button"
+                    className="lvc-btn-cta-outline"
+                    onClick={(e) => {
+                      e.stopPropagation();
+                      setSelectedProject(item);
+                    }}
+                  >
+                    View Specs
+                  </button>
+                </div>
+              </div>
+            </article>
+          ))}
+
+          {filteredDesigns.length === 0 && (
+            <div className="lvc-empty-box">
+              <Icon name="search" size={32} />
+              <h3>No designs found</h3>
+              <p>Try resetting filters or search terms.</p>
+              <button
+                type="button"
+                className="lvc-btn-fill"
+                onClick={() => {
+                  setActiveSubcat('All');
+                  setSearch('');
+                  setWishlistOnly(false);
+                }}
+              >
+                Reset Filters
+              </button>
+            </div>
+          )}
+        </main>
       </div>
 
-      {/* ── SUBCATEGORY FILTER CHIPS ── */}
-      {currentSpace.subcategories && currentSpace.subcategories.length > 1 && (
-        <div className="fc-subcats-bar">
-          <div className="fc-subcats-scroll">
-            {currentSpace.subcategories.map((sub) => (
-              <button
-                key={sub}
-                type="button"
-                className={'fc-subcat-chip' + (activeSubcat === sub ? ' active' : '')}
-                onClick={() => setActiveSubcat(sub)}
-              >
-                {sub}
-              </button>
-            ))}
-          </div>
-        </div>
-      )}
-
-      {/* ── MAIN DESIGN CARDS GRID ── */}
-      <main className="fc-main-grid">
-        {filteredDesigns.map((item) => (
-          <article
-            key={item.id}
-            className="fc-design-card"
-            onClick={() => setSelectedProject(item)}
-          >
-            <div className="fc-card-media">
-              <img src={item.img} alt={item.name} loading="lazy" />
-              <span className="fc-card-size-pill">{item.size}</span>
-              <button
-                type="button"
-                className={'fc-card-heart' + (liked[item.id] ? ' on' : '')}
-                onClick={(e) => toggleLike(item.id, item.name, e)}
-                aria-label="Save to Wishlist"
-              >
-                <Icon name="heart" size={15} />
-              </button>
-            </div>
-
-            <div className="fc-card-details">
-              <span className="fc-card-finish-tag">{item.finish}</span>
-              <h3 className="fc-card-title">{item.name}</h3>
-
-              <div className="fc-card-price-row">
-                <span className="fc-card-price-val">{item.price}</span>
-                <span className="fc-card-rating">
-                  <Icon name="star" size={12} /> {item.rating}
-                </span>
-              </div>
-
-              {/* Dual Action Buttons */}
-              <div className="fc-card-actions-row">
-                <button
-                  type="button"
-                  className="fc-action-consult"
-                  onClick={(e) => {
-                    e.stopPropagation();
-                    setConsultModal(item);
-                  }}
-                >
-                  Book Free Consultation
-                </button>
-                <button
-                  type="button"
-                  className="fc-action-view"
-                  onClick={(e) => {
-                    e.stopPropagation();
-                    setSelectedProject(item);
-                  }}
-                >
-                  View Specs
-                </button>
-              </div>
-            </div>
-          </article>
-        ))}
-
-        {filteredDesigns.length === 0 && (
-          <div className="fc-empty-state">
-            <Icon name="search" size={32} />
-            <h3>No designs match this filter</h3>
-            <p>Try selecting "All" or reset your search term to see all available designs.</p>
-            <button
-              type="button"
-              className="fc-reset-btn"
-              onClick={() => {
-                setActiveSubcat('All');
-                setSearch('');
-                setWishlistOnly(false);
-              }}
-            >
-              Reset Filters
-            </button>
-          </div>
-        )}
-      </main>
-
-      {/* ── PROJECT DETAIL SHEET (Livspace-inspired overlay) ── */}
+      {/* ── PROJECT DETAIL SHEET OVERLAY ── */}
       {selectedProject && (
-        <div className="fc-sheet-overlay" onClick={() => setSelectedProject(null)}>
-          <div className="fc-project-sheet" onClick={(e) => e.stopPropagation()}>
-            <div className="fc-ps-header">
+        <div className="lvc-overlay" onClick={() => setSelectedProject(null)}>
+          <div className="lvc-sheet" onClick={(e) => e.stopPropagation()}>
+            <div className="lvc-sheet-head">
               <button
                 type="button"
-                className="fc-ps-close"
+                className="lvc-sheet-close"
                 onClick={() => setSelectedProject(null)}
                 aria-label="Close"
               >
                 <Icon name="close" size={18} />
               </button>
-              <h3 className="fc-ps-top-title">{selectedProject.name}</h3>
+              <h3 className="lvc-sheet-top-title">{selectedProject.name}</h3>
               <button
                 type="button"
-                className={'fc-ps-heart' + (liked[selectedProject.id] ? ' on' : '')}
+                className={'lvc-sheet-heart' + (liked[selectedProject.id] ? ' on' : '')}
                 onClick={(e) => toggleLike(selectedProject.id, selectedProject.name, e)}
                 aria-label="Save"
               >
@@ -388,63 +381,56 @@ export default function FurnitureCategory() {
               </button>
             </div>
 
-            <div className="fc-ps-scroll">
-              <div className="fc-ps-hero-img-wrap">
+            <div className="lvc-sheet-scroll">
+              <div className="lvc-sheet-hero">
                 <img src={selectedProject.img} alt={selectedProject.name} />
-                <div className="fc-ps-hero-overlay">
-                  <span className="fc-ps-size-tag">{selectedProject.size}</span>
-                  <span className="fc-ps-rating-tag">
-                    <Icon name="star" size={12} /> {selectedProject.rating} Rating
-                  </span>
+                <div className="lvc-sheet-hero-badges">
+                  <span>{selectedProject.size}</span>
+                  <span><Icon name="star" size={12} /> {selectedProject.rating} Rating</span>
                 </div>
               </div>
 
-              <div className="fc-ps-content-body">
-                <div className="fc-ps-meta-row">
+              <div className="lvc-sheet-body">
+                <div className="lvc-sheet-summary">
                   <div>
-                    <h2 className="fc-ps-title">{selectedProject.name}</h2>
-                    <p className="fc-ps-finish">{selectedProject.finish}</p>
+                    <h2 className="lvc-sheet-h2">{selectedProject.name}</h2>
+                    <p className="lvc-sheet-tag">{selectedProject.finish}</p>
                   </div>
-                  <div className="fc-ps-price-box">
-                    <span className="fc-ps-price-lbl">Estimate Range</span>
-                    <span className="fc-ps-price-val">{selectedProject.price}</span>
+                  <div className="lvc-sheet-price-col">
+                    <span className="lvc-sp-lbl">Estimate Range</span>
+                    <span className="lvc-sp-val">{selectedProject.price}</span>
                   </div>
                 </div>
 
-                {/* SARVOTTAM Karigar Promise Box */}
-                <div className="fc-karigar-promise-box">
-                  <div className="fc-kp-icon">
+                <div className="lvc-karigar-card">
+                  <div className="lvc-kc-ic">
                     <Icon name="shield" size={20} />
                   </div>
-                  <div className="fc-kp-text">
-                    <strong>100% Verified Local Rajasthani Master Woodwork</strong>
-                    <p>Direct workshop pricing, premium IS-certified materials, and zero middleman inflation.</p>
+                  <div className="lvc-kc-txt">
+                    <strong>100% Verified Rajasthan Artisans</strong>
+                    <p>Direct workshop fabrication with 10-year warranty and zero showroom markup.</p>
                   </div>
                 </div>
 
-                {/* Technical Specifications Table */}
-                <h4 className="fc-ps-section-heading">Design Specifications</h4>
-                <div className="fc-ps-specs-table">
+                <h4 className="lvc-sheet-h4">Technical Specifications</h4>
+                <div className="lvc-specs-table">
                   {selectedProject.specs?.map(([k, v]) => (
-                    <div key={k} className="fc-ps-spec-row">
-                      <span className="fc-ps-spec-key">{k}</span>
-                      <strong className="fc-ps-spec-val">{v}</strong>
+                    <div key={k} className="lvc-spec-row">
+                      <span className="lvc-spec-k">{k}</span>
+                      <strong className="lvc-spec-v">{v}</strong>
                     </div>
                   ))}
                 </div>
 
-                {/* Quick Consultation Callout */}
-                <div className="fc-ps-consult-banner">
-                  <div className="fc-ps-cb-text">
-                    <strong>Want this exact look customized for your home?</strong>
-                    <p>Get a free doorstep measurement visit with 3D CAD blueprints from our carpenters.</p>
+                <div className="lvc-sheet-cta-box">
+                  <div>
+                    <strong>Want this exact look customized for your room?</strong>
+                    <p>Get a free doorstep measurement visit with 3D CAD blueprints.</p>
                   </div>
                   <button
                     type="button"
-                    className="fc-ps-cb-btn"
-                    onClick={() => {
-                      setConsultModal(selectedProject);
-                    }}
+                    className="lvc-btn-fill w-full mt-2"
+                    onClick={() => setConsultModal(selectedProject)}
                   >
                     Book Measurement Visit
                   </button>
@@ -452,16 +438,16 @@ export default function FurnitureCategory() {
               </div>
             </div>
 
-            {/* Sticky Previous / Next Project Footer */}
-            <div className="fc-ps-nav-footer">
+            {/* Previous / Next Design Footer */}
+            <div className="lvc-sheet-footer">
               {projectNav.prev && (
                 <button
                   type="button"
-                  className="fc-ps-nav-btn prev"
+                  className="lvc-nav-btn prev"
                   onClick={() => setSelectedProject(projectNav.prev)}
                 >
                   <Icon name="chevron" size={14} />
-                  <span className="fc-ps-nav-text">
+                  <span className="lvc-nav-btn-txt">
                     <small>Previous</small>
                     <strong>{projectNav.prev.name}</strong>
                   </span>
@@ -471,10 +457,10 @@ export default function FurnitureCategory() {
               {projectNav.next && (
                 <button
                   type="button"
-                  className="fc-ps-nav-btn next"
+                  className="lvc-nav-btn next"
                   onClick={() => setSelectedProject(projectNav.next)}
                 >
-                  <span className="fc-ps-nav-text">
+                  <span className="lvc-nav-btn-txt">
                     <small>Next Design</small>
                     <strong>{projectNav.next.name}</strong>
                   </span>
@@ -486,21 +472,19 @@ export default function FurnitureCategory() {
         </div>
       )}
 
-      {/* ── BOOK FREE CONSULTATION MODAL ── */}
+      {/* ── CONSULTATION BOOKING MODAL ── */}
       {consultModal && (
-        <div className="fc-sheet-overlay" onClick={() => setConsultModal(null)}>
-          <div className="fc-consult-modal" onClick={(e) => e.stopPropagation()}>
-            <div className="fc-cm-head">
+        <div className="lvc-overlay" onClick={() => setConsultModal(null)}>
+          <div className="lvc-consult-modal" onClick={(e) => e.stopPropagation()}>
+            <div className="lvc-cm-header">
               <div>
-                <span className="fc-cm-badge">Free Doorstep Visit · ₹0</span>
-                <h3 className="fc-cm-title">Book Design Consultation</h3>
-                <p className="fc-cm-sub">
-                  Selected: <strong>{consultModal.name || currentSpace.title}</strong>
-                </p>
+                <span className="lvc-cm-badge">Free Doorstep Visit · ₹0</span>
+                <h3 className="lvc-cm-title">Book Design Consultation</h3>
+                <p className="lvc-cm-sub">Space: <strong>{consultModal.name || currentSpace.title}</strong></p>
               </div>
               <button
                 type="button"
-                className="fc-cm-close"
+                className="lvc-sheet-close"
                 onClick={() => setConsultModal(null)}
                 aria-label="Close"
               >
@@ -508,27 +492,27 @@ export default function FurnitureCategory() {
               </button>
             </div>
 
-            <form className="fc-cm-form" onSubmit={handleConsultSubmit}>
-              <div className="fc-cm-field">
-                <label className="fc-cm-label">Your Name</label>
+            <form className="lvc-cm-form" onSubmit={handleConsultSubmit}>
+              <div className="lvc-cm-field">
+                <label className="lvc-cm-label">Your Name</label>
                 <input
                   type="text"
-                  className="fc-cm-input"
+                  className="lvc-cm-input"
                   value={cName}
                   onChange={(e) => setCName(e.target.value)}
-                  placeholder="Enter full name"
+                  placeholder="Enter your full name"
                   required
                 />
               </div>
 
-              <div className="fc-cm-field">
-                <label className="fc-cm-label">Mobile Number</label>
-                <div className="fc-cm-phone-wrap">
-                  <span className="fc-cm-prefix">+91</span>
+              <div className="lvc-cm-field">
+                <label className="lvc-cm-label">Phone Number</label>
+                <div className="lvc-cm-phone-box">
+                  <span className="lvc-cm-prefix">+91</span>
                   <input
                     type="tel"
                     maxLength={10}
-                    className="fc-cm-input fc-cm-phone"
+                    className="lvc-cm-input lvc-cm-phone-inp"
                     value={cPhone}
                     onChange={(e) => setCPhone(e.target.value.replace(/\D/g, ''))}
                     placeholder="10-digit number"
@@ -537,10 +521,10 @@ export default function FurnitureCategory() {
                 </div>
               </div>
 
-              <div className="fc-cm-field">
-                <label className="fc-cm-label">Preferred Date &amp; Time Slot</label>
+              <div className="lvc-cm-field">
+                <label className="lvc-cm-label">Preferred Time Slot</label>
                 <select
-                  className="fc-cm-select"
+                  className="lvc-cm-select"
                   value={cDate}
                   onChange={(e) => setCDate(e.target.value)}
                 >
@@ -552,11 +536,11 @@ export default function FurnitureCategory() {
                 </select>
               </div>
 
-              <div className="fc-cm-field">
-                <label className="fc-cm-label">Doorstep Address / City</label>
+              <div className="lvc-cm-field">
+                <label className="lvc-cm-label">Doorstep Address / City</label>
                 <input
                   type="text"
-                  className="fc-cm-input"
+                  className="lvc-cm-input"
                   value={cAddress}
                   onChange={(e) => setCAddress(e.target.value)}
                   placeholder="House/Plot No., Area, City in Rajasthan"
@@ -564,23 +548,18 @@ export default function FurnitureCategory() {
                 />
               </div>
 
-              <div className="fc-cm-field">
-                <label className="fc-cm-label">Notes or Custom Requirements (Optional)</label>
+              <div className="lvc-cm-field">
+                <label className="lvc-cm-label">Room Dimensions or Notes (Optional)</label>
                 <textarea
-                  className="fc-cm-textarea"
+                  className="lvc-cm-textarea"
                   rows={2}
                   value={cNotes}
                   onChange={(e) => setCNotes(e.target.value)}
-                  placeholder="e.g. Need L-shaped modular kitchen with chimney space..."
+                  placeholder="e.g. 14x10 ft room, need modular cabinets..."
                 />
               </div>
 
-              <div className="fc-cm-guarantee-note">
-                <Icon name="check" size={14} />
-                <span>Zero obligation · No hidden inspection charges</span>
-              </div>
-
-              <button type="submit" className="fc-cm-submit-btn">
+              <button type="submit" className="lvc-btn-fill w-full">
                 Confirm Free Measurement Visit
               </button>
             </form>
